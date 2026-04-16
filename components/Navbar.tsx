@@ -19,10 +19,10 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-8 text-gray-700 font-medium">
-          <a href="#" className="hover:text-[#F0802D] transition">Home</a>
-          <a href="#" className="hover:text-[#F0802D] transition">About</a>
-          <a href="#" className="hover:text-[#F0802D] transition">Jobs</a>
-          <a href="#" className="hover:text-[#F0802D] transition">Contact</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
         </div>
 
         {/* Desktop Buttons */}
@@ -51,10 +51,10 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col space-y-4 text-gray-700 font-medium">
-          <a href="#" className="hover:text-[#F0802D] transition">Home</a>
-          <a href="#" className="hover:text-[#F0802D] transition">About</a>
-          <a href="#" className="hover:text-[#F0802D] transition">Jobs</a>
-          <a href="#" className="hover:text-[#F0802D] transition">Contact</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
+          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
 
           <button className="text-[#1F3064] py-2 border border-[#1F3064] rounded-lg cursor-pointer">
             Login
