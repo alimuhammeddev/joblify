@@ -1,6 +1,7 @@
 import Choose from "@/components/ChooseUs";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
+import RecentJob from "@/components/RecentJob";
 
 export default function Home() {
   return (
@@ -15,6 +16,10 @@ export default function Home() {
 
       <div>
         <Choose />
+      </div>
+
+      <div>
+        <RecentJob />
       </div>
     </section>
   );
