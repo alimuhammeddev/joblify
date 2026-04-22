@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="flex flex-col lg:flex-row items-center justify-between gap-10">
         {/* Text Content */}
         <div className="max-w-xl text-center lg:text-left">
-          <h1 className="lg:text-5xl text-3xl font-extrabold text-gray-700 leading-tight">
+          <h1 className="lg:text-5xl text-3xl font-extrabold text-[#1F3064] leading-tight">
             Welcome to{" "}
             <span className="text-[#1F3064]">
               Job<span className="text-[#F0802D]">Lify</span>

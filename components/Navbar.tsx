@@ -51,10 +51,10 @@ export default function Navbar() {
         }`}
       >
         <div className="flex flex-col space-y-4 text-gray-700 font-medium">
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
+          <a href="/" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
+          <a href="/about" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
+          <a href="/jobs" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
+          <a href="/contact" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
 
           <button className="text-[#1F3064] py-2 border border-[#1F3064] rounded-lg cursor-pointer">
             Login
