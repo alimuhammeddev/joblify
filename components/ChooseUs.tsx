@@ -25,10 +25,9 @@ export default function Choose() {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 mb-16">
-      {/* Header */}
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-16 mb-16">
       <div className="flex flex-col items-center mb-12">
-        <p className="lg:text-xl font-medium text-[#1F3064]">Why Choose Us</p>
+        <p className="lg:text-xl font-semibold text-[#1F3064]">Why Choose Us</p>
         <div className="w-28 h-0.5 bg-[#F0802D] mt-2"></div>
         <p className="text-gray-500 mt-2 text-center max-w-2xl">
           We combine innovation, dedication, and expertise to give you the best
@@ -36,7 +35,6 @@ export default function Choose() {
         </p>
       </div>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map((item, index) => (
           <div

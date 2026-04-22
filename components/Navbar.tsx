@@ -10,7 +10,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-white shadow-sm top-0 z-50 fixed">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto md:px-6 px-4 py-4 flex items-center justify-between">
         
         {/* Logo */}
         <div className="text-xl font-bold text-gray-800">
@@ -19,15 +19,15 @@ export default function Navbar() {
 
         {/* Desktop Links */}
         <div className="hidden md:flex space-x-8 text-gray-700 font-medium">
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
-          <a href="#" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
+          <a href="/" className="hover:text-[#F0802D] text-[#1F3064] transition">Home</a>
+          <a href="/about" className="hover:text-[#F0802D] text-[#1F3064] transition">About</a>
+          <a href="/jobs" className="hover:text-[#F0802D] text-[#1F3064] transition">Jobs</a>
+          <a href="/contact" className="hover:text-[#F0802D] text-[#1F3064] transition">Contact</a>
         </div>
 
         {/* Desktop Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <button className="text-[#1F3064] border border-[#1F3064] px-4 py-2 rounded-lg hover:text-[#FFFFFF] hover:bg-[#F0802D] hover:border-[#F0802D] cursor-pointer transition">
+          <button className="text-[#1F3064] border border-[#1F3064] px-4 py-2 rounded-lg hover:text-[#FFFFFF] hover:bg-[#1F3064] hover:border-[#1F3064] cursor-pointer transition">
             Login
           </button>
           <button className="bg-[#F0802D] text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-[#E67E22] transition">

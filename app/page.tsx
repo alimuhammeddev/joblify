@@ -1,4 +1,6 @@
 import Choose from "@/components/ChooseUs";
+import CTA from "@/components/Cta";
+import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
 import RecentJob from "@/components/RecentJob";
@@ -20,6 +22,14 @@ export default function Home() {
 
       <div>
         <RecentJob />
+      </div>
+
+      <div>
+        <CTA />
+      </div>
+
+      <div>
+        <Footer />
       </div>
     </section>
   );
