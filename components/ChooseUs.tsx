@@ -39,7 +39,7 @@ export default function Choose() {
         {features.map((item, index) => (
           <div
             key={index}
-            className="bg-white shadow-md rounded-2xl p-6 text-center hover:shadow-md transition duration-300"
+            className="bg-white shadow-sm rounded-2xl p-6 text-center hover:shadow-md transition duration-300"
           >
             <div className="text-4xl mb-4 text-[#F0802D] flex justify-center">
               {item.icon}
