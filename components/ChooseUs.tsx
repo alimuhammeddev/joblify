@@ -25,7 +25,7 @@ export default function Choose() {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-16 mb-16">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-20 mb-16">
       <div className="flex flex-col items-center mb-12">
         <p className="lg:text-xl font-semibold text-[#1F3064]">Why Choose Us</p>
         <div className="w-28 h-0.5 bg-[#F0802D] mt-2"></div>
@@ -39,7 +39,7 @@ export default function Choose() {
         {features.map((item, index) => (
           <div
             key={index}
-            className="bg-white shadow-md rounded-2xl p-6 text-center hover:shadow-xl transition duration-300"
+            className="bg-white shadow-md rounded-2xl p-6 text-center hover:shadow-md transition duration-300"
           >
             <div className="text-4xl mb-4 text-[#F0802D] flex justify-center">
               {item.icon}

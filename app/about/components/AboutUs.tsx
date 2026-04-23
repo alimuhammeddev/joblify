@@ -4,7 +4,7 @@ import about from "./assets/about.jpg";
 export default function AboutUS() {
   return (
     <section>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 lg:mt-36 mt-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mt-5">
           <div>
             <p className="text-[#1F3064] font-bold uppercase tracking-wide lg:text-start text-center">
