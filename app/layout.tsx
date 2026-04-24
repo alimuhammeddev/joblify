@@ -15,6 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Joblify",
   description: "Your Ultimate Job Search Companion",
+  icons: {
+    icon: "/icon.png",
+  }
 };
 
 export default function RootLayout({
