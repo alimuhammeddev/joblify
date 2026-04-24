@@ -14,7 +14,7 @@ export default function AboutUS() {
               </span>
             </p>
 
-            <h1 className="mt-2 text-3xl md:text-5xl font-medium text-[#1F3064] leading-tight lg:text-start text-center">
+            <h1 className="mt-2 text-2xl md:text-5xl font-medium text-[#1F3064] leading-tight lg:text-start text-center">
               Connecting Talent with{" "}
               <span className="text-[#F0802D]">Opportunity</span>
             </h1>
