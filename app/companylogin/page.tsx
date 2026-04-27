@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import icon from "@/components/assets/icon.png";
 
-export default function Login() {
+export default function CompanyLogin() {
   return (
     <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg md:p-8 p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
         <Link href="/">
           <Image src={icon} alt="icon" className="w-10" />
         </Link>
@@ -99,7 +99,7 @@ export default function Login() {
 
         <p className="text-center text-sm text-[#1F3064] mt-6">
           New to Joblify?{" "}
-          <a href="#" className="text-[#F0802D] font-medium hover:underline">
+          <a href="/companysignup" className="text-[#F0802D] font-medium hover:underline">
             Create Account
           </a>
         </p>
