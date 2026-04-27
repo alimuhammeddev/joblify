@@ -31,7 +31,7 @@ export default function CompanyLogin() {
                 </div>
 
                 <div>
-                  <h1 className="text-[#1F3064] font-bold text-sm ">
+                  <h1 className="text-[#1F3064] font-bold text-sm">
                     Individual Account
                   </h1>
                 </div>
@@ -39,21 +39,19 @@ export default function CompanyLogin() {
             </div>
           </Link>
 
-          <Link href="/companylogin">
-            <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#fff7f1] transition duration-300">
-              <div className="flex flex-col items-start gap-3">
-                <div className="bg-[#F0802D] text-white p-3 rounded-lg">
-                  <Building2 size={16} />
-                </div>
+          <div className="border border-[#1F3064] rounded-xl p-4 bg-[#fff7f1] shadow-sm">
+            <div className="flex flex-col items-start gap-3">
+              <div className="bg-[#F0802D] text-white p-3 rounded-lg">
+                <Building2 size={16} />
+              </div>
 
-                <div>
-                  <h1 className="text-[#1F3064] font-bold text-sm">
-                    Company Account
-                  </h1>
-                </div>
+              <div>
+                <h1 className="text-[#1F3064] font-bold text-sm">
+                  Company Account
+                </h1>
               </div>
             </div>
-          </Link>
+          </div>
         </div>
 
         <form className="space-y-5">
@@ -99,7 +97,10 @@ export default function CompanyLogin() {
 
         <p className="text-center text-sm text-[#1F3064] mt-6">
           New to Joblify?{" "}
-          <a href="/companysignup" className="text-[#F0802D] font-medium hover:underline">
+          <a
+            href="/companysignup"
+            className="text-[#F0802D] font-medium hover:underline"
+          >
             Create Account
           </a>
         </p>

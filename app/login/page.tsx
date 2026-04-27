@@ -23,21 +23,19 @@ export default function Login() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
-          <Link href="/login">
-            <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#f8fafc] transition duration-300">
-              <div className="flex flex-col items-start gap-3">
-                <div className="bg-[#1F3064] text-white p-3 rounded-lg">
-                  <User size={16} />
-                </div>
+          <div className="border border-[#1F3064] rounded-xl p-4 bg-[#f8fafc] shadow-sm">
+            <div className="flex flex-col items-start gap-3">
+              <div className="bg-[#1F3064] text-white p-3 rounded-lg">
+                <User size={16} />
+              </div>
 
-                <div>
-                  <h1 className="text-[#1F3064] font-bold text-sm ">
-                    Individual Account
-                  </h1>
-                </div>
+              <div>
+                <h1 className="text-[#1F3064] font-bold text-sm">
+                  Individual Account
+                </h1>
               </div>
             </div>
-          </Link>
+          </div>
 
           <Link href="/companylogin">
             <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#fff7f1] transition duration-300">

@@ -52,9 +52,11 @@ export default function Navbar() {
               Login
             </button>
           </Link>
-          <button className="bg-[#F0802D] text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-[#E67E22] transition">
-            Sign Up
-          </button>
+          <Link href="/signup">
+            <button className="bg-[#F0802D] text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-[#E67E22] transition">
+              Sign Up
+            </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -98,12 +100,16 @@ export default function Navbar() {
             Contact
           </a>
 
-          <button className="text-[#1F3064] py-2 border border-[#1F3064] rounded-lg cursor-pointer">
-            Login
-          </button>
-          <button className="bg-[#F0802D] text-white py-2 rounded-lg hover:bg-[#E67E22]">
-            Sign Up
-          </button>
+          <Link href="/login">
+            <button className="text-[#1F3064] w-full py-2 border border-[#1F3064] rounded-lg cursor-pointer">
+              Login
+            </button>
+          </Link>
+          <Link href="/signup">
+            <button className="bg-[#F0802D] w-full text-white py-2 rounded-lg hover:bg-[#E67E22]">
+              Sign Up
+            </button>
+          </Link>
         </div>
       </div>
     </nav>
