@@ -82,7 +82,7 @@ export default function Jobs() {
             {jobs.map((job) => (
               <div
                 key={job.id}
-                className="bg-white rounded-2xl shadow-sm p-3 hover:shadow-md transition duration-300"
+                className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition duration-300"
               >
                 <div className="flex justify-between items-start">
                   <div>

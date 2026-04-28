@@ -32,12 +32,12 @@ export default function DashboardLayout({
 
         {/* Right */}
         <div className="flex items-center gap-6">
-          <Link href="/dashboard/notifications" className="relative">
+          <Link href="/dashboard/user-notification" className="relative">
             <Bell className="text-gray-700 hover:text-[#1F3064]" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </Link>
 
-          <Link href="/dashboard/profile" className="flex items-center gap-2">
+          <Link href="#" className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
               <User size={18} />
             </div>
