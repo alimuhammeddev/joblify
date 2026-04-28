@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Link from "next/link";
 import {
@@ -67,7 +67,11 @@ export default function DashboardLayout({
 
             <Link
               href="/dashboard/jobs"
-              className="flex items-center gap-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                isActive("/dashboard/jobs")
+                  ? "bg-[#1F3064] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               <Briefcase size={20} />
               Jobs
@@ -75,7 +79,11 @@ export default function DashboardLayout({
 
             <Link
               href="/dashboard/recently-applied"
-              className="flex items-center gap-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                isActive("/dashboard/recently-applied")
+                  ? "bg-[#1F3064] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               <Clock size={20} />
               Recently Applied
@@ -83,15 +91,23 @@ export default function DashboardLayout({
 
             <Link
               href="/dashboard/saved-jobs"
-              className="flex items-center gap-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                isActive("/dashboard/saved-jobs")
+                  ? "bg-[#1F3064] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               <Bookmark size={20} />
               Saved Jobs
             </Link>
 
             <Link
-              href="/dashboard/settings"
-              className="flex items-center gap-3 text-gray-700 hover:bg-gray-100 px-4 py-3 rounded-xl"
+              href="/dashboard/user-settings"
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
+                isActive("/dashboard/user-settings")
+                  ? "bg-[#1F3064] text-white"
+                  : "text-gray-700 hover:bg-gray-100"
+              }`}
             >
               <Settings size={20} />
               Settings
@@ -105,11 +121,12 @@ export default function DashboardLayout({
         </main>
       </div>
 
-      {/* Mobile Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f1f1f1] shadow-lg px-4 py-3 flex items-center justify-around z-50">
         <Link
           href="/dashboard"
-          className="flex flex-col items-center text-[#1F3064]"
+          className={`flex flex-col items-center ${
+            isActive("/dashboard") ? "text-[#1F3064]" : "text-gray-600"
+          }`}
         >
           <Home size={20} />
           <span className="text-xs">Home</span>
@@ -117,7 +134,9 @@ export default function DashboardLayout({
 
         <Link
           href="/dashboard/jobs"
-          className="flex flex-col items-center text-gray-600"
+          className={`flex flex-col items-center ${
+            isActive("/dashboard/jobs") ? "text-[#1F3064]" : "text-gray-600"
+          }`}
         >
           <Briefcase size={20} />
           <span className="text-xs">Jobs</span>
@@ -125,7 +144,11 @@ export default function DashboardLayout({
 
         <Link
           href="/dashboard/recently-applied"
-          className="flex flex-col items-center text-gray-600"
+          className={`flex flex-col items-center ${
+            isActive("/dashboard/recently-applied")
+              ? "text-[#1F3064]"
+              : "text-gray-600"
+          }`}
         >
           <Clock size={20} />
           <span className="text-xs">Applied</span>
@@ -133,15 +156,21 @@ export default function DashboardLayout({
 
         <Link
           href="/dashboard/saved-jobs"
-          className="flex flex-col items-center text-gray-600"
+          className={`flex flex-col items-center ${
+            isActive("/dashboard/saved-jobs")
+              ? "text-[#1F3064]"
+              : "text-gray-600"
+          }`}
         >
           <Bookmark size={20} />
           <span className="text-xs">Saved</span>
         </Link>
 
         <Link
-          href="/dashboard/settings"
-          className="flex flex-col items-center text-gray-600"
+          href="/dashboard/user-settings"
+          className={`flex flex-col items-center ${
+            isActive("/dashboard/user-settings") ? "text-[#1F3064]" : "text-gray-600"
+          }`}
         >
           <Settings size={20} />
           <span className="text-xs">Settings</span>
