@@ -55,7 +55,7 @@ export default function RecentlyApplied() {
         {appliedJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl p-6 transition duration-300"
+            className="bg-white rounded-2xl shadow-sm p-6 transition duration-300"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
               {/* Left Section */}
