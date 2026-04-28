@@ -87,17 +87,22 @@ export default function Login() {
             </a>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition"
-          >
-            Login
-          </button>
+          <Link href="/dashboard">
+            <button
+              type="submit"
+              className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition"
+            >
+              Login
+            </button>
+          </Link>
         </form>
 
         <p className="text-center text-sm text-[#1F3064] mt-6">
           New to Joblify?{" "}
-          <a href="/signup" className="text-[#F0802D] font-medium hover:underline">
+          <a
+            href="/signup"
+            className="text-[#F0802D] font-medium hover:underline"
+          >
             Create Account
           </a>
         </p>
