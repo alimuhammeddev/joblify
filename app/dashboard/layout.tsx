@@ -9,10 +9,13 @@ import {
   Settings,
   User,
   Clock,
+  LogOut,
+  ChevronDown,
 } from "lucide-react";
 import Image from "next/image";
 import joblify from "./assets/joblify.png";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function DashboardLayout({
   children,
@@ -20,6 +23,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [showDropdown, setShowDropdown] = useState(false);
   const isActive = (path: string) => pathname === path;
   return (
     <section className="min-h-screen bg-gray-50 flex flex-col overflow-hidden pt-20">
@@ -37,14 +41,33 @@ export default function DashboardLayout({
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
           </Link>
 
-          <Link href="#" className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center">
-              <User size={18} />
-            </div>
-            <span className="hidden md:block text-sm text-gray-700">
-              My Profile
-            </span>
-          </Link>
+          <div className="relative">
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition">
+                <User size={18} />
+              </div>
+              <ChevronDown size={16} className="text-gray-600" />
+            </button>
+
+            {showDropdown && (
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 p-3 z-50">
+                <div className="pb-3 border-b">
+                  <h3 className="font-semibold text-[#1F3064]">King Rudy</h3>
+                  <p className="text-sm text-gray-500">kingurdy@email.com</p>
+                </div>
+
+                <div className="mt-3 space-y-2">
+                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-red-50 transition text-red-500 cursor-pointer">
+                    <LogOut size={18} />
+                    Logout
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </header>
 
@@ -169,7 +192,9 @@ export default function DashboardLayout({
         <Link
           href="/dashboard/user-settings"
           className={`flex flex-col items-center ${
-            isActive("/dashboard/user-settings") ? "text-[#1F3064]" : "text-gray-600"
+            isActive("/dashboard/user-settings")
+              ? "text-[#1F3064]"
+              : "text-gray-600"
           }`}
         >
           <Settings size={20} />
