@@ -1,4 +1,5 @@
 import { Search, MapPin, Wallet, Bookmark } from "lucide-react";
+import Link from "next/link";
 
 export default function Jobs() {
   const jobs = [
@@ -115,9 +116,11 @@ export default function Jobs() {
                   </div>
                 </div>
 
-                <button className="mt-6 w-full cursor-pointer bg-[#1F3064] text-white py-2 rounded-lg hover:bg-[#16254d] transition">
-                  Apply Now
-                </button>
+                <Link href="/dashboard/job-details">
+                  <button className="mt-6 w-full cursor-pointer bg-[#1F3064] text-white py-2 rounded-lg hover:bg-[#16254d] transition">
+                    Apply Now
+                  </button>
+                </Link>
               </div>
             ))}
           </div>
