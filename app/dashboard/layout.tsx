@@ -11,6 +11,7 @@ import {
   Clock,
   LogOut,
   ChevronDown,
+  HelpCircle,
 } from "lucide-react";
 import Image from "next/image";
 import joblify from "./assets/joblify.png";
@@ -53,14 +54,37 @@ export default function DashboardLayout({
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 p-3 z-50">
-                <div className="pb-3 border-b">
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50">
+                <div className="pb-3 bg-[#FDE6D5] p-3">
                   <h3 className="font-semibold text-[#1F3064]">King Rudy</h3>
                   <p className="text-sm text-gray-500">kingurdy@email.com</p>
                 </div>
 
+                <Link href="/dashboard/user-settings">
+                  <button
+                    onClick={() => setShowDropdown(false)}
+                    className="w-full flex items-center mt-3 gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
+                  >
+                    <Settings size={18} />
+                    <span className="text-sm font-medium">Settings</span>
+                  </button>
+                </Link>
+
+                <Link href="/dashboard/help-support">
+                  <button
+                    onClick={() => setShowDropdown(false)}
+                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
+                  >
+                    <HelpCircle size={18} />
+                    <span className="text-sm font-medium">Help & Support</span>
+                  </button>
+                </Link>
+
                 <div className="mt-3 space-y-2">
-                  <button className="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-red-50 transition text-red-500 cursor-pointer">
+                  <button
+                    onClick={() => setShowDropdown(false)}
+                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 transition text-red-500 cursor-pointer"
+                  >
                     <LogOut size={18} />
                     Logout
                   </button>
