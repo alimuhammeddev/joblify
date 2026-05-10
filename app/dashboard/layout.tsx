@@ -39,7 +39,7 @@ export default function DashboardLayout({
         <div className="flex items-center gap-6">
           <Link href="/dashboard/user-notification" className="relative">
             <Bell className="text-gray-700 hover:text-[#1F3064]" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#F0802D] rounded-full"></span>
           </Link>
 
           <div className="relative">
