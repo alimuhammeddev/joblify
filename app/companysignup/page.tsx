@@ -19,9 +19,7 @@ export default function CompanySignup() {
             </span>
           </h1>
 
-          <p className="text-gray-500">
-            Create your Company Joblify account
-          </p>
+          <p className="text-gray-500">Create your Company Joblify account</p>
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
@@ -113,10 +111,7 @@ export default function CompanySignup() {
           </div>
 
           <div className="flex items-start gap-2 text-sm">
-            <input
-              type="checkbox"
-              className="mt-1 rounded text-[#1F3064]"
-            />
+            <input type="checkbox" className="mt-1 rounded text-[#1F3064]" />
             <p className="text-[#1F3064]">
               I agree to the{" "}
               <a href="#" className="text-[#F0802D] hover:underline">
@@ -125,12 +120,14 @@ export default function CompanySignup() {
             </p>
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition"
-          >
-            Create Company Account
-          </button>
+          <Link href="company-dashboard">
+            <button
+              type="submit"
+              className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition"
+            >
+              Create Company Account
+            </button>
+          </Link>
         </form>
 
         <p className="text-center text-sm text-[#1F3064] mt-6">
@@ -145,4 +142,4 @@ export default function CompanySignup() {
       </div>
     </section>
   );
-};
+}

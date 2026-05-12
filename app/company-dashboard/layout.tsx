@@ -18,7 +18,7 @@ import joblify from "./assets/joblify.png";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-export default function DashboardLayout({
+export default function CompanyDashboardLayout({
   children,
 }: {
   children: React.ReactNode;
@@ -37,7 +37,7 @@ export default function DashboardLayout({
 
         {/* Right */}
         <div className="flex items-center gap-6">
-          <Link href="/dashboard/user-notification" className="relative">
+          <Link href="/company-dashboard/company-notification" className="relative">
             <Bell className="text-gray-700 hover:text-[#1F3064]" />
             <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#F0802D] rounded-full"></span>
           </Link>
@@ -56,11 +56,11 @@ export default function DashboardLayout({
             {showDropdown && (
               <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50 overflow-hidden">
                 <div className="pb-3 bg-[#FDE6D5] p-3">
-                  <h3 className="font-semibold text-[#1F3064]">King Rudy</h3>
-                  <p className="text-sm text-gray-500">kingurdy@email.com</p>
+                  <h3 className="font-semibold text-[#1F3064]">TechNova Ltd</h3>
+                  <p className="text-sm text-gray-500">technova@email.com</p>
                 </div>
 
-                <Link href="/dashboard/user-settings">
+                <Link href="/company-dashboard/company-settings">
                   <button
                     onClick={() => setShowDropdown(false)}
                     className="w-full flex items-center mt-3 gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
@@ -70,7 +70,7 @@ export default function DashboardLayout({
                   </button>
                 </Link>
 
-                <Link href="/dashboard/help-support">
+                <Link href="/company-dashboard/company-help-support">
                   <button
                     onClick={() => setShowDropdown(false)}
                     className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
@@ -101,9 +101,9 @@ export default function DashboardLayout({
         <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f1f1f1] p-6 fixed top-20 left-0 bottom-0">
           <nav className="space-y-3">
             <Link
-              href="/dashboard"
+              href="/company-dashboard"
               className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isActive("/dashboard")
+                isActive("/company-dashboard")
                   ? "bg-[#1F3064] text-white"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
@@ -113,45 +113,21 @@ export default function DashboardLayout({
             </Link>
 
             <Link
-              href="/dashboard/jobs"
+              href="/company-dashboard/posted-job"
               className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isActive("/dashboard/jobs")
+                isActive("/company-dashboard/posted-job")
                   ? "bg-[#1F3064] text-white"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
             >
               <Briefcase size={20} />
-              Jobs
+              Posted Jobs
             </Link>
 
             <Link
-              href="/dashboard/recently-applied"
+              href="/company-dashboard/company-settings"
               className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isActive("/dashboard/recently-applied")
-                  ? "bg-[#1F3064] text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              <Clock size={20} />
-              Recently Applied
-            </Link>
-
-            <Link
-              href="/dashboard/saved-jobs"
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isActive("/dashboard/saved-jobs")
-                  ? "bg-[#1F3064] text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              <Bookmark size={20} />
-              Saved Jobs
-            </Link>
-
-            <Link
-              href="/dashboard/user-settings"
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl ${
-                isActive("/dashboard/user-settings")
+                isActive("/company-dashboard/company-settings")
                   ? "bg-[#1F3064] text-white"
                   : "text-gray-700 hover:bg-gray-100"
               }`}
@@ -170,9 +146,9 @@ export default function DashboardLayout({
 
       <nav className="fixed bottom-0 left-0 right-0 md:hidden bg-[#f1f1f1] shadow-lg px-4 py-3 flex items-center justify-around z-50">
         <Link
-          href="/dashboard"
+          href="/company-dashboard"
           className={`flex flex-col items-center ${
-            isActive("/dashboard") ? "text-[#1F3064]" : "text-gray-600"
+            isActive("/company-dashboard") ? "text-[#1F3064]" : "text-gray-600"
           }`}
         >
           <Home size={20} />
@@ -180,43 +156,19 @@ export default function DashboardLayout({
         </Link>
 
         <Link
-          href="/dashboard/jobs"
+          href="/company-dashboard/posted-job"
           className={`flex flex-col items-center ${
-            isActive("/dashboard/jobs") ? "text-[#1F3064]" : "text-gray-600"
+            isActive("/company-dashboard/posted-job") ? "text-[#1F3064]" : "text-gray-600"
           }`}
         >
           <Briefcase size={20} />
-          <span className="text-xs">Jobs</span>
+          <span className="text-xs">Posted Jobs</span>
         </Link>
 
         <Link
-          href="/dashboard/recently-applied"
+          href="/company-dashboard/company-user-settings"
           className={`flex flex-col items-center ${
-            isActive("/dashboard/recently-applied")
-              ? "text-[#1F3064]"
-              : "text-gray-600"
-          }`}
-        >
-          <Clock size={20} />
-          <span className="text-xs">Applied</span>
-        </Link>
-
-        <Link
-          href="/dashboard/saved-jobs"
-          className={`flex flex-col items-center ${
-            isActive("/dashboard/saved-jobs")
-              ? "text-[#1F3064]"
-              : "text-gray-600"
-          }`}
-        >
-          <Bookmark size={20} />
-          <span className="text-xs">Saved</span>
-        </Link>
-
-        <Link
-          href="/dashboard/user-settings"
-          className={`flex flex-col items-center ${
-            isActive("/dashboard/user-settings")
+            isActive("/company-dashboard/company-user-settings")
               ? "text-[#1F3064]"
               : "text-gray-600"
           }`}
