@@ -78,7 +78,10 @@ export default function Dashboard() {
             <h2 className="text-xl font-semibold text-[#1F3064]">
               Recommended Jobs
             </h2>
-            <Link href="#" className="text-sm text-[#1F3064] font-medium">
+            <Link
+              href="/dashboard/jobs"
+              className="text-sm text-[#1F3064] font-medium"
+            >
               View all
             </Link>
           </div>
@@ -112,9 +115,11 @@ export default function Dashboard() {
                     </div>
                   </div>
 
-                  <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium">
-                    Apply Now
-                  </button>
+                  <Link href="/dashboard/job-details">
+                    <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium">
+                      Apply Now
+                    </button>
+                  </Link>
                 </div>
               </div>
             ))}
