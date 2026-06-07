@@ -44,7 +44,7 @@ export default function Dashboard() {
     <section className="bg-gray-50 min-h-screen mb-20">
       <div className="mb-8">
         <p className="text-sm text-gray-500">Welcome back</p>
-        <h1 className="text-2xl sm:text-3xl font-bold text-[#1F3064]">
+        <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
           King Rudy
         </h1>
       </div>

@@ -13,7 +13,7 @@ export default function JobDetailsPage() {
         
         {/* Header */}
         <div className="mb-5 sm:mb-6">
-          <h1 className="text-xl sm:text-3xl font-bold text-[#1F3064]">
+          <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
             Frontend Developer
           </h1>
           <p className="text-gray-500 text-sm sm:text-base mt-1">

@@ -29,7 +29,7 @@ export default function CompanyDashboardLayout({
   return (
     <section className="min-h-screen bg-gray-50 flex flex-col overflow-hidden pt-20">
       {/* Top Navbar */}
-      <header className="w-full bg-[#f1f1f1] px-6 py-4 flex items-center justify-between fixed top-0 left-0 right-0 z-50 h-20">
+      <header className="w-full bg-[#f1f1f1] px-6 py-4 flex items-center justify-between fixed top-0 left-0 right-0 z-50 h-16">
         {/* Left */}
         <div className="flex items-center gap-3">
           <Image src={joblify} alt="joblify" className="w-28" />
@@ -57,7 +57,7 @@ export default function CompanyDashboardLayout({
               <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50 overflow-hidden">
                 <div className="pb-3 bg-[#FDE6D5] p-3">
                   <h3 className="font-semibold text-[#1F3064]">TechNova Ltd</h3>
-                  <p className="text-sm text-gray-500">technova@email.com</p>
+                  <p className="text-sm text-gray-500">contact@technova.com</p>
                 </div>
 
                 <Link href="/company-dashboard/company-settings">
@@ -98,7 +98,7 @@ export default function CompanyDashboardLayout({
       {/* Body */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f1f1f1] p-6 fixed top-20 left-0 bottom-0">
+        <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f1f1f1] p-6 fixed top-16 left-0 bottom-0">
           <nav className="space-y-3">
             <Link
               href="/company-dashboard"

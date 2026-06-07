@@ -12,25 +12,25 @@ import {
   ChevronDown,
 } from "lucide-react";
 
-export default function HelpSupport() {
+export default function CompanyHelpSupport() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const supportOptions = [
     {
-      title: "Live Chat",
-      desc: "Chat instantly with our support team",
+      title: "Live Chat Support",
+      desc: "Get instant help with hiring and account issues",
       icon: MessageCircle,
       color: "bg-blue-100 text-blue-600",
     },
     {
       title: "Email Support",
-      desc: "Get help via support@joblify.com",
+      desc: "support@joblify.com for technical or billing issues",
       icon: Mail,
       color: "bg-green-100 text-green-600",
     },
     {
-      title: "Call Support",
-      desc: "Speak directly with our team",
+      title: "Account Manager",
+      desc: "Speak directly with your assigned support agent",
       icon: Phone,
       color: "bg-orange-100 text-orange-600",
     },
@@ -38,47 +38,48 @@ export default function HelpSupport() {
 
   const faqItems = [
     {
-      question: "How do I apply for jobs?",
+      question: "How do I post a job?",
       answer:
-        "Browse available jobs, open the job details page, and click the apply button to submit your application.",
+        "Go to the 'Post Job' section, fill in job details, and publish it to start receiving applicants.",
     },
     {
-      question: "How can I upload my CV?",
+      question: "How do I manage applicants?",
       answer:
-        "Go to your profile settings and upload your CV in PDF or DOC format from the CV section.",
+        "Open a job listing to view all applicants, shortlist candidates, and schedule interviews.",
     },
     {
-      question: "How do I update my profile?",
+      question: "How can I edit or close a job post?",
       answer:
-        "Navigate to account settings and edit your personal information, skills, and experience.",
+        "Go to 'Posted Jobs', select the job, and use the edit or close option.",
     },
     {
-      question: "Why is my application pending?",
+      question: "How do I schedule interviews?",
       answer:
-        "Your application is currently under review by the employer. You will receive updates once a decision is made.",
+        "From the applicant list, select a candidate and use the schedule interview feature.",
     },
     {
-      question: "How can I reset my password?",
+      question: "Why is my job not getting applicants?",
       answer:
-        "Click on the forgot password option on the login page and follow the instructions sent to your email.",
+        "Improve job visibility by updating job description, salary range, or promoting the listing.",
     },
   ];
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
+
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
-          Help & Support
+        <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
+          Company Help & Support
         </h1>
 
         <p className="text-sm text-gray-500 mt-2 max-w-2xl">
-          Need assistance? We're here to help you manage your account,
-          applications, CV uploads, and more.
+          Get assistance with job postings, applicant management,
+          interviews, and your company account.
         </p>
       </div>
 
-      {/* Quick Support Cards */}
+      {/* Support Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
         {supportOptions.map((item, index) => {
           const Icon = item.icon;
@@ -98,10 +99,12 @@ export default function HelpSupport() {
                 {item.title}
               </h3>
 
-              <p className="text-sm text-gray-500 mt-1">{item.desc}</p>
+              <p className="text-sm text-gray-500 mt-1">
+                {item.desc}
+              </p>
 
               <button className="mt-5 text-sm font-medium text-[#F0802D] flex items-center gap-1 hover:gap-2 transition-all">
-                Contact Now
+                Contact Support
                 <ChevronRight size={16} />
               </button>
             </div>
@@ -109,20 +112,21 @@ export default function HelpSupport() {
         })}
       </div>
 
-      {/* FAQ Accordion */}
+      {/* FAQ */}
       <div className="mb-8 bg-white rounded-2xl p-5 border border-gray-100">
+
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-11 h-11 md:block hidden rounded-xl bg-purple-100 lg:flex items-center justify-center text-purple-600">
+          <div className="w-11 h-11 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
             <HelpCircle size={22} />
           </div>
 
           <div>
             <h2 className="text-lg font-bold text-[#1F3064]">
-              Frequently Asked Questions
+              Employer FAQs
             </h2>
 
             <p className="text-sm text-gray-500">
-              Quick answers to common questions
+              Common questions from hiring companies
             </p>
           </div>
         </div>
@@ -134,7 +138,7 @@ export default function HelpSupport() {
             return (
               <div
                 key={index}
-                className="border border-gray-100 rounded-2xl overflow-hidden transition-all"
+                className="border border-gray-100 rounded-2xl overflow-hidden"
               >
                 <button
                   onClick={() =>
@@ -170,8 +174,9 @@ export default function HelpSupport() {
         </div>
       </div>
 
-      {/* Support Resources */}
+      {/* Resources */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
         <div className="bg-white rounded-2xl p-6 border border-gray-100">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-11 h-11 rounded-xl bg-blue-100 flex items-center justify-center text-blue-600">
@@ -180,17 +185,17 @@ export default function HelpSupport() {
 
             <div>
               <h3 className="font-semibold text-[#1F3064]">
-                User Guides
+                Hiring Guide
               </h3>
 
               <p className="text-sm text-gray-500">
-                Learn how to use Joblify effectively
+                Learn how to attract and manage top talent
               </p>
             </div>
           </div>
 
           <button className="mt-3 bg-[#1F3064] text-white px-5 py-3 rounded-xl text-sm font-medium hover:opacity-90 transition">
-            View Guides
+            View Guide
           </button>
         </div>
 
@@ -202,11 +207,11 @@ export default function HelpSupport() {
 
             <div>
               <h3 className="font-semibold text-[#1F3064]">
-                Account Security
+                Company Security
               </h3>
 
               <p className="text-sm text-gray-500">
-                Keep your Joblify account safe and secure
+                Protect your hiring data and account access
               </p>
             </div>
           </div>
@@ -215,7 +220,8 @@ export default function HelpSupport() {
             Security Tips
           </button>
         </div>
+
       </div>
     </section>
   );
-}
+};

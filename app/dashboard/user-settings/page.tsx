@@ -14,7 +14,7 @@ export default function UserSettings() {
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div className="mb-6">
-        <h1 className="text-2xl md:text-3xl font-bold text-[#1F3064]">
+        <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
           User Settings
         </h1>
         <p className="text-sm text-gray-500 mt-2">

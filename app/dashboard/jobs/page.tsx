@@ -57,7 +57,7 @@ export default function Jobs() {
     <section className="bg-gray-50 min-h-screen mb-20">
       <div>
         <div className="mb-5">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#1F3064]">
+          <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
             Jobs
           </h1>
         </div>

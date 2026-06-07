@@ -1,3 +1,6 @@
+import Image from "next/image";
+import footer from "./assets/footer.png";
+
 export default function Footer() {
   return (
     <footer className="bg-[#1F3064] text-white">
@@ -5,9 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           <div>
             <h2 className="text-xl font-bold mb-4">
-              <span className="text-[#ffffff]">
-                Job<span className="text-[#F0802D]">Lify</span>
-              </span>
+              <Image src={footer} alt="Brand Logo" className="w-28" />
             </h2>
             <p className="text-sm text-gray-300">
               Connecting talent with opportunities. Find your dream job or hire

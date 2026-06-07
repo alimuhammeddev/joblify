@@ -29,7 +29,7 @@ export default function DashboardLayout({
   return (
     <section className="min-h-screen bg-gray-50 flex flex-col overflow-hidden pt-20">
       {/* Top Navbar */}
-      <header className="w-full bg-[#f1f1f1] px-6 py-4 flex items-center justify-between fixed top-0 left-0 right-0 z-50 h-20">
+      <header className="w-full bg-[#f1f1f1] px-6 py-4 flex items-center justify-between fixed top-0 left-0 right-0 z-50 h-16">
         {/* Left */}
         <div className="flex items-center gap-3">
           <Image src={joblify} alt="joblify" className="w-28" />
@@ -98,7 +98,7 @@ export default function DashboardLayout({
       {/* Body */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f1f1f1] p-6 fixed top-20 left-0 bottom-0">
+        <aside className="hidden md:flex flex-col w-72 min-h-screen bg-[#f1f1f1] p-6 fixed top-16 left-0 bottom-0">
           <nav className="space-y-3">
             <Link
               href="/dashboard"

@@ -47,14 +47,16 @@ export default function CompanyDashboard() {
       <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <p className="text-sm text-gray-500">Welcome back</p>
-          <h1 className="text-2xl sm:text-3xl font-bold text-[#1F3064]">
+          <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
             TechNova Ltd
           </h1>
         </div>
 
-        <button className="bg-[#1F3064] text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition">
-          Post New Job
-        </button>
+        <Link href="/company-dashboard/posted-job">
+          <button className="bg-[#1F3064] text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition">
+            Post New Job
+          </button>
+        </Link>
       </div>
 
       {/* Stats */}
@@ -90,10 +92,7 @@ export default function CompanyDashboard() {
               Active Job Listings
             </h2>
 
-            <Link
-              href="#"
-              className="text-sm text-[#1F3064] font-medium"
-            >
+            <Link href="/company-dashboard/posted-job" className="text-sm text-[#1F3064] font-medium">
               View all
             </Link>
           </div>
@@ -113,9 +112,7 @@ export default function CompanyDashboard() {
                       </h3>
                     </div>
 
-                    <p className="text-sm text-gray-500">
-                      {job.applicants}
-                    </p>
+                    <p className="text-sm text-gray-500">{job.applicants}</p>
 
                     <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
@@ -179,12 +176,8 @@ export default function CompanyDashboard() {
             <div className="space-y-4">
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">
-                    Hiring Progress
-                  </span>
-                  <span className="font-medium text-[#1F3064]">
-                    75%
-                  </span>
+                  <span className="text-gray-500">Hiring Progress</span>
+                  <span className="font-medium text-[#1F3064]">75%</span>
                 </div>
 
                 <div className="w-full bg-gray-200 rounded-full h-3">
@@ -194,12 +187,8 @@ export default function CompanyDashboard() {
 
               <div>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">
-                    Job Engagement
-                  </span>
-                  <span className="font-medium text-[#1F3064]">
-                    89%
-                  </span>
+                  <span className="text-gray-500">Job Engagement</span>
+                  <span className="font-medium text-[#1F3064]">89%</span>
                 </div>
 
                 <div className="w-full bg-gray-200 rounded-full h-3">
