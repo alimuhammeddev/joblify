@@ -1,10 +1,8 @@
-import {
-  Building2,
-  MapPin,
-  Briefcase,
-  Clock,
-  Users,
-} from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Building2, MapPin, Briefcase, Clock, Users } from "lucide-react";
+import PostJobModal from "./component/PostJob";
 
 const postedJobs = [
   {
@@ -37,22 +35,24 @@ const postedJobs = [
 ];
 
 export default function PostedJob() {
+  const [isPostJobOpen, setIsPostJobOpen] = useState(false);
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
-      
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div>
-          <p className="text-sm text-gray-500">
-            Manage your openings
-          </p>
+          <p className="text-sm text-gray-500">Manage your openings</p>
 
           <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
             Posted Jobs
           </h1>
         </div>
 
-        <button className="bg-[#1F3064] text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition">
+        <button
+          onClick={() => setIsPostJobOpen(true)}
+          className="bg-[#1F3064] text-white px-5 py-3 rounded-2xl font-medium hover:opacity-90 transition"
+        >
           + Post New Job
         </button>
       </div>
@@ -65,7 +65,6 @@ export default function PostedJob() {
             className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition"
           >
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-
               {/* Left Content */}
               <div>
                 <div className="flex items-center gap-2 mb-2">
@@ -92,7 +91,6 @@ export default function PostedJob() {
                 </div>
 
                 <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-500">
-                  
                   <span className="flex items-center gap-1">
                     <MapPin className="w-4 h-4 text-[#F0802D]" />
                     {job.location}
@@ -124,11 +122,15 @@ export default function PostedJob() {
                   Delete
                 </button>
               </div>
-
             </div>
           </div>
         ))}
       </div>
+
+      <PostJobModal
+        isOpen={isPostJobOpen}
+        onClose={() => setIsPostJobOpen(false)}
+      />
     </section>
   );
 }
