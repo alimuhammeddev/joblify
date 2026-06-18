@@ -49,12 +49,10 @@ export default function Dashboard() {
         </h1>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 mb-8">
         {[
           { label: "Applied Jobs", value: "24", icon: Briefcase },
           { label: "Saved Jobs", value: "12", icon: Bookmark },
-          { label: "Profile Views", value: "89", icon: TrendingUp },
-          { label: "Interview Invites", value: "5", icon: Bell },
         ].map((item, index) => (
           <div
             key={index}

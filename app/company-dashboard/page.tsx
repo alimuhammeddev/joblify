@@ -60,12 +60,10 @@ export default function CompanyDashboard() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 mb-8">
         {[
           { label: "Posted Jobs", value: "12", icon: Briefcase },
           { label: "Total Applicants", value: "248", icon: Users },
-          { label: "Profile Views", value: "1.2k", icon: Eye },
-          { label: "Interviews Scheduled", value: "18", icon: Bell },
         ].map((item, index) => (
           <div
             key={index}
@@ -165,41 +163,6 @@ export default function CompanyDashboard() {
                 </div>
               ))}
             </div>
-          </div>
-
-          {/* Company Performance */}
-          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-[#1F3064] mb-3">
-              Company Performance
-            </h2>
-
-            <div className="space-y-4">
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Hiring Progress</span>
-                  <span className="font-medium text-[#1F3064]">75%</span>
-                </div>
-
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#1F3064] h-3 rounded-full w-[75%]" />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500">Job Engagement</span>
-                  <span className="font-medium text-[#1F3064]">89%</span>
-                </div>
-
-                <div className="w-full bg-gray-200 rounded-full h-3">
-                  <div className="bg-[#F0802D] h-3 rounded-full w-[89%]" />
-                </div>
-              </div>
-            </div>
-
-            <button className="mt-5 w-full bg-[#1F3064] text-white py-2 rounded-xl font-medium hover:opacity-90 transition">
-              View Analytics
-            </button>
           </div>
         </div>
       </div>

@@ -1,9 +1,42 @@
-import { User, Building2 } from "lucide-react";
+"use client";
+
+import { User, Building2, ChevronDown } from "lucide-react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import icon from "@/components/assets/icon.png";
 
+const industries = [
+  "Information Technology",
+  "Software Development",
+  "FinTech",
+  "Banking & Finance",
+  "Healthcare",
+  "Education",
+  "Telecommunications",
+  "Manufacturing",
+  "Construction",
+  "Real Estate",
+  "Oil & Gas",
+  "Energy & Utilities",
+  "Agriculture",
+  "Transportation & Logistics",
+  "Retail & E-commerce",
+  "Media & Entertainment",
+  "Hospitality & Tourism",
+  "Consulting",
+  "Government",
+  "Non-Profit",
+  "Human Resources",
+  "Marketing & Advertising",
+  "Legal Services",
+  "Security Services",
+  "Other",
+];
+
 export default function CompanySignup() {
+  const [industry, setIndustry] = useState("");
+
   return (
     <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
@@ -75,6 +108,33 @@ export default function CompanySignup() {
               placeholder="Enter company email"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+              Industry
+            </label>
+
+            <div className="relative">
+              <select
+                value={industry}
+                onChange={(e) => setIndustry(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
+              >
+                <option value="">Select Industry</option>
+
+                {industries.map((item) => (
+                  <option key={item} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </select>
+
+              <ChevronDown
+                size={18}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              />
+            </div>
           </div>
 
           <div>

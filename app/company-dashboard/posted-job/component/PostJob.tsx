@@ -1,41 +1,27 @@
 "use client";
 
-import {
-  X,
-  Briefcase,
-  MapPin,
-  FileText,
-  Building2,
-} from "lucide-react";
+import { X, Briefcase, MapPin, FileText, Building2 } from "lucide-react";
 
 interface PostJobModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export default function PostJobModal({
-  isOpen,
-  onClose,
-}: PostJobModalProps) {
+export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-
-      <div className="bg-white w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl max-h-[80vh] overflow-y-auto -mt-16">
-
+      <div className="bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl md:max-h-[90vh] max-h-[80vh] overflow-y-auto md:mt-0 -mt-16">
         <div className="bg-linear-to-r from-[#1F3064] to-[#2B4287] text-white p-6">
           <div className="flex items-center justify-between">
-
             <div className="flex items-center gap-4">
               <div className="bg-white/15 p-3 rounded-2xl">
                 <Briefcase size={20} />
               </div>
 
               <div>
-                <h2 className="lg:text-2xl text-xl font-bold">
-                  Post New Job
-                </h2>
+                <h2 className="lg:text-2xl text-xl font-bold">Post New Job</h2>
 
                 <p className="text-white/80 text-sm mt-1">
                   Create a new opportunity and attract top talent.
@@ -49,20 +35,17 @@ export default function PostJobModal({
             >
               <X size={20} />
             </button>
-
           </div>
         </div>
 
         {/* Form */}
         <form className="p-6 md:p-8">
-
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-[#1F3064] mb-5">
               Job Information
             </h3>
 
             <div className="grid md:grid-cols-2 gap-5">
-
               {/* Job Title */}
               <div>
                 <label className="text-sm font-medium text-gray-600 mb-2 block">
@@ -70,10 +53,7 @@ export default function PostJobModal({
                 </label>
 
                 <div className="flex items-center border border-gray-200 rounded-2xl px-4 py-3 focus-within:border-[#F0802D]">
-                  <Briefcase
-                    size={18}
-                    className="text-[#F0802D] mr-3"
-                  />
+                  <Briefcase size={18} className="text-[#F0802D] mr-3" />
 
                   <input
                     type="text"
@@ -90,10 +70,7 @@ export default function PostJobModal({
                 </label>
 
                 <div className="flex items-center border border-gray-200 rounded-2xl px-4 py-3 focus-within:border-[#F0802D]">
-                  <Building2
-                    size={18}
-                    className="text-[#F0802D] mr-3"
-                  />
+                  <Building2 size={18} className="text-[#F0802D] mr-3" />
 
                   <input
                     type="text"
@@ -110,10 +87,7 @@ export default function PostJobModal({
                 </label>
 
                 <div className="flex items-center border border-gray-200 rounded-2xl px-4 py-3 focus-within:border-[#F0802D]">
-                  <MapPin
-                    size={18}
-                    className="text-[#F0802D] mr-3"
-                  />
+                  <MapPin size={18} className="text-[#F0802D] mr-3" />
 
                   <input
                     type="text"
@@ -137,7 +111,6 @@ export default function PostJobModal({
                   <option>Hybrid</option>
                 </select>
               </div>
-
             </div>
           </div>
 
@@ -148,7 +121,6 @@ export default function PostJobModal({
             </h3>
 
             <div className="grid md:grid-cols-2 gap-5">
-
               <div>
                 <label className="text-sm font-medium text-gray-600 mb-2 block">
                   Minimum Salary
@@ -172,7 +144,6 @@ export default function PostJobModal({
                   className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-[#F0802D]"
                 />
               </div>
-
             </div>
           </div>
 
@@ -184,14 +155,49 @@ export default function PostJobModal({
 
             <div className="border border-gray-200 rounded-2xl p-4 focus-within:border-[#F0802D]">
               <div className="flex items-start gap-3">
-                <FileText
-                  size={18}
-                  className="text-[#F0802D] mt-1"
-                />
+                <FileText size={18} className="text-[#F0802D] mt-1" />
 
                 <textarea
-                  rows={7}
+                  rows={2}
                   placeholder="Describe responsibilities, requirements, qualifications, and expectations..."
+                  className="w-full outline-none resize-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Responsibilities */}
+          <div className="mt-8">
+            <label className="text-sm font-medium text-gray-600 mb-2 block">
+              Responsibilities
+            </label>
+
+            <div className="border border-gray-200 rounded-2xl p-4 focus-within:border-[#F0802D]">
+              <div className="flex items-start gap-3">
+                <FileText size={18} className="text-[#F0802D] mt-1" />
+
+                <textarea
+                  rows={3}
+                  placeholder="e.g Build and maintain frontend applications, collaborate with backend team..."
+                  className="w-full outline-none resize-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Requirements */}
+          <div className="mt-6">
+            <label className="text-sm font-medium text-gray-600 mb-2 block">
+              Requirements
+            </label>
+
+            <div className="border border-gray-200 rounded-2xl p-4 focus-within:border-[#F0802D]">
+              <div className="flex items-start gap-3">
+                <FileText size={18} className="text-[#F0802D] mt-1" />
+
+                <textarea
+                  rows={3}
+                  placeholder="e.g 3+ years experience, React, TypeScript, strong communication skills..."
                   className="w-full outline-none resize-none"
                 />
               </div>
@@ -200,7 +206,6 @@ export default function PostJobModal({
 
           {/* buttons */}
           <div className="mt-8 flex flex-col sm:flex-row justify-end gap-3 mb-7">
-
             <button
               type="button"
               onClick={onClose}
@@ -213,13 +218,11 @@ export default function PostJobModal({
               type="submit"
               className="bg-[#1F3064] hover:bg-[#182650] text-white px-8 py-3 rounded-2xl font-medium transition shadow-md"
             >
-              Publish Job
+              Post Job
             </button>
-
           </div>
-
         </form>
       </div>
     </div>
   );
-};
+}

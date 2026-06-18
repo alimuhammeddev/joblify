@@ -1,8 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, MapPin, Briefcase, Clock, Users } from "lucide-react";
+import {
+  Building2,
+  MapPin,
+  Briefcase,
+  Clock,
+  Users,
+  Wallet,
+} from "lucide-react";
 import PostJobModal from "./component/PostJob";
+import ViewApplicants from "./component/ViewApplicants";
+import EditJobModal from "./component/EditJob";
 
 const postedJobs = [
   {
@@ -11,8 +20,21 @@ const postedJobs = [
     applicants: 45,
     location: "Lagos, Nigeria",
     type: "Full-time",
+    salary: "₦500,000 - ₦800,000",
     posted: "2 days ago",
     status: "Open",
+    applicantList: [
+      {
+        id: 1,
+        name: "John Doe",
+        email: "john@example.com",
+      },
+      {
+        id: 2,
+        name: "Sarah Johnson",
+        email: "sarah@example.com",
+      },
+    ],
   },
   {
     id: 2,
@@ -20,22 +42,26 @@ const postedJobs = [
     applicants: 28,
     location: "Abuja, Nigeria",
     type: "Remote",
+    salary: "₦400,000 - ₦650,000",
     posted: "1 day ago",
     status: "Open",
-  },
-  {
-    id: 3,
-    title: "Backend Engineer",
-    applicants: 63,
-    location: "Port Harcourt, Nigeria",
-    type: "Hybrid",
-    posted: "3 days ago",
-    status: "Closed",
+    applicantList: [
+      {
+        id: 3,
+        name: "David James",
+        email: "david@example.com",
+      },
+    ],
   },
 ];
 
 export default function PostedJob() {
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
+
+  const [isApplicantsOpen, setIsApplicantsOpen] = useState(false);
+
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<any>(null);
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
@@ -102,6 +128,11 @@ export default function PostedJob() {
                   </span>
 
                   <span className="flex items-center gap-1">
+                    <Wallet className="w-4 h-4 text-[#F0802D]" />
+                    {job.salary}
+                  </span>
+
+                  <span className="flex items-center gap-1">
                     <Clock className="w-4 h-4 text-[#F0802D]" />
                     {job.posted}
                   </span>
@@ -110,11 +141,23 @@ export default function PostedJob() {
 
               {/* Actions */}
               <div className="flex flex-wrap gap-3">
-                <button className="border border-[#1F3064] text-[#1F3064] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#1F3064] hover:text-white transition">
+                <button
+                  onClick={() => {
+                    setSelectedJob(job);
+                    setIsApplicantsOpen(true);
+                  }}
+                  className="border border-[#1F3064] text-[#1F3064] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#1F3064] hover:text-white transition"
+                >
                   View Applicants
                 </button>
 
-                <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition">
+                <button
+                  onClick={() => {
+                    setSelectedJob(job);
+                    setIsEditOpen(true);
+                  }}
+                  className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition"
+                >
                   Edit Job
                 </button>
 
@@ -130,6 +173,19 @@ export default function PostedJob() {
       <PostJobModal
         isOpen={isPostJobOpen}
         onClose={() => setIsPostJobOpen(false)}
+      />
+
+      <ViewApplicants
+        isOpen={isApplicantsOpen}
+        onClose={() => setIsApplicantsOpen(false)}
+        jobTitle={selectedJob?.title || ""}
+        applicants={selectedJob?.applicantList || []}
+      />
+
+      <EditJobModal
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        job={selectedJob}
       />
     </section>
   );

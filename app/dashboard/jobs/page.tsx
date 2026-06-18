@@ -57,14 +57,12 @@ export default function Jobs() {
     <section className="bg-gray-50 min-h-screen mb-20">
       <div>
         <div className="mb-5">
-          <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
-            Jobs
-          </h1>
+          <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">Jobs</h1>
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-gray-100 mb-8">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 flex items-center gap-3 border rounded-xl px-4 py-3">
+            <div className="flex-1 flex items-center gap-3 border border-gray-300 rounded-xl px-4 py-3">
               <Search className="w-5 h-5 text-gray-400" />
               <input
                 type="text"

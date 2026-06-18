@@ -1,3 +1,5 @@
+"use client";
+
 import {
   User,
   Mail,
@@ -8,9 +10,13 @@ import {
   Save,
   Upload,
   FileText,
+  ChevronDown,
 } from "lucide-react";
+import { useState } from "react";
 
 export default function UserSettings() {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div className="mb-6">
@@ -41,10 +47,6 @@ export default function UserSettings() {
               King Rudy
             </h2>
             <p className="text-sm text-gray-500">Frontend Developer</p>
-
-            <button className="mt-5 border border-[#1F3064] text-[#1F3064] px-5 py-2 rounded-lg hover:bg-[#1F3064] hover:text-white transition">
-              Update Profile
-            </button>
           </div>
         </div>
 
@@ -56,7 +58,7 @@ export default function UserSettings() {
               <label className="text-sm font-medium text-gray-600 mb-2 block">
                 Full Name
               </label>
-              <div className="flex items-center border rounded-xl px-4 py-3">
+              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3">
                 <User size={18} className="text-gray-400 mr-3" />
                 <input
                   type="text"
@@ -71,7 +73,7 @@ export default function UserSettings() {
               <label className="text-sm font-medium text-gray-600 mb-2 block">
                 Email Address
               </label>
-              <div className="flex items-center border rounded-xl px-4 py-3">
+              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3">
                 <Mail size={18} className="text-gray-400 mr-3" />
                 <input
                   type="email"
@@ -86,7 +88,7 @@ export default function UserSettings() {
               <label className="text-sm font-medium text-gray-600 mb-2 block">
                 Phone Number
               </label>
-              <div className="flex items-center border rounded-xl px-4 py-3">
+              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3">
                 <Phone size={18} className="text-gray-400 mr-3" />
                 <input
                   type="text"
@@ -96,19 +98,90 @@ export default function UserSettings() {
               </div>
             </div>
 
-            {/* Password */}
             <div>
               <label className="text-sm font-medium text-gray-600 mb-2 block">
-                Password
+                Current Password
               </label>
-              <div className="flex items-center border rounded-xl px-4 py-3">
+              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3">
                 <Lock size={18} className="text-gray-400 mr-3" />
                 <input
                   type="password"
-                  defaultValue="password123"
+                  defaultValue="CurrentPassword123"
                   className="w-full outline-none text-sm"
                 />
               </div>
+            </div>
+
+            {/* Change Password */}
+            <div className="md:col-span-2">
+              <button
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="w-full flex items-center justify-between border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition"
+              >
+                <div className="flex items-center gap-3">
+                  <Lock size={18} className="text-gray-400" />
+                  <span className="text-sm font-medium text-gray-700">
+                    Change Password
+                  </span>
+                </div>
+
+                <ChevronDown
+                  size={18}
+                  className={`text-gray-400 transition-transform duration-300 ${
+                    showPassword ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {/* Animated dropdown */}
+              <div
+                className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                  showPassword
+                    ? "max-h-65 opacity-100 mt-4"
+                    : "max-h-0 opacity-0"
+                }`}
+              >
+                <div className="border border-gray-300 rounded-xl p-4 space-y-4 bg-gray-50">
+                  <div>
+                    <label className="text-sm text-gray-600 block mb-2">
+                      New Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Enter new password"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-[#1F3064]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-sm text-gray-600 block mb-2">
+                      Confirm Password
+                    </label>
+                    <input
+                      type="password"
+                      placeholder="Confirm new password"
+                      className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-[#1F3064]"
+                    />
+                  </div>
+
+                  <button className="bg-[#1F3065] text-white px-4 py-2 rounded-lg hover:opacity-90 transition">
+                    Update Password
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Bio */}
+            <div className="md:col-span-2">
+              <label className="text-sm font-medium text-gray-600 mb-2 block">
+                Bio
+              </label>
+
+              <textarea
+                rows={1}
+                placeholder="e.g Frontend developer with 5 years of experience"
+                className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none text-sm resize-none focus:border-[#1F3064]"
+              />
             </div>
           </div>
 
@@ -151,7 +224,7 @@ export default function UserSettings() {
             </h3>
 
             <div className="space-y-4">
-              <div className="flex items-center justify-between border rounded-xl p-4">
+              <div className="flex items-center justify-between border border-gray-300 rounded-xl p-4">
                 <div className="flex items-center gap-3">
                   <Bell size={18} className="text-[#F0802D]" />
                   <div>
@@ -169,13 +242,11 @@ export default function UserSettings() {
                 />
               </div>
 
-              <div className="flex items-center justify-between border rounded-xl p-4">
+              <div className="flex items-center justify-between border border-gray-300 rounded-xl p-4">
                 <div className="flex items-center gap-3">
                   <Bell size={18} className="text-[#F0802D]" />
                   <div>
-                    <p className="font-medium text-sm">
-                      Application Updates
-                    </p>
+                    <p className="font-medium text-sm">Application Updates</p>
                     <p className="text-xs text-gray-500">
                       Get updates on your submitted applications
                     </p>
@@ -193,7 +264,8 @@ export default function UserSettings() {
 
           {/* Save Button */}
           <div className="mt-8 flex justify-end">
-            <button className="bg-[#1F3064] text-white px-6 py-3 rounded-xl hover:bg-[#16254d] transition">
+            <button className="bg-[#1F3064] text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:opacity-90">
+              <Save size={18} />
               Save Changes
             </button>
           </div>
@@ -201,4 +273,4 @@ export default function UserSettings() {
       </div>
     </section>
   );
-};
+}

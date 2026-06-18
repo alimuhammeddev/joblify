@@ -9,7 +9,7 @@ export default function RecentlyApplied() {
       location: "Remote",
       salary: "₦300k - ₦500k",
       appliedDate: "2 days ago",
-      status: "Under Review",
+      status: "Application Sent",
     },
     {
       id: 2,
@@ -18,7 +18,7 @@ export default function RecentlyApplied() {
       location: "Lagos, Nigeria",
       salary: "₦200k - ₦350k",
       appliedDate: "5 days ago",
-      status: "Interview Scheduled",
+      status: "Application Sent",
     },
     {
       id: 3,
@@ -36,7 +36,7 @@ export default function RecentlyApplied() {
       location: "Hybrid - Lagos",
       salary: "₦500k - ₦800k",
       appliedDate: "3 days ago",
-      status: "Shortlisted",
+      status: "Application Sent",
     },
   ];
 
