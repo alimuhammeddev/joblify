@@ -89,10 +89,6 @@ export default function RecentlyApplied() {
                   <CheckCircle size={16} />
                   <span>{job.status}</span>
                 </div>
-
-                <button className="border border-[#1F3064] text-[#1F3064] px-5 py-2 rounded-lg hover:bg-[#1F3064] hover:text-white transition cursor-pointer">
-                  View Details
-                </button>
               </div>
             </div>
           </div>

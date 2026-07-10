@@ -28,11 +28,17 @@ const postedJobs = [
         id: 1,
         name: "John Doe",
         email: "john@example.com",
+        resume: "John_Doe_CV.pdf",
+        coverLetter:
+          "I am excited to apply for the Frontend Developer position. I have over three years of experience building responsive web applications using React and Next.js.",
       },
       {
         id: 2,
         name: "Sarah Johnson",
         email: "sarah@example.com",
+        resume: "Sarah_Johnson_CV.pdf",
+        coverLetter:
+          "With a strong background in UI/UX and frontend development, I believe I can contribute significantly to your team.",
       },
     ],
   },

@@ -6,6 +6,7 @@ import {
   MapPin,
   Clock,
   TrendingUp,
+  Wallet,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -15,21 +16,21 @@ const recommendedJobs = [
     company: "TechNova",
     location: "Lagos, Nigeria",
     type: "Full-time",
-    posted: "2 days ago",
+    pay: "₦300k - ₦500k",
   },
   {
     title: "UI/UX Designer",
     company: "Pixel Studio",
     location: "Abuja, Nigeria",
     type: "Remote",
-    posted: "1 day ago",
+    pay: "₦300k - ₦500k",
   },
   {
     title: "Backend Engineer",
     company: "CloudStack",
     location: "Port Harcourt, Nigeria",
     type: "Hybrid",
-    posted: "3 days ago",
+    pay: "₦300k - ₦500k",
   },
 ];
 
@@ -107,8 +108,8 @@ export default function Dashboard() {
                         {job.type}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4 text-[#F0802D]" />{" "}
-                        {job.posted}
+                        <Wallet className="w-4 h-4 text-[#F0802D]" />{" "}
+                        {job.pay}
                       </span>
                     </div>
                   </div>
