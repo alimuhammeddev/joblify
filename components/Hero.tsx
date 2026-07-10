@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import hero from "./assets/hero.png";
+import Link from "next/link";
 
 export default function Hero() {
   return (
@@ -26,9 +27,11 @@ export default function Hero() {
           </p>
 
           <div className="flex mt-5 w-full">
-            <button className="w-full md:w-auto bg-[#F0802D] text-white px-6 py-3 rounded-lg hover:bg-[#E67E22] transition cursor-pointer">
-              Explore Jobs
-            </button>
+            <Link href="/jobs">
+              <button className="w-full md:w-auto bg-[#F0802D] text-white px-6 py-3 rounded-lg hover:bg-[#E67E22] transition cursor-pointer">
+                Explore Jobs
+              </button>
+            </Link>
           </div>
         </div>
 

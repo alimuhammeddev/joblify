@@ -1,4 +1,5 @@
 import { MapPin, Wallet, Bookmark, Trash2 } from "lucide-react";
+import Link from "next/link";
 
 export default function SavedJobs() {
   const savedJobs = [
@@ -83,9 +84,11 @@ export default function SavedJobs() {
 
               {/* Right Section */}
               <div className="flex flex-col sm:flex-row gap-3">
+                <Link href="job-details">
                 <button className="bg-[#1F3064] text-white px-5 py-2 rounded-lg hover:bg-[#16254d] transition cursor-pointer">
                   Apply Now
                 </button>
+                </Link>
 
                 <button className="flex items-center justify-center gap-2 border border-red-200 text-red-500 px-5 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer">
                   <Trash2 size={16} />

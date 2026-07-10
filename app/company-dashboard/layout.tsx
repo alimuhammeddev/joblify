@@ -166,7 +166,7 @@ export default function CompanyDashboardLayout({
         </Link>
 
         <Link
-          href="/company-dashboard/company-user-settings"
+          href="/company-dashboard/company-settings"
           className={`flex flex-col items-center ${
             isActive("/company-dashboard/company-user-settings")
               ? "text-[#1F3064]"

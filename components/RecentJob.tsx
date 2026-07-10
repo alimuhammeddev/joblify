@@ -1,4 +1,5 @@
 import { MapPin, Wallet } from "lucide-react";
+import Link from "next/link";
 
 export default function RecentJob() {
   const jobs = [
@@ -77,9 +78,11 @@ export default function RecentJob() {
       </div>
 
       <div className="flex justify-center mt-10">
-        <button className="px-6 py-2 border cursor-pointer border-[#1F3064] text-[#1F3064] rounded-lg hover:bg-[#1F3064] hover:text-white transition">
-          View More Jobs
-        </button>
+        <Link href="/jobs">
+          <button className="px-6 py-2 border cursor-pointer border-[#1F3064] text-[#1F3064] rounded-lg hover:bg-[#1F3064] hover:text-white transition">
+            View More Jobs
+          </button>
+        </Link>
       </div>
     </section>
   );
