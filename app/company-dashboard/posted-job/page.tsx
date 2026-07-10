@@ -56,6 +56,9 @@ const postedJobs = [
         id: 3,
         name: "David James",
         email: "david@example.com",
+        resume: "David_James_CV.pdf",
+        coverLetter:
+          "With a strong background in UI/UX and frontend development, I believe I can contribute significantly to your team.",
       },
     ],
   },
