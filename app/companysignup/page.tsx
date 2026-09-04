@@ -4,6 +4,13 @@ import { User, Building2, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+
+import { auth, db } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
 
 const industries = [
@@ -35,15 +42,131 @@ const industries = [
 ];
 
 export default function CompanySignup() {
+  const router = useRouter();
+
+  const [companyName, setCompanyName] = useState("");
+  const [email, setEmail] = useState("");
   const [industry, setIndustry] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    setError("");
+
+    // Validate company name
+    if (!companyName.trim()) {
+      setError("Please enter your company name.");
+      return;
+    }
+
+    // Validate industry
+    if (!industry) {
+      setError("Please select your industry.");
+      return;
+    }
+
+    // Validate phone
+    if (!phone.trim()) {
+      setError("Please enter your company phone number.");
+      return;
+    }
+
+    // Validate passwords
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    // Validate terms
+    if (!termsAccepted) {
+      setError("You must agree to the Terms & Conditions.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+
+      const user = userCredential.user;
+      await updateProfile(user, {
+        displayName: companyName,
+      });
+
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        companyName: companyName,
+        email: user.email,
+        industry: industry,
+        phone: phone,
+        accountType: "company",
+        createdAt: serverTimestamp(),
+      });
+
+      router.push("/company-dashboard");
+    } catch (error: any) {
+      console.error(error);
+
+      switch (error.code) {
+        case "auth/email-already-in-use":
+          setError("An account with this email already exists.");
+          break;
+
+        case "auth/invalid-email":
+          setError("Please enter a valid company email address.");
+          break;
+
+        case "auth/weak-password":
+          setError("Your password is too weak. Use at least 6 characters.");
+          break;
+
+        case "auth/configuration-not-found":
+          setError(
+            "Firebase Authentication is not configured correctly. Please check your Firebase settings.",
+          );
+          break;
+
+        case "permission-denied":
+          setError(
+            "Unable to save company information. Please check your Firestore security rules.",
+          );
+          break;
+
+        default:
+          setError(
+            "Something went wrong while creating your account. Please try again.",
+          );
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
+        {/* Logo */}
         <Link href="/">
           <Image src={icon} alt="icon" className="w-10" />
         </Link>
 
+        {/* Heading */}
         <div className="text-center mb-4">
           <h1 className="text-2xl font-bold text-[#1F3064]">
             Welcome to{" "}
@@ -55,7 +178,9 @@ export default function CompanySignup() {
           <p className="text-gray-500">Create your Company Joblify account</p>
         </div>
 
+        {/* Account Type */}
         <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
+          {/* Individual */}
           <Link href="/signup">
             <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#f8fafc] transition duration-300">
               <div className="flex flex-col items-start gap-3">
@@ -72,6 +197,7 @@ export default function CompanySignup() {
             </div>
           </Link>
 
+          {/* Company */}
           <div className="border border-[#1F3064] rounded-xl p-4 bg-[#fff7f1] shadow-sm">
             <div className="flex flex-col items-start gap-3">
               <div className="bg-[#F0802D] text-white p-3 rounded-lg">
@@ -87,29 +213,48 @@ export default function CompanySignup() {
           </div>
         </div>
 
-        <form className="space-y-5">
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
+        {/* Form */}
+        <form onSubmit={handleSignup} className="space-y-5">
+          {/* Company Name */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Company Name
             </label>
+
             <input
               type="text"
               placeholder="Enter your company name"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
           </div>
 
+          {/* Company Email */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Company Email
             </label>
+
             <input
               type="email"
               placeholder="Enter company email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
           </div>
 
+          {/* Industry */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Industry
@@ -119,6 +264,7 @@ export default function CompanySignup() {
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
+                required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
               >
                 <option value="">Select Industry</option>
@@ -137,41 +283,64 @@ export default function CompanySignup() {
             </div>
           </div>
 
+          {/* Phone */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Phone Number
             </label>
+
             <input
               type="tel"
               placeholder="Enter company phone number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
           </div>
 
+          {/* Password */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Password
             </label>
+
             <input
               type="password"
               placeholder="Create a password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
           </div>
 
+          {/* Confirm Password */}
           <div>
             <label className="block text-sm font-semibold text-[#1F3064] mb-2">
               Confirm Password
             </label>
+
             <input
               type="password"
               placeholder="Confirm your password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
             />
           </div>
 
+          {/* Terms */}
           <div className="flex items-start gap-2 text-sm">
-            <input type="checkbox" className="mt-1 rounded text-[#1F3064]" />
+            <input
+              type="checkbox"
+              checked={termsAccepted}
+              onChange={(e) => setTermsAccepted(e.target.checked)}
+              required
+              className="mt-1 rounded text-[#1F3064]"
+            />
+
             <p className="text-[#1F3064]">
               I agree to the{" "}
               <a href="#" className="text-[#F0802D] hover:underline">
@@ -180,16 +349,17 @@ export default function CompanySignup() {
             </p>
           </div>
 
-          <Link href="company-dashboard">
-            <button
-              type="submit"
-              className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition"
-            >
-              Create Company Account
-            </button>
-          </Link>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Creating Account..." : "Create Company Account"}
+          </button>
         </form>
 
+        {/* Login */}
         <p className="text-center text-sm text-[#1F3064] mt-6">
           Already have a company account?{" "}
           <Link
