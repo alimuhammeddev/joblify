@@ -83,7 +83,7 @@ export default function Jobs() {
           const data = job.data();
 
           return {
-            id: job.id,
+            id: String(job.id),
             title: data.title || "Untitled job",
             company: data.companyName || "Company",
             location: data.location || "Location not specified",
