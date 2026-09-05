@@ -18,6 +18,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { auth, db, storage } from "@/lib/firebase";
+import { useUserSettingsStore } from "@/lib/userSettingsStore";
 
 type ProfileData = {
   phone?: string;
@@ -39,50 +40,69 @@ const CV_TYPES = [
 ];
 
 export default function UserSettings() {
-  const [showPassword, setShowPassword] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [bio, setBio] = useState("");
-  const [profileImageUrl, setProfileImageUrl] = useState("");
-  const [cvData, setCvData] = useState("");
-  const [cvName, setCvName] = useState("");
-  const [cvType, setCvType] = useState("");
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
-  const [jobAlerts, setJobAlerts] = useState(true);
-  const [applicationUpdates, setApplicationUpdates] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  const {
+    profile,
+    showPassword,
+    loading,
+    saving,
+    message,
+    error,
+    updateProfile,
+    setShowPassword,
+    setLoading,
+    setSaving,
+    setMessage,
+    setError,
+    resetProfile,
+    resetFeedback,
+  } = useUserSettingsStore();
+  const {
+    fullName,
+    email,
+    phone,
+    bio,
+    profileImageUrl,
+    cvData,
+    cvName,
+    cvType,
+    jobAlerts,
+    applicationUpdates,
+  } = profile;
 
   useEffect(() => {
     return onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (!currentUser) {
+        resetProfile();
         setLoading(false);
         return;
       }
 
-      setFullName(currentUser.displayName || "");
-      setEmail(currentUser.email || "");
+      resetProfile();
+      updateProfile({
+        fullName: currentUser.displayName || "",
+        email: currentUser.email || "",
+      });
 
       try {
         const profileSnapshot = await getDoc(doc(db, "users", currentUser.uid));
         const profile = profileSnapshot.data() as ProfileData | undefined;
 
         if (profile) {
-          setPhone(profile.phone || "");
-          setBio(profile.bio || "");
-          setProfileImageUrl(profile.profileImageUrl || "");
-          setCvData(profile.cvData || "");
-          setCvName(profile.cvName || "");
-          setCvType(profile.cvType || "");
-          setJobAlerts(profile.jobAlerts ?? true);
-          setApplicationUpdates(profile.applicationUpdates ?? true);
+          updateProfile({
+            phone: profile.phone || "",
+            bio: profile.bio || "",
+            profileImageUrl: profile.profileImageUrl || "",
+            cvData: profile.cvData || "",
+            cvName: profile.cvName || "",
+            cvType: profile.cvType || "",
+            jobAlerts: profile.jobAlerts ?? true,
+            applicationUpdates: profile.applicationUpdates ?? true,
+          });
         }
       } catch {
         setError("We could not load your saved profile details.");
@@ -121,21 +141,19 @@ export default function UserSettings() {
     if (!file || !validateFile(file, "image")) return;
 
     setProfileImageFile(file);
-    setProfileImageUrl(URL.createObjectURL(file));
+    updateProfile({ profileImageUrl: URL.createObjectURL(file) });
   };
 
   const handleCvChange = (file: File | undefined) => {
     if (!file || !validateFile(file, "cv")) return;
 
     setCvFile(file);
-    setCvName(file.name);
-    setCvType(file.type);
+    updateProfile({ cvName: file.name, cvType: file.type });
   };
 
   const handleSave = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setMessage("");
-    setError("");
+    resetFeedback();
 
     const currentUser = user || auth.currentUser;
     if (!currentUser) {
@@ -182,8 +200,10 @@ export default function UserSettings() {
         { merge: true }
       );
 
-      setProfileImageUrl(savedProfileImageUrl);
-      setCvData(savedCvData);
+      updateProfile({
+        profileImageUrl: savedProfileImageUrl,
+        cvData: savedCvData,
+      });
       setProfileImageFile(null);
       setCvFile(null);
       setMessage("Your changes have been saved.");
@@ -246,19 +266,19 @@ export default function UserSettings() {
             </div>
             <div>
               <label className="text-sm font-medium text-gray-600 mb-2 block">Phone Number</label>
-              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3"><Phone size={18} className="text-gray-400 mr-3" /><input type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="Enter your phone number" className="w-full outline-none text-sm" /></div>
+              <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3"><Phone size={18} className="text-gray-400 mr-3" /><input type="tel" value={phone} onChange={(event) => updateProfile({ phone: event.target.value })} placeholder="Enter your phone number" className="w-full outline-none text-sm" /></div>
             </div>
             <div>
               <label className="text-sm font-medium text-gray-600 mb-2 block">Current Password</label>
               <div className="flex items-center border border-gray-300 rounded-xl px-4 py-3"><Lock size={18} className="text-gray-400 mr-3" /><input type="password" placeholder="Enter current password" className="w-full outline-none text-sm" /></div>
             </div>
             <div className="md:col-span-2">
-              <button type="button" onClick={() => setShowPassword((previous) => !previous)} className="w-full flex items-center justify-between border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition"><div className="flex items-center gap-3"><Lock size={18} className="text-gray-400" /><span className="text-sm font-medium text-gray-700">Change Password</span></div><ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${showPassword ? "rotate-180" : ""}`} /></button>
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="w-full flex items-center justify-between border border-gray-300 rounded-xl px-4 py-3 hover:bg-gray-50 transition"><div className="flex items-center gap-3"><Lock size={18} className="text-gray-400" /><span className="text-sm font-medium text-gray-700">Change Password</span></div><ChevronDown size={18} className={`text-gray-400 transition-transform duration-300 ${showPassword ? "rotate-180" : ""}`} /></button>
               <div className={`overflow-hidden transition-all duration-500 ease-in-out ${showPassword ? "max-h-65 opacity-100 mt-4" : "max-h-0 opacity-0"}`}><div className="border border-gray-300 rounded-xl p-4 space-y-4 bg-gray-50"><input type="password" placeholder="Enter new password" className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-[#1F3064]" /><input type="password" placeholder="Confirm new password" className="w-full border border-gray-300 rounded-lg px-4 py-2 outline-none focus:border-[#1F3064]" /><button type="button" className="bg-[#1F3065] text-white px-4 py-2 rounded-lg hover:opacity-90 transition">Update Password</button></div></div>
             </div>
             <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-600 mb-2 block">Bio</label>
-              <textarea rows={3} value={bio} onChange={(event) => setBio(event.target.value)} placeholder="e.g Frontend developer with 5 years of experience" className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none text-sm resize-none focus:border-[#1F3064]" />
+              <textarea rows={3} value={bio} onChange={(event) => updateProfile({ bio: event.target.value })} placeholder="e.g Frontend developer with 5 years of experience" className="w-full border border-gray-300 rounded-xl px-4 py-3 outline-none text-sm resize-none focus:border-[#1F3064]" />
             </div>
           </div>
 
@@ -267,7 +287,7 @@ export default function UserSettings() {
             <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6"><div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"><div className="flex items-center gap-4"><div className="bg-[#F0802D]/10 p-3 rounded-xl"><FileText size={22} className="text-[#F0802D]" /></div><div><p className="font-medium text-sm text-[#1F3064]">{cvName || "Upload Your CV"}</p><p className="text-xs text-gray-500">PDF, DOC, or DOCX (Max 700KB)</p>{cvData && <a href={cvData} download={cvName} className="text-xs text-[#F0802D] hover:underline">Download saved CV</a>}</div></div><label className="cursor-pointer bg-[#1F3064] text-white px-5 py-2 rounded-lg hover:bg-[#16254d] transition flex items-center gap-2"><Upload size={16} /> Upload CV<input type="file" accept=".pdf,.doc,.docx" className="hidden" onChange={(event) => handleCvChange(event.target.files?.[0])} /></label></div></div>
           </div>
 
-          <div className="mt-8"><h3 className="text-lg font-semibold text-[#1F3064] mb-4">Notification Preferences</h3><div className="space-y-4"><label className="flex items-center justify-between border border-gray-300 rounded-xl p-4 cursor-pointer"><div className="flex items-center gap-3"><Bell size={18} className="text-[#F0802D]" /><div><p className="font-medium text-sm">Job Alerts</p><p className="text-xs text-gray-500">Receive notifications for new job matches</p></div></div><input type="checkbox" checked={jobAlerts} onChange={(event) => setJobAlerts(event.target.checked)} className="w-5 h-5 accent-[#F0802D]" /></label><label className="flex items-center justify-between border border-gray-300 rounded-xl p-4 cursor-pointer"><div className="flex items-center gap-3"><Bell size={18} className="text-[#F0802D]" /><div><p className="font-medium text-sm">Application Updates</p><p className="text-xs text-gray-500">Get updates on your submitted applications</p></div></div><input type="checkbox" checked={applicationUpdates} onChange={(event) => setApplicationUpdates(event.target.checked)} className="w-5 h-5 accent-[#F0802D]" /></label></div></div>
+          <div className="mt-8"><h3 className="text-lg font-semibold text-[#1F3064] mb-4">Notification Preferences</h3><div className="space-y-4"><label className="flex items-center justify-between border border-gray-300 rounded-xl p-4 cursor-pointer"><div className="flex items-center gap-3"><Bell size={18} className="text-[#F0802D]" /><div><p className="font-medium text-sm">Job Alerts</p><p className="text-xs text-gray-500">Receive notifications for new job matches</p></div></div><input type="checkbox" checked={jobAlerts} onChange={(event) => updateProfile({ jobAlerts: event.target.checked })} className="w-5 h-5 accent-[#F0802D]" /></label><label className="flex items-center justify-between border border-gray-300 rounded-xl p-4 cursor-pointer"><div className="flex items-center gap-3"><Bell size={18} className="text-[#F0802D]" /><div><p className="font-medium text-sm">Application Updates</p><p className="text-xs text-gray-500">Get updates on your submitted applications</p></div></div><input type="checkbox" checked={applicationUpdates} onChange={(event) => updateProfile({ applicationUpdates: event.target.checked })} className="w-5 h-5 accent-[#F0802D]" /></label></div></div>
 
           <div className="mt-8 flex justify-end"><button type="submit" disabled={saving || !user} className="bg-[#1F3064] text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:opacity-90 disabled:opacity-50"><Save size={18} /> {saving ? "Saving..." : "Save Changes"}</button></div>
         </form>

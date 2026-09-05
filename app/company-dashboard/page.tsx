@@ -3,11 +3,8 @@
 import {
   Users,
   Briefcase,
-  Eye,
-  Bell,
   MapPin,
   Clock,
-  TrendingUp,
   Building2,
 } from "lucide-react";
 import Link from "next/link";

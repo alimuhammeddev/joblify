@@ -6,8 +6,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
 
 export default function Signup() {
@@ -56,6 +57,14 @@ export default function Signup() {
       // Save user's name to Firebase Auth profile
       await updateProfile(userCredential.user, {
         displayName: fullName,
+      });
+
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: userCredential.user.uid,
+        fullName: fullName.trim(),
+        email: userCredential.user.email,
+        accountType: "individual",
+        createdAt: serverTimestamp(),
       });
 
       // Redirect to dashboard
