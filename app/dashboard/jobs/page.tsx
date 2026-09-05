@@ -78,20 +78,19 @@ export default function Jobs() {
 
   useEffect(() => {
     return onSnapshot(collection(db, "jobs"), (snapshot) => {
-      setPostedJobs(
-        snapshot.docs.map((job) => {
-          const data = job.data();
+      const jobs: Job[] = snapshot.docs.map((job) => {
+        const data = job.data();
 
-          return {
-            id: job.id,
-            title: data.title || "Untitled job",
-            company: data.companyName || "Company",
-            location: data.location || "Location not specified",
-            type: data.type || "Not specified",
-            salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
-          } as Job;
-        }),
-      );
+        return {
+          id: job.id,
+          title: String(data.title || "Untitled job"),
+          company: String(data.companyName || "Company"),
+          location: String(data.location || "Location not specified"),
+          type: String(data.type || "Not specified"),
+          salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
+        };
+      });
+      setPostedJobs(jobs);
     });
   }, []);
 
