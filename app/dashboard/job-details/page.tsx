@@ -10,13 +10,14 @@ import {
 import { useState } from "react";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
 import { recordApplication } from "@/lib/userActivity";
 import { recordJobApplication } from "@/lib/companyActivity";
 
-export default function JobDetailsPage() {
+function JobDetailsContent() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId") || "frontend-developer";
   const [submitted, setSubmitted] = useState(false);
@@ -200,5 +201,13 @@ export default function JobDetailsPage() {
         </div>
       </div>
     </section>
+  );
+}
+
+export default function JobDetailsPage() {
+  return (
+    <Suspense fallback={<div>Loading job details...</div>}>
+      <JobDetailsContent />
+    </Suspense>
   );
 }
