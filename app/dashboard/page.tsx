@@ -1,14 +1,16 @@
+"use client";
+
 import {
-  Search,
   Briefcase,
   Bookmark,
-  Bell,
   MapPin,
-  Clock,
-  TrendingUp,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { getUserActivity, type UserActivity } from "@/lib/userActivity";
 
 const recommendedJobs = [
   {
@@ -41,19 +43,78 @@ const recentActivities = [
 ];
 
 export default function Dashboard() {
+  const [displayName, setDisplayName] = useState("User");
+  const [isNewAccount, setIsNewAccount] = useState(false);
+  const [userActivity, setUserActivity] = useState<UserActivity | null>(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setDisplayName(user?.displayName || "User");
+      setUserActivity(user ? getUserActivity(user.uid) : null);
+
+      const createdAt = user?.metadata.creationTime;
+      const lastSignInAt = user?.metadata.lastSignInTime;
+      const accountAge =
+        createdAt && lastSignInAt
+          ? Math.abs(Date.parse(lastSignInAt) - Date.parse(createdAt))
+          : Infinity;
+
+      setIsNewAccount(accountAge < 60 * 1000);
+    });
+  }, []);
+
+  const hasTrackedActivity = Boolean(
+    userActivity?.appliedJobIds.length || userActivity?.savedJobIds.length
+  );
+  const dashboardStats = hasTrackedActivity
+    ? {
+        appliedJobs: String(userActivity?.appliedJobIds.length || 0),
+        savedJobs: String(userActivity?.savedJobIds.length || 0),
+      }
+    : isNewAccount
+      ? { appliedJobs: "0", savedJobs: "0" }
+      : { appliedJobs: "24", savedJobs: "12" };
+  const activities = hasTrackedActivity
+    ? userActivity?.recentActivities || []
+    : isNewAccount
+      ? []
+      : recentActivities;
+  const hasApplications = Boolean(userActivity?.appliedJobIds.length);
+
+  const analyticsData = hasApplications
+    ? [
+        { label: "Applied", value: "100%", color: "bg-[#1F3064]" },
+        { label: "Interviewing", value: "0%", color: "bg-[#F0802D]" },
+        { label: "Shortlisted", value: "0%", color: "bg-[#4F8A70]" },
+        { label: "Rejected", value: "0%", color: "bg-[#D9DEE8]" },
+      ]
+    : isNewAccount
+    ? [
+        { label: "Applied", value: "0%", color: "bg-[#1F3064]" },
+        { label: "Interviewing", value: "0%", color: "bg-[#F0802D]" },
+        { label: "Shortlisted", value: "0%", color: "bg-[#4F8A70]" },
+        { label: "Rejected", value: "0%", color: "bg-[#D9DEE8]" },
+      ]
+    : [
+        { label: "Applied", value: "40%", color: "bg-[#1F3064]" },
+        { label: "Interviewing", value: "25%", color: "bg-[#F0802D]" },
+        { label: "Shortlisted", value: "20%", color: "bg-[#4F8A70]" },
+        { label: "Rejected", value: "15%", color: "bg-[#D9DEE8]" },
+      ];
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div className="mb-8">
         <p className="text-sm text-gray-500">Welcome back</p>
         <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
-          King Rudy
+          {displayName}
         </h1>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 mb-8">
         {[
-          { label: "Applied Jobs", value: "24", icon: Briefcase },
-          { label: "Saved Jobs", value: "12", icon: Bookmark },
+          { label: "Applied Jobs", value: dashboardStats.appliedJobs, icon: Briefcase },
+          { label: "Saved Jobs", value: dashboardStats.savedJobs, icon: Bookmark },
         ].map((item, index) => (
           <div
             key={index}
@@ -130,31 +191,69 @@ export default function Dashboard() {
             <h2 className="text-lg font-semibold text-[#1F3064] mb-4">
               Recent Activity
             </h2>
-            <div className="space-y-3">
-              {recentActivities.map((activity, index) => (
-                <div
-                  key={index}
-                  className="text-sm text-gray-600 border-b pb-2 last:border-none"
-                >
-                  {activity}
-                </div>
-              ))}
-            </div>
+            {activities.length === 0 ? (
+              <p className="text-sm text-gray-500">No recent activity yet.</p>
+            ) : (
+              <div className="space-y-3">
+                {activities.map((activity, index) => (
+                  <div
+                    key={index}
+                    className="text-sm text-gray-600 border-b pb-2 last:border-none"
+                  >
+                    {activity}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
-            <h2 className="text-lg font-semibold text-[#1F3064] mb-3">
-              Profile Completion
-            </h2>
-            <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
-              <div className="bg-[#1F3064] h-3 rounded-full w-[75%]" />
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-semibold text-[#1F3064]">
+                Application Analytics
+              </h2>
+              <span className="text-xs font-medium text-gray-400">This month</span>
             </div>
-            <p className="text-sm text-gray-500">
-              Your profile is 75% complete
-            </p>
-            <button className="mt-4 w-full bg-[#1F3064] text-white py-2 rounded-xl font-medium">
-              Complete Profile
-            </button>
+
+            <div className="flex items-center gap-5">
+              <div
+                className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full"
+                style={{
+                  background: isNewAccount && !hasApplications
+                    ? "#D9DEE8"
+                    : hasApplications
+                      ? "conic-gradient(#1F3064 0 100%, #F0802D 100% 100%, #4F8A70 100% 100%, #D9DEE8 100% 100%)"
+                      : "conic-gradient(#1F3064 0 40%, #F0802D 40% 65%, #4F8A70 65% 85%, #D9DEE8 85% 100%)",
+                }}
+                role="img"
+                aria-label={
+                  hasApplications
+                    ? "Application analytics: 100 percent applied"
+                    : isNewAccount
+                      ? "Application analytics: no applications yet"
+                      : "Application analytics: 40 percent applied, 25 percent interviewing, 20 percent shortlisted, and 15 percent rejected"
+                }
+              >
+                <div className="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-white">
+                  <span className="text-2xl font-bold text-[#1F3064]">
+                    {dashboardStats.appliedJobs}
+                  </span>
+                  <span className="text-[11px] text-gray-500">applications</span>
+                </div>
+              </div>
+
+              <div className="min-w-0 flex-1 space-y-3">
+                {analyticsData.map((item) => (
+                  <div key={item.label} className="flex items-center justify-between gap-3 text-sm">
+                    <span className="flex min-w-0 items-center gap-2 text-gray-600">
+                      <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${item.color}`} />
+                      <span className="truncate">{item.label}</span>
+                    </span>
+                    <span className="font-semibold text-[#1F3064]">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>

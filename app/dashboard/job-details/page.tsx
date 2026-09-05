@@ -1,3 +1,5 @@
+"use client";
+
 import {
   FiBriefcase,
   FiMapPin,
@@ -5,8 +7,60 @@ import {
   FiDollarSign,
   FiUpload,
 } from "react-icons/fi";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { doc, getDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
+import { recordApplication } from "@/lib/userActivity";
+import { recordJobApplication } from "@/lib/companyActivity";
 
 export default function JobDetailsPage() {
+  const searchParams = useSearchParams();
+  const jobId = searchParams.get("jobId") || "frontend-developer";
+  const [submitted, setSubmitted] = useState(false);
+  const [job, setJob] = useState({
+    title: "Frontend Developer",
+    company: "MoTechnologies",
+    location: "Lagos, Nigeria",
+    type: "Full-time",
+  });
+
+  useEffect(() => {
+    if (jobId === "frontend-developer") return;
+
+    getDoc(doc(db, "jobs", jobId)).then((snapshot) => {
+      if (!snapshot.exists()) return;
+
+      const data = snapshot.data();
+      setJob({
+        title: data.title || "Untitled job",
+        company: data.companyName || "Company",
+        location: data.location || "Location not specified",
+        type: data.type || "Not specified",
+      });
+    });
+  }, [jobId]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const user = auth.currentUser;
+    if (!user) {
+      return;
+    }
+
+    await recordJobApplication(
+      jobId,
+      user.uid,
+      user.displayName || "Applicant",
+      user.email || "",
+    );
+    recordApplication(user.uid, jobId, `${job.title} at ${job.company}`);
+    setSubmitted(true);
+  };
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div className="mx-auto">
@@ -14,10 +68,10 @@ export default function JobDetailsPage() {
         {/* Header */}
         <div className="mb-5 sm:mb-6">
           <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">
-            Frontend Developer
+            {job.title}
           </h1>
           <p className="text-gray-500 text-sm sm:text-base mt-1">
-            MoTechnologies • Lagos, Nigeria
+            {job.company} • {job.location}
           </p>
         </div>
 
@@ -29,7 +83,7 @@ export default function JobDetailsPage() {
             <FiBriefcase className="text-[#F0802D]" />
             <div>
               <p className="text-xs text-gray-500">Job Type</p>
-              <p className="font-medium text-sm">Full-time</p>
+              <p className="font-medium text-sm">{job.type}</p>
             </div>
           </div>
 
@@ -102,7 +156,7 @@ export default function JobDetailsPage() {
             Apply for this job
           </h2>
 
-          <form className="space-y-4 sm:space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
             
             {/* Cover Letter */}
             <div>
@@ -136,9 +190,10 @@ export default function JobDetailsPage() {
             {/* Submit */}
             <button
               type="submit"
+              disabled={submitted}
               className="w-full bg-[#1F3064] text-white py-3 sm:py-3.5 rounded-lg font-medium text-sm sm:text-base hover:bg-[#16254d] transition"
             >
-              Submit Application
+              {submitted ? "Application Submitted" : "Submit Application"}
             </button>
 
           </form>

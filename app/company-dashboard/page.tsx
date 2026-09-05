@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Users,
   Briefcase,
@@ -9,38 +11,62 @@ import {
   Building2,
 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
 
-const activeJobs = [
-  {
-    title: "Frontend Developer",
-    applicants: "45 Applicants",
-    location: "Lagos, Nigeria",
-    type: "Full-time",
-    posted: "2 days ago",
-  },
-  {
-    title: "UI/UX Designer",
-    applicants: "28 Applicants",
-    location: "Abuja, Nigeria",
-    type: "Remote",
-    posted: "1 day ago",
-  },
-  {
-    title: "Backend Engineer",
-    applicants: "63 Applicants",
-    location: "Port Harcourt, Nigeria",
-    type: "Hybrid",
-    posted: "3 days ago",
-  },
-];
-
-const recentActivities = [
-  "New application received for Frontend Developer",
-  "Backend Engineer job reached 60 applicants",
-  "Interview scheduled with Sarah Johnson",
-];
+type CompanyJob = {
+  id: string;
+  title: string;
+  applicants: number;
+  location: string;
+  type: string;
+  postedAt?: { toDate: () => Date };
+};
 
 export default function CompanyDashboard() {
+  const [companyName, setCompanyName] = useState("Company");
+  const [jobs, setJobs] = useState<CompanyJob[]>([]);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setCompanyName(user?.displayName || "Company");
+
+      if (!user) {
+        setJobs([]);
+        return;
+      }
+
+      const jobsQuery = query(
+        collection(db, "jobs"),
+        where("companyId", "==", user.uid),
+      );
+
+      return onSnapshot(jobsQuery, (snapshot) => {
+        setJobs(
+          snapshot.docs.map((job) => {
+            const data = job.data();
+
+            return {
+              id: job.id,
+              title: data.title || "Untitled job",
+              applicants: data.applicantCount || 0,
+              location: data.location || "Location not specified",
+              type: data.type || "Not specified",
+              postedAt: data.postedAt,
+            };
+          }),
+        );
+      });
+    });
+  }, []);
+
+  const totalApplicants = jobs.reduce(
+    (total, job) => total + job.applicants,
+    0,
+  );
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       {/* Header */}
@@ -48,7 +74,7 @@ export default function CompanyDashboard() {
         <div>
           <p className="text-sm text-gray-500">Welcome back</p>
           <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
-            TechNova Ltd
+            {companyName}
           </h1>
         </div>
 
@@ -62,8 +88,8 @@ export default function CompanyDashboard() {
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 mb-8">
         {[
-          { label: "Posted Jobs", value: "12", icon: Briefcase },
-          { label: "Total Applicants", value: "248", icon: Users },
+          { label: "Posted Jobs", value: jobs.length, icon: Briefcase },
+          { label: "Total Applicants", value: totalApplicants, icon: Users },
         ].map((item, index) => (
           <div
             key={index}
@@ -96,9 +122,9 @@ export default function CompanyDashboard() {
           </div>
 
           <div className="space-y-4">
-            {activeJobs.map((job, index) => (
+            {jobs.map((job) => (
               <div
-                key={index}
+                key={job.id}
                 className="border border-gray-100 rounded-2xl p-5 hover:shadow-sm transition"
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -110,7 +136,9 @@ export default function CompanyDashboard() {
                       </h3>
                     </div>
 
-                    <p className="text-sm text-gray-500">{job.applicants}</p>
+                    <p className="text-sm text-gray-500">
+                      {job.applicants} Applicants
+                    </p>
 
                     <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-500">
                       <span className="flex items-center gap-1">
@@ -125,7 +153,9 @@ export default function CompanyDashboard() {
 
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4 text-[#F0802D]" />
-                        {job.posted}
+                        {job.postedAt
+                          ? job.postedAt.toDate().toLocaleDateString()
+                          : "Recently"}
                       </span>
                     </div>
                   </div>
@@ -142,6 +172,12 @@ export default function CompanyDashboard() {
                 </div>
               </div>
             ))}
+
+            {jobs.length === 0 && (
+              <p className="py-8 text-center text-sm text-gray-500">
+                No jobs posted yet.
+              </p>
+            )}
           </div>
         </div>
 
@@ -154,14 +190,11 @@ export default function CompanyDashboard() {
             </h2>
 
             <div className="space-y-3">
-              {recentActivities.map((activity, index) => (
-                <div
-                  key={index}
-                  className="text-sm text-gray-600 border-b pb-2 last:border-none"
-                >
-                  {activity}
-                </div>
-              ))}
+              <div className="text-sm text-gray-600">
+                {jobs.length === 0
+                  ? "No activity yet. Post a job to get started."
+                  : `${jobs.length} job${jobs.length === 1 ? "" : "s"} posted`}
+              </div>
             </div>
           </div>
         </div>

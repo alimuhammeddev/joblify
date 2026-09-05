@@ -1,7 +1,21 @@
+"use client";
+
 import { Search, MapPin, Wallet, Bookmark } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useEffect } from "react";
+import { auth } from "@/lib/firebase";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
 
 export default function Jobs() {
+  const [postedJobs, setPostedJobs] = useState<typeof jobs>([]);
+  const [savedJobIds, setSavedJobIds] = useState<string[]>(() => {
+    const user = auth.currentUser;
+    return user ? getUserActivity(user.uid).savedJobIds : [];
+  });
+
   const jobs = [
     {
       id: 1,
@@ -53,6 +67,27 @@ export default function Jobs() {
     },
   ];
 
+  useEffect(() => {
+    return onSnapshot(collection(db, "jobs"), (snapshot) => {
+      setPostedJobs(
+        snapshot.docs.map((job) => {
+          const data = job.data();
+
+          return {
+            id: job.id,
+            title: data.title || "Untitled job",
+            company: data.companyName || "Company",
+            location: data.location || "Location not specified",
+            type: data.type || "Not specified",
+            salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
+          };
+        }),
+      );
+    });
+  }, []);
+
+  const availableJobs = [...postedJobs, ...jobs];
+
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div>
@@ -78,7 +113,7 @@ export default function Jobs() {
 
         <div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {jobs.map((job) => (
+            {availableJobs.map((job) => (
               <div
                 key={job.id}
                 className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition duration-300"
@@ -92,8 +127,34 @@ export default function Jobs() {
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <button className="text-gray-400 hover:text-[#F0802D] transition cursor-pointer">
-                      <Bookmark size={20} />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const user = auth.currentUser;
+                        if (!user) return;
+
+                        const isSaved = toggleSavedJob(
+                          user.uid,
+                          String(job.id),
+                          job.title
+                        );
+                        setSavedJobIds((currentIds) =>
+                          isSaved
+                            ? [...currentIds, String(job.id)]
+                            : currentIds.filter((id) => id !== String(job.id))
+                        );
+                      }}
+                      className={`transition cursor-pointer ${
+                        savedJobIds.includes(String(job.id))
+                          ? "text-[#F0802D]"
+                          : "text-gray-400 hover:text-[#F0802D]"
+                      }`}
+                      aria-label={`${savedJobIds.includes(String(job.id)) ? "Remove" : "Save"} ${job.title}`}
+                    >
+                      <Bookmark
+                        size={20}
+                        fill={savedJobIds.includes(String(job.id)) ? "currentColor" : "none"}
+                      />
                     </button>
 
                     <span className="text-xs bg-[#F0802D]/10 text-[#F0802D] px-3 py-1 rounded-full">
@@ -114,7 +175,7 @@ export default function Jobs() {
                   </div>
                 </div>
 
-                <Link href="/dashboard/job-details">
+                <Link href={`/dashboard/job-details?jobId=${job.id}`}>
                   <button className="mt-6 w-full cursor-pointer bg-[#1F3064] text-white py-2 rounded-lg hover:bg-[#16254d] transition">
                     Apply Now
                   </button>

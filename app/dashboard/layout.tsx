@@ -16,7 +16,9 @@ import {
 import Image from "next/image";
 import joblify from "./assets/joblify.png";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function DashboardLayout({
   children,
@@ -25,6 +27,12 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, setUser);
+  }, []);
+
   const isActive = (path: string) => pathname === path;
   return (
     <section className="min-h-screen bg-gray-50 flex flex-col overflow-hidden pt-20">
@@ -56,8 +64,12 @@ export default function DashboardLayout({
             {showDropdown && (
               <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50 overflow-hidden">
                 <div className="pb-3 bg-[#FDE6D5] p-3">
-                  <h3 className="font-semibold text-[#1F3064]">King Rudy</h3>
-                  <p className="text-sm text-gray-500">kingurdy@email.com</p>
+                  <h3 className="font-semibold text-[#1F3064]">
+                    {user?.displayName || "User"}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    {user?.email || "No email available"}
+                  </p>
                 </div>
 
                 <Link href="/dashboard/user-settings">
