@@ -18,7 +18,7 @@ export default function Jobs() {
 
   const jobs = [
     {
-      id: 1,
+      id: "1",
       title: "Frontend Developer",
       company: "MoTechnologies",
       location: "Remote",
@@ -26,7 +26,7 @@ export default function Jobs() {
       salary: "₦300k - ₦500k",
     },
     {
-      id: 2,
+      id: "2",
       title: "UI/UX Designer",
       company: "Creative Labs",
       location: "Lagos, Nigeria",
@@ -34,7 +34,7 @@ export default function Jobs() {
       salary: "₦200k - ₦350k",
     },
     {
-      id: 3,
+      id: "3",
       title: "Backend Engineer",
       company: "TechCore",
       location: "Abuja, Nigeria",
@@ -42,7 +42,7 @@ export default function Jobs() {
       salary: "₦400k - ₦700k",
     },
     {
-      id: 4,
+      id: "4",
       title: "Product Manager",
       company: "Innovate Hub",
       location: "Hybrid - Lagos",
@@ -50,7 +50,7 @@ export default function Jobs() {
       salary: "₦500k - ₦800k",
     },
     {
-      id: 5,
+      id: "5",
       title: "Mobile App Developer",
       company: "NextGen Solutions",
       location: "Remote",
@@ -58,7 +58,7 @@ export default function Jobs() {
       salary: "₦350k - ₦600k",
     },
     {
-      id: 6,
+      id: "6",
       title: "Data Analyst",
       company: "Insight Africa",
       location: "Abuja, Nigeria",
