@@ -36,49 +36,22 @@ const recommendedJobs = [
   },
 ];
 
-const recentActivities = [
-  "You applied for Product Designer at Creativex",
-  "Your profile was viewed by DevCore",
-  "Interview invitation from InsightHub",
-];
-
 export default function Dashboard() {
   const [displayName, setDisplayName] = useState("User");
-  const [isNewAccount, setIsNewAccount] = useState(false);
   const [userActivity, setUserActivity] = useState<UserActivity | null>(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
       setDisplayName(user?.displayName || "User");
       setUserActivity(user ? getUserActivity(user.uid) : null);
-
-      const createdAt = user?.metadata.creationTime;
-      const lastSignInAt = user?.metadata.lastSignInTime;
-      const accountAge =
-        createdAt && lastSignInAt
-          ? Math.abs(Date.parse(lastSignInAt) - Date.parse(createdAt))
-          : Infinity;
-
-      setIsNewAccount(accountAge < 60 * 1000);
     });
   }, []);
 
-  const hasTrackedActivity = Boolean(
-    userActivity?.appliedJobIds.length || userActivity?.savedJobIds.length
-  );
-  const dashboardStats = hasTrackedActivity
-    ? {
-        appliedJobs: String(userActivity?.appliedJobIds.length || 0),
-        savedJobs: String(userActivity?.savedJobIds.length || 0),
-      }
-    : isNewAccount
-      ? { appliedJobs: "0", savedJobs: "0" }
-      : { appliedJobs: "24", savedJobs: "12" };
-  const activities = hasTrackedActivity
-    ? userActivity?.recentActivities || []
-    : isNewAccount
-      ? []
-      : recentActivities;
+  const dashboardStats = {
+    appliedJobs: String(userActivity?.appliedJobIds.length || 0),
+    savedJobs: String(userActivity?.savedJobIds.length || 0),
+  };
+  const activities = userActivity?.recentActivities || [];
   const hasApplications = Boolean(userActivity?.appliedJobIds.length);
 
   const analyticsData = hasApplications
@@ -88,18 +61,11 @@ export default function Dashboard() {
         { label: "Shortlisted", value: "0%", color: "bg-[#4F8A70]" },
         { label: "Rejected", value: "0%", color: "bg-[#D9DEE8]" },
       ]
-    : isNewAccount
-    ? [
+    : [
         { label: "Applied", value: "0%", color: "bg-[#1F3064]" },
         { label: "Interviewing", value: "0%", color: "bg-[#F0802D]" },
         { label: "Shortlisted", value: "0%", color: "bg-[#4F8A70]" },
         { label: "Rejected", value: "0%", color: "bg-[#D9DEE8]" },
-      ]
-    : [
-        { label: "Applied", value: "40%", color: "bg-[#1F3064]" },
-        { label: "Interviewing", value: "25%", color: "bg-[#F0802D]" },
-        { label: "Shortlisted", value: "20%", color: "bg-[#4F8A70]" },
-        { label: "Rejected", value: "15%", color: "bg-[#D9DEE8]" },
       ];
 
   return (
@@ -219,19 +185,15 @@ export default function Dashboard() {
               <div
                 className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full"
                 style={{
-                  background: isNewAccount && !hasApplications
-                    ? "#D9DEE8"
-                    : hasApplications
+                  background: hasApplications
                       ? "conic-gradient(#1F3064 0 100%, #F0802D 100% 100%, #4F8A70 100% 100%, #D9DEE8 100% 100%)"
-                      : "conic-gradient(#1F3064 0 40%, #F0802D 40% 65%, #4F8A70 65% 85%, #D9DEE8 85% 100%)",
+                      : "#D9DEE8",
                 }}
                 role="img"
                 aria-label={
                   hasApplications
                     ? "Application analytics: 100 percent applied"
-                    : isNewAccount
-                      ? "Application analytics: no applications yet"
-                      : "Application analytics: 40 percent applied, 25 percent interviewing, 20 percent shortlisted, and 15 percent rejected"
+                    : "Application analytics: no applications yet"
                 }
               >
                 <div className="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-white">
