@@ -89,7 +89,7 @@ export default function Jobs() {
             location: data.location || "Location not specified",
             type: data.type || "Not specified",
             salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
-          };
+          } as Job;
         }),
       );
     });
