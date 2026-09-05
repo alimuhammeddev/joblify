@@ -9,8 +9,17 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
 
+type Job = {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  salary: string;
+};
+
 export default function Jobs() {
-  const [postedJobs, setPostedJobs] = useState<typeof jobs>([]);
+  const [postedJobs, setPostedJobs] = useState<Job[]>([]);
   const [savedJobIds, setSavedJobIds] = useState<string[]>(() => {
     const user = auth.currentUser;
     return user ? getUserActivity(user.uid).savedJobIds : [];
