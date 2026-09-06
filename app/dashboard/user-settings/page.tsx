@@ -19,6 +19,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { auth, db, storage } from "@/lib/firebase";
 import { useUserSettingsStore } from "@/lib/userSettingsStore";
+import { recordUserActivity } from "@/lib/userActivity";
 
 type ProfileData = {
   phone?: string;
@@ -204,6 +205,7 @@ export default function UserSettings() {
         profileImageUrl: savedProfileImageUrl,
         cvData: savedCvData,
       });
+      recordUserActivity(currentUser.uid, "You updated your profile settings");
       setProfileImageFile(null);
       setCvFile(null);
       setMessage("Your changes have been saved.");

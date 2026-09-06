@@ -52,10 +52,17 @@ export function recordApplication(userId: string, jobId: string, jobTitle: strin
   saveUserActivity(userId, {
     appliedJobIds: [...activity.appliedJobIds, jobId],
     savedJobIds: activity.savedJobIds,
-    recentActivities: [
-      `You applied for ${jobTitle}`,
-      ...activity.recentActivities,
-    ].slice(0, 5),
+    recentActivities: [`You applied for ${jobTitle}`, ...activity.recentActivities].slice(0, 50),
+  });
+}
+
+export function recordUserActivity(userId: string, message: string) {
+  const activity = getUserActivity(userId);
+
+  saveUserActivity(userId, {
+    appliedJobIds: activity.appliedJobIds,
+    savedJobIds: activity.savedJobIds,
+    recentActivities: [message, ...activity.recentActivities].slice(0, 50),
   });
 }
 
@@ -73,9 +80,10 @@ export function toggleSavedJob(
   saveUserActivity(userId, {
     appliedJobIds: activity.appliedJobIds,
     savedJobIds,
-    recentActivities: isSaved
-      ? activity.recentActivities
-      : [`You saved ${jobTitle}`, ...activity.recentActivities].slice(0, 5),
+    recentActivities: [
+      isSaved ? `You removed ${jobTitle} from saved jobs` : `You saved ${jobTitle}`,
+      ...activity.recentActivities,
+    ].slice(0, 50),
   });
 
   return !isSaved;

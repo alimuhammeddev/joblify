@@ -1,41 +1,60 @@
-import { MapPin, Wallet, Bookmark, Trash2 } from "lucide-react";
+"use client";
+
+import { MapPin, Wallet, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, onSnapshot } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
+
+type SavedJob = {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  salary: string;
+};
 
 export default function SavedJobs() {
-  const savedJobs = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "MoTechnologies",
-      location: "Remote",
-      type: "Full-time",
-      salary: "₦300k - ₦500k",
-    },
-    {
-      id: 2,
-      title: "UI/UX Designer",
-      company: "Creative Labs",
-      location: "Lagos, Nigeria",
-      type: "Part-time",
-      salary: "₦200k - ₦350k",
-    },
-    {
-      id: 3,
-      title: "Backend Engineer",
-      company: "TechCore",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦400k - ₦700k",
-    },
-    {
-      id: 4,
-      title: "Product Manager",
-      company: "Innovate Hub",
-      location: "Hybrid - Lagos",
-      type: "Full-time",
-      salary: "₦500k - ₦800k",
-    },
-  ];
+  const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
+
+  useEffect(() => {
+    let unsubscribeJobs = () => {};
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      unsubscribeJobs();
+
+      if (!user) {
+        setSavedJobs([]);
+        return;
+      }
+
+      unsubscribeJobs = onSnapshot(collection(db, "jobs"), (snapshot) => {
+        const savedJobIds = getUserActivity(user.uid).savedJobIds;
+        setSavedJobs(
+          snapshot.docs
+            .filter((job) => savedJobIds.includes(job.id))
+            .map((job) => {
+              const data = job.data();
+              return {
+                id: job.id,
+                title: String(data.title || "Untitled job"),
+                company: String(data.companyName || "Company"),
+                location: String(data.location || "Location not specified"),
+                type: String(data.type || "Not specified"),
+                salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
+              };
+            }),
+        );
+      });
+    });
+
+    return () => {
+      unsubscribeJobs();
+      unsubscribeAuth();
+    };
+  }, []);
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
@@ -48,7 +67,12 @@ export default function SavedJobs() {
         </p>
       </div>
 
-      <div className="grid gap-6">
+      {savedJobs.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center text-gray-500">
+          You have not saved any jobs yet.
+        </div>
+      ) : (
+        <div className="grid gap-6">
         {savedJobs.map((job) => (
           <div
             key={job.id}
@@ -84,13 +108,25 @@ export default function SavedJobs() {
 
               {/* Right Section */}
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link href="job-details">
+                <Link href={`/dashboard/job-details?jobId=${job.id}`}>
                 <button className="bg-[#1F3064] text-white px-5 py-2 rounded-lg hover:bg-[#16254d] transition cursor-pointer">
                   Apply Now
                 </button>
                 </Link>
 
-                <button className="flex items-center justify-center gap-2 border border-red-200 text-red-500 px-5 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const user = auth.currentUser;
+                    if (!user) return;
+
+                    toggleSavedJob(user.uid, job.id, job.title);
+                    setSavedJobs((currentJobs) =>
+                      currentJobs.filter((currentJob) => currentJob.id !== job.id),
+                    );
+                  }}
+                  className="flex items-center justify-center gap-2 border border-red-200 text-red-500 px-5 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                >
                   <Trash2 size={16} />
                   Remove
                 </button>
@@ -98,7 +134,8 @@ export default function SavedJobs() {
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      )}
     </section>
   );
 };

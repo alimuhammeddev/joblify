@@ -40,22 +40,29 @@ export default function CompanyDashboard() {
         where("companyId", "==", user.uid),
       );
 
-      return onSnapshot(jobsQuery, (snapshot) => {
-        setJobs(
-          snapshot.docs.map((job) => {
-            const data = job.data();
+      return onSnapshot(
+        jobsQuery,
+        (snapshot) => {
+          setJobs(
+            snapshot.docs.map((job) => {
+              const data = job.data();
 
-            return {
-              id: job.id,
-              title: data.title || "Untitled job",
-              applicants: data.applicantCount || 0,
-              location: data.location || "Location not specified",
-              type: data.type || "Not specified",
-              postedAt: data.postedAt,
-            };
-          }),
-        );
-      });
+              return {
+                id: job.id,
+                title: data.title || "Untitled job",
+                applicants: data.applicantCount || 0,
+                location: data.location || "Location not specified",
+                type: data.type || "Not specified",
+                postedAt: data.postedAt,
+              };
+            }),
+          );
+        },
+        (error) => {
+          console.error("Unable to load company jobs:", error);
+          setJobs([]);
+        },
+      );
     });
   }, []);
 

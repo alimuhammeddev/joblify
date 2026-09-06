@@ -1,33 +1,27 @@
+"use client";
+
 import { MapPin, Wallet } from "lucide-react";
 import Link from "next/link";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { mapJob, type Job } from "@/lib/jobs";
 
 export default function RecentJob() {
-  const jobs = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "MoTechnologies",
-      location: "Remote",
-      type: "Full-time",
-      salary: "₦300k - ₦500k",
-    },
-    {
-      id: 2,
-      title: "UI/UX Designer",
-      company: "Creative Labs",
-      location: "Lagos, Nigeria",
-      type: "Part-time",
-      salary: "₦200k - ₦350k",
-    },
-    {
-      id: 3,
-      title: "Backend Engineer",
-      company: "TechCore",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦400k - ₦700k",
-    },
-  ];
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
+    setJobs(
+      snapshot.docs
+        .map(mapJob)
+        .sort((firstJob, secondJob) => {
+          const firstTime = firstJob.postedAt?.toDate().getTime() || 0;
+          const secondTime = secondJob.postedAt?.toDate().getTime() || 0;
+          return secondTime - firstTime;
+        })
+        .slice(0, 3),
+    );
+  }), []);
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-20 mb-16">

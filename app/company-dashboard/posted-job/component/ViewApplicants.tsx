@@ -4,10 +4,11 @@ import { X, Mail, User, Eye, FileText, Download } from "lucide-react";
 import { useState } from "react";
 
 interface Applicant {
-  id: number;
+  id: string;
   name: string;
   email: string;
   resume: string;
+  resumeName: string;
   coverLetter: string;
 }
 
@@ -24,9 +25,9 @@ export default function ViewApplicants({
   jobTitle,
   applicants,
 }: ApplicantsModalProps) {
-  if (!isOpen) return null;
-
   const [openApplicant, setOpenApplicant] = useState<number | null>(null);
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
@@ -111,19 +112,28 @@ export default function ViewApplicants({
                         </div>
 
                         <p className="text-sm text-gray-600 break-all">
-                          {applicant.resume}
+                          {applicant.resumeName || "CV attached"}
                         </p>
 
                         <div className="mt-4 flex flex-col sm:flex-row gap-3">
-                          <button className="flex-1 flex items-center justify-center gap-2 border border-[#1F3064] text-[#1F3064] py-2.5 rounded-xl hover:bg-[#1F3064] hover:text-white transition">
+                          <a
+                            href={applicant.resume}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="flex-1 flex items-center justify-center gap-2 border border-[#1F3064] text-[#1F3064] py-2.5 rounded-xl hover:bg-[#1F3064] hover:text-white transition"
+                          >
                             <Eye size={16} />
                             View Resume
-                          </button>
+                          </a>
 
-                          <button className="flex-1 flex items-center justify-center gap-2 bg-[#F0802D] text-white py-2.5 rounded-xl hover:opacity-90 transition">
+                          <a
+                            href={applicant.resume}
+                            download={applicant.resumeName || "applicant-cv"}
+                            className="flex-1 flex items-center justify-center gap-2 bg-[#F0802D] text-white py-2.5 rounded-xl hover:opacity-90 transition"
+                          >
                             <Download size={16} />
                             Download
-                          </button>
+                          </a>
                         </div>
                       </div>
 
@@ -134,7 +144,7 @@ export default function ViewApplicants({
                           Cover Letter
                         </div>
 
-                        <div className="text-sm leading-7 text-gray-600">
+                        <div className="whitespace-pre-wrap text-sm leading-7 text-gray-600">
                           {applicant.coverLetter}
                         </div>
                       </div>

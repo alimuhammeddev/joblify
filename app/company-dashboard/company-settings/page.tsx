@@ -22,6 +22,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase";
 import { useCompanySettingsStore } from "@/lib/companySettingsStore";
+import { recordCompanyActivity } from "@/lib/companyActivity";
 
 type CompanyProfile = {
   companyName?: string;
@@ -204,6 +205,7 @@ export default function CompanySettings() {
         });
       }
       updateProfile({ logoUrl: savedLogoUrl });
+      recordCompanyActivity(currentUser.uid, "You updated your company settings");
       setLogoFile(null);
       setMessage("Your company changes have been saved.");
     } catch {

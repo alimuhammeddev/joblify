@@ -2,15 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { X, Briefcase, MapPin, Wallet } from "lucide-react";
-
-interface Job {
-  id: number;
-  title: string;
-  location: string;
-  type: string;
-  status: string;
-  salary: string;
-}
+import type { Job } from "@/lib/jobs";
 
 interface EditJobModalProps {
   isOpen: boolean;
@@ -42,9 +34,9 @@ export default function EditJobModal({
         type: job.type,
         status: job.status,
         salary: job.salary,
-        description: "",
-        responsibilities: "",
-        requirements: "",
+        description: job.description,
+        responsibilities: job.responsibilities,
+        requirements: job.requirements,
       });
     }
   }, [job]);

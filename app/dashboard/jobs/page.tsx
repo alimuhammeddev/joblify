@@ -20,87 +20,50 @@ type Job = {
 
 export default function Jobs() {
   const [postedJobs, setPostedJobs] = useState<Job[]>([]);
+  const [jobsError, setJobsError] = useState(false);
   const [savedJobIds, setSavedJobIds] = useState<string[]>(() => {
     const user = auth.currentUser;
     return user ? getUserActivity(user.uid).savedJobIds : [];
   });
 
-  const jobs = [
-    {
-      id: "1",
-      title: "Frontend Developer",
-      company: "MoTechnologies",
-      location: "Remote",
-      type: "Full-time",
-      salary: "₦300k - ₦500k",
-    },
-    {
-      id: "2",
-      title: "UI/UX Designer",
-      company: "Creative Labs",
-      location: "Lagos, Nigeria",
-      type: "Part-time",
-      salary: "₦200k - ₦350k",
-    },
-    {
-      id: "3",
-      title: "Backend Engineer",
-      company: "TechCore",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦400k - ₦700k",
-    },
-    {
-      id: "4",
-      title: "Product Manager",
-      company: "Innovate Hub",
-      location: "Hybrid - Lagos",
-      type: "Full-time",
-      salary: "₦500k - ₦800k",
-    },
-    {
-      id: "5",
-      title: "Mobile App Developer",
-      company: "NextGen Solutions",
-      location: "Remote",
-      type: "Contract",
-      salary: "₦350k - ₦600k",
-    },
-    {
-      id: "6",
-      title: "Data Analyst",
-      company: "Insight Africa",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦250k - ₦450k",
-    },
-  ];
-
   useEffect(() => {
-    return onSnapshot(collection(db, "jobs"), (snapshot) => {
-      const jobs: Job[] = snapshot.docs.map((job) => {
-        const data = job.data();
+    return onSnapshot(
+      collection(db, "jobs"),
+      (snapshot) => {
+        const jobs: Job[] = snapshot.docs.map((job) => {
+          const data = job.data();
 
-        return {
-          id: job.id,
-          title: String(data.title || "Untitled job"),
-          company: String(data.companyName || "Company"),
-          location: String(data.location || "Location not specified"),
-          type: String(data.type || "Not specified"),
-          salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
-        };
-      });
-      setPostedJobs(jobs);
-    });
+          return {
+            id: job.id,
+            title: String(data.title || "Untitled job"),
+            company: String(data.companyName || "Company"),
+            location: String(data.location || "Location not specified"),
+            type: String(data.type || "Not specified"),
+            salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
+          };
+        });
+        setPostedJobs(jobs);
+        setJobsError(false);
+      },
+      (error) => {
+        console.error("Unable to load jobs:", error);
+        setJobsError(true);
+      },
+    );
   }, []);
 
-  const availableJobs = [...postedJobs, ...jobs];
+  const availableJobs = postedJobs;
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       <div>
         <div className="mb-5">
           <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">Jobs</h1>
+          {jobsError && (
+            <p className="mt-2 text-sm text-red-600">
+              Jobs could not be loaded. Please try again later.
+            </p>
+          )}
         </div>
 
         <div className="bg-white rounded-2xl p-4 border border-gray-100 mb-8">
@@ -144,12 +107,12 @@ export default function Jobs() {
                         const isSaved = toggleSavedJob(
                           user.uid,
                           String(job.id),
-                          job.title
+                          job.title,
                         );
                         setSavedJobIds((currentIds) =>
                           isSaved
                             ? [...currentIds, String(job.id)]
-                            : currentIds.filter((id) => id !== String(job.id))
+                            : currentIds.filter((id) => id !== String(job.id)),
                         );
                       }}
                       className={`transition cursor-pointer ${
@@ -161,7 +124,11 @@ export default function Jobs() {
                     >
                       <Bookmark
                         size={20}
-                        fill={savedJobIds.includes(String(job.id)) ? "currentColor" : "none"}
+                        fill={
+                          savedJobIds.includes(String(job.id))
+                            ? "currentColor"
+                            : "none"
+                        }
                       />
                     </button>
 

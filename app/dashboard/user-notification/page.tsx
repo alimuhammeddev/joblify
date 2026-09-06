@@ -1,50 +1,19 @@
-import {
-  Bell,
-  Briefcase,
-  CheckCircle,
-  MessageSquare,
-  Calendar,
-} from "lucide-react";
+"use client";
+
+import { Bell, CheckCircle } from "lucide-react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
+import { getUserActivity } from "@/lib/userActivity";
 
 export default function UserNotification() {
-  const notifications = [
-    {
-      id: 1,
-      title: "Application Update",
-      message:
-        "Your application for Frontend Developer at MoTechnologies is now under review.",
-      time: "2 hours ago",
-      icon: <Briefcase size={18} />,
-      unread: true,
-    },
-    {
-      id: 2,
-      title: "Interview Scheduled",
-      message:
-        "You have been invited for an interview with Creative Labs for the UI/UX Designer role.",
-      time: "Yesterday",
-      icon: <Calendar size={18} />,
-      unread: true,
-    },
-    {
-      id: 3,
-      title: "New Job Match",
-      message:
-        "A new Backend Engineer role matches your profile preferences.",
-      time: "2 days ago",
-      icon: <CheckCircle size={18} />,
-      unread: false,
-    },
-    {
-      id: 4,
-      title: "Message from Recruiter",
-      message:
-        "A recruiter from TechCore sent you a message regarding your application.",
-      time: "3 days ago",
-      icon: <MessageSquare size={18} />,
-      unread: false,
-    },
-  ];
+  const [activities, setActivities] = useState<string[]>([]);
+
+  useEffect(() => {
+    return onAuthStateChanged(auth, (user) => {
+      setActivities(user ? getUserActivity(user.uid).recentActivities : []);
+    });
+  }, []);
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
@@ -68,7 +37,9 @@ export default function UserNotification() {
 
             <div>
               <h2 className="font-semibold text-[#1F3064]">
-                You have 2 unread notifications
+                {activities.length === 0
+                  ? "No activity yet"
+                  : `${activities.length} recent platform ${activities.length === 1 ? "activity" : "activities"}`}
               </h2>
               <p className="text-sm text-gray-500">
                 Review your latest updates
@@ -76,63 +47,46 @@ export default function UserNotification() {
             </div>
           </div>
 
-          <button className="border border-[#1F3064] text-[#1F3064] px-5 py-2 rounded-lg hover:bg-[#1F3064] hover:text-white transition cursor-pointer">
-            Mark all as read
-          </button>
         </div>
       </div>
 
       {/* Notifications List */}
+      {activities.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-gray-300 bg-white px-6 py-14 text-center text-gray-500">
+          Your platform activity will appear here.
+        </div>
+      ) : (
       <div className="grid gap-5">
-        {notifications.map((item) => (
+        {activities.map((activity, index) => (
           <div
-            key={item.id}
-            className={`bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-300 border ${
-              item.unread
-                ? "border-[#F0802D]/30"
-                : "border-transparent"
-            }`}
+            key={`${activity}-${index}`}
+            className="bg-white rounded-2xl p-5 shadow-sm hover:shadow-md transition duration-300 border border-[#F0802D]/30"
           >
             <div className="flex gap-4">
               {/* Icon */}
               <div className="bg-[#F0802D]/10 text-[#F0802D] p-3 rounded-xl h-fit">
-                {item.icon}
+                <CheckCircle size={18} />
               </div>
 
               {/* Content */}
               <div className="flex-1">
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-[#1F3064]">
-                      {item.title}
-                    </h3>
-
-                    {item.unread && (
-                      <span className="w-2 h-2 rounded-full bg-[#F0802D]"></span>
-                    )}
+                    <h3 className="font-semibold text-[#1F3064]">Platform Activity</h3>
                   </div>
 
-                  <p className="text-xs text-gray-400">{item.time}</p>
+                  <p className="text-xs text-gray-400">Recent</p>
                 </div>
 
                 <p className="text-sm text-gray-600 mt-2 leading-relaxed">
-                  {item.message}
+                  {activity}
                 </p>
-
-                <div className="mt-4 flex gap-3">
-                  <button className="text-sm font-medium text-[#1F3064] hover:underline">
-                    View Details
-                  </button>
-
-                  <button className="text-sm font-medium text-gray-500 hover:underline">
-                    Dismiss
-                  </button>
-                </div>
               </div>
             </div>
           </div>
         ))}
       </div>
+      )}
     </section>
   );
 };

@@ -1,56 +1,17 @@
+"use client";
+
 import { MapPin, Wallet, Search } from "lucide-react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { useEffect, useState } from "react";
+import { db } from "@/lib/firebase";
+import { mapJob, type Job } from "@/lib/jobs";
 
 export default function LatestJob() {
-  const jobs = [
-    {
-      id: 1,
-      title: "Frontend Developer",
-      company: "MoTechnologies",
-      location: "Remote",
-      type: "Full-time",
-      salary: "₦300k - ₦500k",
-    },
-    {
-      id: 2,
-      title: "UI/UX Designer",
-      company: "Creative Labs",
-      location: "Lagos, Nigeria",
-      type: "Part-time",
-      salary: "₦200k - ₦350k",
-    },
-    {
-      id: 3,
-      title: "Backend Engineer",
-      company: "TechCore",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦400k - ₦700k",
-    },
-    {
-      id: 4,
-      title: "Product Manager",
-      company: "Innovate Hub",
-      location: "Hybrid - Lagos",
-      type: "Full-time",
-      salary: "₦500k - ₦800k",
-    },
-    {
-      id: 5,
-      title: "Mobile App Developer",
-      company: "NextGen Solutions",
-      location: "Remote",
-      type: "Contract",
-      salary: "₦350k - ₦600k",
-    },
-    {
-      id: 6,
-      title: "Data Analyst",
-      company: "Insight Africa",
-      location: "Abuja, Nigeria",
-      type: "Full-time",
-      salary: "₦250k - ₦450k",
-    },
-  ];
+  const [jobs, setJobs] = useState<Job[]>([]);
+
+  useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
+    setJobs(snapshot.docs.map(mapJob));
+  }), []);
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 lg:mt-36 mt-28 mb-16">
@@ -116,6 +77,10 @@ export default function LatestJob() {
           </div>
         ))}
       </div>
+
+      {jobs.length === 0 && (
+        <p className="py-12 text-center text-gray-500">No jobs posted yet.</p>
+      )}
 
       <div className="flex justify-center mt-10">
         <button className="px-6 py-2 border cursor-pointer border-[#1F3064] text-[#1F3064] rounded-lg hover:bg-[#1F3064] hover:text-white transition">

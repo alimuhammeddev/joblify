@@ -1,8 +1,10 @@
 "use client";
 
 import { X, Briefcase, MapPin, FileText, Building2 } from "lucide-react";
+import { useState } from "react";
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
+import { recordCompanyActivity } from "@/lib/companyActivity";
 
 interface PostJobModalProps {
   isOpen: boolean;
@@ -10,32 +12,48 @@ interface PostJobModalProps {
 }
 
 export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
+  const [error, setError] = useState("");
+
   if (!isOpen) return null;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    const user = auth.currentUser;
-    if (!user) return;
-
     const formData = new FormData(event.currentTarget);
 
-    await addDoc(collection(db, "jobs"), {
-      companyId: user.uid,
-      companyName: user.displayName || "Company",
-      title: formData.get("title"),
-      location: formData.get("location"),
-      type: formData.get("type"),
-      minimumSalary: formData.get("minimumSalary"),
-      maximumSalary: formData.get("maximumSalary"),
-      description: formData.get("description"),
-      responsibilities: formData.get("responsibilities"),
-      requirements: formData.get("requirements"),
-      applicantCount: 0,
-      postedAt: serverTimestamp(),
-    });
+    setError("");
+    await auth.authStateReady();
+    const user = auth.currentUser;
+    if (!user) {
+      setError("Your session has expired. Please sign in again.");
+      return;
+    }
 
-    onClose();
+    try {
+      await addDoc(collection(db, "jobs"), {
+        companyId: user.uid,
+        companyName: user.displayName || "Company",
+        title: String(formData.get("title") || "").trim(),
+        location: String(formData.get("location") || "").trim(),
+        type: String(formData.get("type") || "").trim(),
+        minimumSalary: String(formData.get("minimumSalary") || "").trim(),
+        maximumSalary: String(formData.get("maximumSalary") || "").trim(),
+        description: String(formData.get("description") || "").trim(),
+        responsibilities: String(formData.get("responsibilities") || "").trim(),
+        requirements: String(formData.get("requirements") || "").trim(),
+        applicantCount: 0,
+        postedAt: serverTimestamp(),
+      });
+
+      recordCompanyActivity(
+        user.uid,
+        `You posted a new job: ${String(formData.get("title") || "Untitled job").trim()}`,
+      );
+
+      onClose();
+    } catch (submissionError) {
+      console.error("Unable to post job:", submissionError);
+      setError("Unable to post this job. Please check your account and try again.");
+    }
   };
 
   return (
@@ -68,6 +86,12 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-6 md:p-8">
+          {error && (
+            <p className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </p>
+          )}
+
           <div className="mb-8">
             <h3 className="text-lg font-semibold text-[#1F3064] mb-5">
               Job Information

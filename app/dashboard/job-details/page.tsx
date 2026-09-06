@@ -17,50 +17,178 @@ import { db } from "@/lib/firebase";
 import { recordApplication } from "@/lib/userActivity";
 import { recordJobApplication } from "@/lib/companyActivity";
 
+type JobDetails = {
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  salary: string;
+  status: string;
+  description: string;
+  responsibilities: string;
+  requirements: string;
+};
+
 function JobDetailsContent() {
   const searchParams = useSearchParams();
-  const jobId = searchParams.get("jobId") || "frontend-developer";
+  const jobId = searchParams.get("jobId");
   const [submitted, setSubmitted] = useState(false);
-  const [job, setJob] = useState({
-    title: "Frontend Developer",
-    company: "MoTechnologies",
-    location: "Lagos, Nigeria",
-    type: "Full-time",
-  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [coverLetter, setCoverLetter] = useState("");
+  const [cvFile, setCvFile] = useState<File | null>(null);
+  const [savedCvName, setSavedCvName] = useState("");
+  const [job, setJob] = useState<JobDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
   useEffect(() => {
-    if (jobId === "frontend-developer") return;
-
-    getDoc(doc(db, "jobs", jobId)).then((snapshot) => {
-      if (!snapshot.exists()) return;
-
-      const data = snapshot.data();
-      setJob({
-        title: data.title || "Untitled job",
-        company: data.companyName || "Company",
-        location: data.location || "Location not specified",
-        type: data.type || "Not specified",
+    const user = auth.currentUser;
+    if (user) {
+      getDoc(doc(db, "users", user.uid)).then((snapshot) => {
+        setSavedCvName(String(snapshot.data()?.cvName || ""));
       });
-    });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!jobId) {
+      setLoadError("This job could not be found.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setLoadError("");
+
+    getDoc(doc(db, "jobs", jobId))
+      .then((snapshot) => {
+        if (!snapshot.exists()) {
+          setLoadError("This job could not be found.");
+          return;
+        }
+
+        const data = snapshot.data();
+        const minimumSalary = String(data.minimumSalary || "-");
+        const maximumSalary = String(data.maximumSalary || "-");
+
+        setJob({
+          title: String(data.title || "Untitled job"),
+          company: String(data.companyName || "Company"),
+          location: String(data.location || "Location not specified"),
+          type: String(data.type || "Not specified"),
+          salary: `${minimumSalary} - ${maximumSalary}`,
+          status: String(data.status || "Open"),
+          description: String(data.description || "Not provided."),
+          responsibilities: String(data.responsibilities || "Not provided."),
+          requirements: String(data.requirements || "Not provided."),
+        });
+      })
+      .catch((error) => {
+        console.error("Unable to load job details:", error);
+        setLoadError("Unable to load this job. Please try again later.");
+      })
+      .finally(() => setLoading(false));
   }, [jobId]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const user = auth.currentUser;
-    if (!user) {
+    if (!user || !job || !jobId) {
       return;
     }
 
-    await recordJobApplication(
-      jobId,
-      user.uid,
-      user.displayName || "Applicant",
-      user.email || "",
-    );
-    recordApplication(user.uid, jobId, `${job.title} at ${job.company}`);
-    setSubmitted(true);
+    setSubmitError("");
+    setSubmitting(true);
+
+    try {
+      let cvData = "";
+      let cvName = "";
+      let cvType = "";
+
+      if (cvFile) {
+        cvData = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result));
+          reader.onerror = () => reject(new Error("Unable to read CV file"));
+          reader.readAsDataURL(cvFile);
+        });
+        cvName = cvFile.name;
+        cvType = cvFile.type;
+      } else {
+        const profileSnapshot = await getDoc(doc(db, "users", user.uid));
+        const profile = profileSnapshot.data();
+        cvData = String(profile?.cvData || "");
+        cvName = String(profile?.cvName || "");
+        cvType = String(profile?.cvType || "");
+      }
+
+      if (!cvData) {
+        setSubmitError("Please upload a CV or save one in your settings first.");
+        return;
+      }
+
+      const created = await recordJobApplication(
+        jobId,
+        user.uid,
+        user.displayName || "Applicant",
+        user.email || "",
+        job.title,
+        job.company,
+        job.location,
+        job.salary,
+        coverLetter.trim(),
+        cvData,
+        cvName,
+        cvType,
+      );
+
+      if (!created) {
+        setSubmitError("You have already applied for this job.");
+        return;
+      }
+
+      recordApplication(user.uid, jobId, `${job.title} at ${job.company}`);
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Unable to submit application:", error);
+      setSubmitError("Unable to submit your application. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
+
+  const handleCvChange = (file: File | undefined) => {
+    if (!file) return;
+
+    const allowedTypes = [
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ];
+
+    if (file.size > 700 * 1024) {
+      setSubmitError("CV files must be smaller than 700KB.");
+      return;
+    }
+
+    if (!allowedTypes.includes(file.type)) {
+      setSubmitError("Your CV must be a PDF, DOC, or DOCX file.");
+      return;
+    }
+
+    setSubmitError("");
+    setCvFile(file);
+  };
+
+  if (loading) {
+    return <p className="text-gray-600">Loading job details...</p>;
+  }
+
+  if (loadError || !job) {
+    return <p className="text-red-600">{loadError || "This job could not be found."}</p>;
+  }
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
@@ -91,8 +219,8 @@ function JobDetailsContent() {
           <div className="min-w-37.5 flex items-center gap-2 bg-gray-100 p-3 rounded-lg">
             <FiClock className="text-[#F0802D]" />
             <div>
-              <p className="text-xs text-gray-500">Experience</p>
-              <p className="font-medium text-sm">3+ years</p>
+              <p className="text-xs text-gray-500">Status</p>
+              <p className="font-medium text-sm">{job.status}</p>
             </div>
           </div>
 
@@ -100,7 +228,7 @@ function JobDetailsContent() {
             <FiDollarSign className="text-[#F0802D]" />
             <div>
               <p className="text-xs text-gray-500">Salary</p>
-              <p className="font-medium text-sm">₦250k - ₦400k</p>
+              <p className="font-medium text-sm">{job.salary}</p>
             </div>
           </div>
 
@@ -108,7 +236,7 @@ function JobDetailsContent() {
             <FiMapPin className="text-[#F0802D]" />
             <div>
               <p className="text-xs text-gray-500">Location</p>
-              <p className="font-medium text-sm">Lagos</p>
+              <p className="font-medium text-sm">{job.location}</p>
             </div>
           </div>
         </div>
@@ -119,9 +247,7 @@ function JobDetailsContent() {
             Job Description
           </h2>
           <p className="text-gray-600 text-sm sm:text-base leading-relaxed">
-            We are looking for a skilled frontend developer to build modern,
-            responsive web applications. You will work closely with designers
-            and backend engineers.
+            {job.description}
           </p>
         </div>
 
@@ -130,12 +256,9 @@ function JobDetailsContent() {
           <h2 className="text-base sm:text-lg font-semibold text-[#1F3064] mb-2">
             Responsibilities
           </h2>
-          <ul className="space-y-2 text-gray-600 text-sm sm:text-base">
-            <li>• Build and maintain web applications</li>
-            <li>• Collaborate with team members</li>
-            <li>• Optimize performance</li>
-            <li>• Write clean code</li>
-          </ul>
+          <p className="whitespace-pre-wrap text-gray-600 text-sm sm:text-base leading-relaxed">
+            {job.responsibilities}
+          </p>
         </div>
 
         {/* Requirements */}
@@ -143,12 +266,9 @@ function JobDetailsContent() {
           <h2 className="text-base sm:text-lg font-semibold text-[#1F3064] mb-2">
             Requirements
           </h2>
-          <ul className="space-y-2 text-gray-600 text-sm sm:text-base">
-            <li>• 3+ years experience</li>
-            <li>• Good knowledge of React</li>
-            <li>• Understanding of modern CSS</li>
-            <li>• Problem-solving skills</li>
-          </ul>
+          <p className="whitespace-pre-wrap text-gray-600 text-sm sm:text-base leading-relaxed">
+            {job.requirements}
+          </p>
         </div>
 
         {/* Application Section */}
@@ -158,6 +278,11 @@ function JobDetailsContent() {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+            {submitError && (
+              <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+                {submitError}
+              </p>
+            )}
             
             {/* Cover Letter */}
             <div>
@@ -168,7 +293,10 @@ function JobDetailsContent() {
                 className="w-full border border-gray-300 rounded-lg p-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
                 rows={5}
                 placeholder="Write your cover letter..."
-              ></textarea>
+                value={coverLetter}
+                onChange={(event) => setCoverLetter(event.target.value)}
+                required
+              />
             </div>
 
             {/* CV Upload */}
@@ -179,11 +307,12 @@ function JobDetailsContent() {
 
               <label className="flex items-center justify-center gap-2 border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-5 cursor-pointer hover:border-[#1F3064] transition text-sm text-gray-600">
                 <FiUpload />
-                Tap to upload your CV
+                {cvFile?.name || savedCvName || "Tap to upload your CV"}
                 <input
                   type="file"
                   className="hidden"
                   accept=".pdf,.doc,.docx"
+                  onChange={(event) => handleCvChange(event.target.files?.[0])}
                 />
               </label>
             </div>
@@ -191,10 +320,14 @@ function JobDetailsContent() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={submitted}
+              disabled={submitted || submitting}
               className="w-full bg-[#1F3064] text-white py-3 sm:py-3.5 rounded-lg font-medium text-sm sm:text-base hover:bg-[#16254d] transition"
             >
-              {submitted ? "Application Submitted" : "Submit Application"}
+              {submitted
+                ? "Application Submitted"
+                : submitting
+                  ? "Submitting..."
+                  : "Submit Application"}
             </button>
 
           </form>
