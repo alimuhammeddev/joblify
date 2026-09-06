@@ -25,7 +25,7 @@ export default function ViewApplicants({
   jobTitle,
   applicants,
 }: ApplicantsModalProps) {
-  const [openApplicant, setOpenApplicant] = useState<number | null>(null);
+  const [openApplicant, setOpenApplicant] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
