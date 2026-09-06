@@ -4,7 +4,6 @@ import {
   FiBriefcase,
   FiMapPin,
   FiClock,
-  FiDollarSign,
   FiUpload,
 } from "react-icons/fi";
 import { useState } from "react";
@@ -225,7 +224,9 @@ function JobDetailsContent() {
           </div>
 
           <div className="min-w-37.5 flex items-center gap-2 bg-gray-100 p-3 rounded-lg">
-            <FiDollarSign className="text-[#F0802D]" />
+            <span className="text-[#F0802D] font-semibold" aria-hidden="true">
+              ₦
+            </span>
             <div>
               <p className="text-xs text-gray-500">Salary</p>
               <p className="font-medium text-sm">{job.salary}</p>
