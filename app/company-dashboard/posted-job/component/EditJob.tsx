@@ -56,6 +56,12 @@ export default function EditJobModal({
     setError("");
 
     try {
+      await auth.authStateReady();
+      if (!auth.currentUser) {
+        setError("Your session has expired. Please sign in again.");
+        return;
+      }
+
       const [minimumSalary, maximumSalary] = formData.salary
         .split("-")
         .map((value) => value.trim());

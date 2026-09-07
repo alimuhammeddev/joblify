@@ -207,7 +207,10 @@ export default function CompanySettings() {
         });
       }
       updateProfile({ logoUrl: savedLogoUrl });
-      recordCompanyActivity(currentUser.uid, "You updated your company settings");
+      recordCompanyActivity(
+        currentUser.uid,
+        "You updated your company settings",
+      );
       setLogoFile(null);
       setMessage("Your company changes have been saved.");
       setToast("Changes saved successfully.");
@@ -244,10 +247,9 @@ export default function CompanySettings() {
         </Notice>
       )}
       {error && <Notice kind="error">{error}</Notice>}
-      {message && <Notice kind="success">{message}</Notice>}
 
       <div className="grid lg:grid-cols-3 gap-6">
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden h-fit">
+        <div className="bg-white rounded-2xl shadow-xs overflow-hidden h-fit">
           <div className="h-28 bg-[#1F3064]" />
           <div className="px-6 pb-6">
             <div className="-mt-12 relative w-fit mx-auto">
@@ -287,7 +289,7 @@ export default function CompanySettings() {
 
         <form
           onSubmit={handleSave}
-          className="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6"
+          className="lg:col-span-2 bg-white rounded-2xl shadow-xs p-6"
         >
           <h3 className="text-lg font-semibold text-[#1F3064] mb-5">
             Company Information
@@ -504,12 +506,15 @@ function NotificationToggle({
         <Bell className="text-[#F0802D]" size={18} />
         <span className="text-sm">{label}</span>
       </div>
-      <input
-        type="checkbox"
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        className="accent-[#F0802D] w-5 h-5"
-      />
+      <span className="relative h-5 w-5 shrink-0">
+        <input
+          type="checkbox"
+          checked={checked}
+          onChange={(event) => onChange(event.target.checked)}
+          className="peer sr-only"
+        />
+        <span className="absolute inset-0 rounded border border-gray-300 transition peer-checked:border-[#F0802D] peer-checked:bg-[#F0802D] after:absolute after:left-1.5 after:top-0.5 after:h-2.5 after:w-1.5 after:rotate-45 after:border-b-2 after:border-r-2 after:border-white after:opacity-0 after:content-[''] peer-checked:after:opacity-100" />
+      </span>
     </label>
   );
 }

@@ -88,7 +88,7 @@ export default function DashboardLayout({
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50 overflow-hidden">
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-sm border border-gray-100 z-50 overflow-hidden">
                 <div className="pb-3 bg-[#FDE6D5] p-3">
                   <h3 className="font-semibold text-[#1F3064]">
                     {user?.displayName || "User"}

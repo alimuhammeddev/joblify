@@ -45,3 +45,7 @@ export function mapJob(snapshot: QueryDocumentSnapshot<DocumentData>): Job {
 export function formatPostedAt(job: Job) {
   return job.postedAt ? job.postedAt.toDate().toLocaleDateString() : "Recently";
 }
+
+export function isJobOpen(job: Pick<Job, "status">) {
+  return job.status.trim().toLowerCase() === "open";
+}

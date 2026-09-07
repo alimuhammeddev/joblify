@@ -25,31 +25,47 @@ export default function Choose() {
   ];
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-20 mb-16">
-      <div className="flex flex-col items-center mb-12">
-        <p className="lg:text-xl font-semibold text-[#1F3064]">Why Choose Us</p>
-        <div className="w-28 h-0.5 bg-[#F0802D] mt-2"></div>
-        <p className="text-gray-500 mt-2 text-center max-w-2xl">
-          We combine innovation, dedication, and expertise to give you the best
-          experience possible.
-        </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white shadow-sm rounded-2xl p-6 text-center hover:shadow-md transition duration-300"
-          >
-            <div className="text-4xl mb-4 text-[#F0802D] flex justify-center">
-              {item.icon}
-            </div>
-            <h3 className="text-lg font-medium text-[#1F3064] mb-2">
-              {item.title}
-            </h3>
-            <p className="text-gray-500 text-sm">{item.desc}</p>
+    <section className="relative overflow-hidden bg-[#f8f9fc] py-20 sm:py-24">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
+          <div>
+            <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
+              Why Joblify
+            </p>
+            <h2 className="max-w-md text-3xl font-extrabold leading-tight text-[#1F3064] sm:text-4xl">
+              A better way to move your career forward.
+            </h2>
           </div>
-        ))}
+          <p className="max-w-xl text-base leading-relaxed text-slate-600 lg:justify-self-end lg:text-lg">
+            We bring clarity to the job search with trusted listings, smarter
+            matches, and a simpler path from first search to first day.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((item, index) => (
+            <div
+              key={index}
+              className="group relative overflow-hidden rounded-2xl border border-[#1F3064]/10 bg-white p-6 transition duration-300 hover:-translate-y-1 hover:border-[#F0802D]/40 hover:shadow-xl hover:shadow-[#1F3064]/10"
+            >
+              <div className="mb-10 flex items-start justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#fff1e8] text-2xl text-[#F0802D] transition group-hover:bg-[#F0802D] group-hover:text-white">
+                  {item.icon}
+                </div>
+                <span className="text-sm font-bold text-[#1F3064]/25">
+                  0{index + 1}
+                </span>
+              </div>
+              <h3 className="mb-3 text-lg font-bold text-[#1F3064]">
+                {item.title}
+              </h3>
+              <p className="text-sm leading-relaxed text-slate-500">
+                {item.desc}
+              </p>
+              <div className="absolute bottom-0 left-0 h-1 w-0 bg-[#F0802D] transition-all duration-300 group-hover:w-full" />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

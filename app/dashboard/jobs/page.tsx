@@ -8,15 +8,7 @@ import { auth } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
-
-type Job = {
-  id: string;
-  title: string;
-  company: string;
-  location: string;
-  type: string;
-  salary: string;
-};
+import { isJobOpen, mapJob, type Job } from "@/lib/jobs";
 
 export default function Jobs() {
   const [postedJobs, setPostedJobs] = useState<Job[]>([]);
@@ -30,18 +22,7 @@ export default function Jobs() {
     return onSnapshot(
       collection(db, "jobs"),
       (snapshot) => {
-        const jobs: Job[] = snapshot.docs.map((job) => {
-          const data = job.data();
-
-          return {
-            id: job.id,
-            title: String(data.title || "Untitled job"),
-            company: String(data.companyName || "Company"),
-            location: String(data.location || "Location not specified"),
-            type: String(data.type || "Not specified"),
-            salary: `${data.minimumSalary || "-"} - ${data.maximumSalary || "-"}`,
-          };
-        });
+        const jobs: Job[] = snapshot.docs.map(mapJob).filter(isJobOpen);
         setPostedJobs(jobs);
         setJobsError(false);
       },
@@ -87,7 +68,7 @@ export default function Jobs() {
             {availableJobs.map((job) => (
               <div
                 key={job.id}
-                className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition duration-300"
+                className="bg-white rounded-2xl shadow-xs p-6 transition duration-300"
               >
                 <div className="flex justify-between items-start">
                   <div>

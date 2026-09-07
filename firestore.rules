@@ -13,8 +13,17 @@ service cloud.firestore {
         && request.resource.data.companyId == request.auth.uid
         && request.resource.data.applicantCount == 0;
       allow update: if request.auth != null
-        && request.resource.data.companyId == resource.data.companyId
-        && request.resource.data.applicantCount == resource.data.applicantCount + 1;
+        && (
+          (
+            resource.data.companyId == request.auth.uid
+            && request.resource.data.companyId == resource.data.companyId
+            && request.resource.data.applicantCount == resource.data.applicantCount
+          )
+          || (
+            request.resource.data.companyId == resource.data.companyId
+            && request.resource.data.applicantCount == resource.data.applicantCount + 1
+          )
+        );
     }
 
     match /applications/{applicationId} {

@@ -57,7 +57,7 @@ export default function ViewApplicants({
               return (
                 <div
                   key={applicant.id}
-                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm transition-all"
+                  className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-xs transition-all"
                 >
                   <div className="p-4">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">

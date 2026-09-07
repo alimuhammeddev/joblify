@@ -8,7 +8,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { getUserActivity, type UserActivity } from "@/lib/userActivity";
 import { db } from "@/lib/firebase";
-import { mapJob, type Job } from "@/lib/jobs";
+import { isJobOpen, mapJob, type Job } from "@/lib/jobs";
 
 export default function Dashboard() {
   const [displayName, setDisplayName] = useState("User");
@@ -24,7 +24,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     return onSnapshot(collection(db, "jobs"), (snapshot) => {
-      setPostedJobs(snapshot.docs.map(mapJob));
+      setPostedJobs(snapshot.docs.map(mapJob).filter(isJobOpen));
     });
   }, []);
 
@@ -75,7 +75,7 @@ export default function Dashboard() {
         ].map((item, index) => (
           <div
             key={index}
-            className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100"
+            className="bg-white rounded-2xl p-5 shadow-xs border border-gray-100"
           >
             <div className="flex items-center justify-between mb-3">
               <item.icon className="w-6 h-6 text-[#1F3064]" />
@@ -90,7 +90,7 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Recommended Jobs */}
-        <div className="xl:col-span-2 bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+        <div className="xl:col-span-2 bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-semibold text-[#1F3064]">
               Recommended Jobs
@@ -107,7 +107,7 @@ export default function Dashboard() {
             {dashboardJobs.map((job) => (
               <div
                 key={job.id}
-                className="border border-gray-100 rounded-2xl p-5 hover:shadow-sm transition"
+                className="border border-gray-100 rounded-2xl p-5 transition"
               >
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                   <div>
@@ -144,7 +144,7 @@ export default function Dashboard() {
         </div>
 
         <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100">
             <h2 className="text-lg font-semibold text-[#1F3064] mb-4">
               Recent Activity
             </h2>
@@ -164,7 +164,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
+          <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100">
             <div className="flex items-center justify-between mb-5">
               <h2 className="text-lg font-semibold text-[#1F3064]">
                 Application Analytics

@@ -12,8 +12,6 @@ type AppliedJob = {
   company: string;
   location: string;
   salary: string;
-  coverLetter: string;
-  cvName: string;
   appliedAt: string;
 };
 
@@ -55,8 +53,6 @@ export default function RecentlyApplied() {
             salary: job.minimumSalary || job.maximumSalary
               ? `${minimumSalary} - ${maximumSalary}`
               : String(application.salary || "-"),
-            coverLetter: String(application.coverLetter || "Not provided"),
-            cvName: String(application.cvName || "CV attached"),
             appliedAt: appliedDate
               ? appliedDate.toLocaleDateString()
               : "Date unavailable",
@@ -122,7 +118,7 @@ export default function RecentlyApplied() {
         {appliedJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl shadow-sm p-6 transition duration-300"
+            className="bg-white rounded-2xl shadow-xs p-6 transition duration-300"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
               {/* Left Section */}
@@ -160,15 +156,6 @@ export default function RecentlyApplied() {
               </div>
             </div>
 
-            <div className="mt-5 border-t border-gray-100 pt-4 text-sm text-gray-600">
-              <p>
-                <span className="font-medium text-gray-700">CV:</span> {job.cvName}
-              </p>
-              <p className="mt-2 whitespace-pre-wrap">
-                <span className="font-medium text-gray-700">Cover letter:</span>{" "}
-                {job.coverLetter}
-              </p>
-            </div>
           </div>
         ))}
         </div>

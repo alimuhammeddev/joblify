@@ -13,7 +13,7 @@ export default function Toast({
   useEffect(() => {
     if (!message) return;
 
-    const timeout = window.setTimeout(onClose, 3500);
+    const timeout = window.setTimeout(onClose, 1500);
     return () => window.clearTimeout(timeout);
   }, [message, onClose]);
 

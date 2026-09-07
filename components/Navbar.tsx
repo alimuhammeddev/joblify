@@ -10,106 +10,94 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-white shadow-sm top-0 z-50 fixed">
-      <div className="max-w-7xl mx-auto md:px-6 px-4 py-4 flex items-center justify-between">
-        {/* Logo */}
-        <div className="text-xl font-bold text-gray-800">
-          <Image src={joblify} alt="Brand Logo" className="w-28" />
-        </div>
-
-        {/* Desktop Links */}
-        <div className="hidden md:flex space-x-8 text-gray-700 font-medium">
-          <a
-            href="/"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Home
-          </a>
-          <a
-            href="/about"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            About
-          </a>
-          <a
-            href="/jobs"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Jobs
-          </a>
-          <a
-            href="/contact"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Contact
-          </a>
-        </div>
-
-        {/* Desktop Buttons */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link href="/login">
-            <button className="text-[#1F3064] border border-[#1F3064] px-4 py-2 rounded-lg hover:text-[#FFFFFF] hover:bg-[#1F3064] hover:border-[#1F3064] cursor-pointer transition">
-              Login
-            </button>
+    <nav className="fixed top-0 z-50 w-full bg-white/90 px-4 py-3 backdrop-blur-md sm:px-6">
+      <div className="mx-auto max-w-7xl rounded-2xl border border-[#1F3064]/10 bg-white px-4 py-3 sm:px-5">
+        <div className="flex items-center justify-between">
+          <Link href="/" aria-label="Joblify home">
+            <Image src={joblify} alt="Joblify" className="w-28" priority />
           </Link>
-          <Link href="/signup">
-            <button className="bg-[#F0802D] text-white px-4 py-2 rounded-lg cursor-pointer hover:bg-[#E67E22] transition">
-              Sign Up
-            </button>
-          </Link>
+
+          <div className="hidden items-center gap-8 md:flex">
+            {[
+              ["Home", "/"],
+              ["About", "/about"],
+              ["Jobs", "/jobs"],
+              ["Contact", "/contact"],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                className="text-sm font-semibold text-[#1F3064] transition hover:text-[#F0802D]"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="hidden items-center gap-2 md:flex">
+            <Link
+              href="/login"
+              className="rounded-xl px-4 py-2.5 text-sm font-bold text-[#1F3064] transition hover:bg-[#f8f9fc]"
+            >
+              Log in
+            </Link>
+            <Link
+              href="/signup"
+              className="rounded-xl bg-[#F0802D] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[#E67E22]"
+            >
+              Get started
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={isOpen}
+            className="rounded-lg p-2 text-[#1F3064] transition hover:bg-[#f8f9fc] md:hidden"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-gray-800"
-          onClick={() => setIsOpen(!isOpen)}
+        <div
+          className={`overflow-hidden transition-all duration-300 md:hidden ${
+            isOpen ? "max-h-96 pt-4" : "max-h-0"
+          }`}
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
-      <div
-        className={`md:hidden bg-white px-6 overflow-hidden transition-all duration-300 ${
-          isOpen ? "max-h-96 py-4" : "max-h-0"
-        }`}
-      >
-        <div className="flex flex-col space-y-4 text-gray-700 font-medium">
-          <a
-            href="/"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Home
-          </a>
-          <a
-            href="/about"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            About
-          </a>
-          <a
-            href="/jobs"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Jobs
-          </a>
-          <a
-            href="/contact"
-            className="hover:text-[#F0802D] text-[#1F3064] transition"
-          >
-            Contact
-          </a>
-
-          <Link href="/login">
-            <button className="text-[#1F3064] w-full py-2 border border-[#1F3064] rounded-lg cursor-pointer">
-              Login
-            </button>
-          </Link>
-          <Link href="/signup">
-            <button className="bg-[#F0802D] w-full text-white py-2 rounded-lg hover:bg-[#E67E22]">
-              Sign Up
-            </button>
-          </Link>
+          <div className="flex flex-col gap-2 border-t border-[#1F3064]/10 pt-4">
+            {[
+              ["Home", "/"],
+              ["About", "/about"],
+              ["Jobs", "/jobs"],
+              ["Contact", "/contact"],
+            ].map(([label, href]) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setIsOpen(false)}
+                className="rounded-lg px-3 py-2.5 font-semibold text-[#1F3064] transition hover:bg-[#fff1e8] hover:text-[#F0802D]"
+              >
+                {label}
+              </Link>
+            ))}
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <Link
+                href="/login"
+                onClick={() => setIsOpen(false)}
+                className="rounded-xl border border-[#1F3064]/15 px-4 py-2.5 text-center text-sm font-bold text-[#1F3064]"
+              >
+                Log in
+              </Link>
+              <Link
+                href="/signup"
+                onClick={() => setIsOpen(false)}
+                className="rounded-xl bg-[#F0802D] px-4 py-2.5 text-center text-sm font-bold text-white"
+              >
+                Get started
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </nav>

@@ -4,13 +4,13 @@ import { MapPin, Wallet, Search } from "lucide-react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
-import { mapJob, type Job } from "@/lib/jobs";
+import { isJobOpen, mapJob, type Job } from "@/lib/jobs";
 
 export default function LatestJob() {
   const [jobs, setJobs] = useState<Job[]>([]);
 
   useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
-    setJobs(snapshot.docs.map(mapJob));
+    setJobs(snapshot.docs.map(mapJob).filter(isJobOpen));
   }), []);
 
   return (

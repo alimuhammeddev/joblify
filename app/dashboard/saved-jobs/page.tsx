@@ -7,6 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
+import { isJobOpen } from "@/lib/jobs";
 
 type SavedJob = {
   id: string;
@@ -34,6 +35,7 @@ export default function SavedJobs() {
         const savedJobIds = getUserActivity(user.uid).savedJobIds;
         setSavedJobs(
           snapshot.docs
+            .filter((job) => isJobOpen({ status: String(job.data().status || "Open") }))
             .filter((job) => savedJobIds.includes(job.id))
             .map((job) => {
               const data = job.data();

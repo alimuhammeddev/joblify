@@ -123,7 +123,7 @@ export default function PostedJob() {
         {postedJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition"
+            className="bg-white rounded-2xl p-5 border border-gray-100 shadow-xs"
           >
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
               {/* Left Content */}
