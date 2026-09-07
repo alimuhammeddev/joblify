@@ -16,9 +16,13 @@ import {
 import Image from "next/image";
 import joblify from "./assets/joblify.png";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { getUserActivity } from "@/lib/userActivity";
+import { signOut } from "firebase/auth";
+import { setAuthToast } from "@/components/AuthToast";
 
 export default function DashboardLayout({
   children,
@@ -26,12 +30,30 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
     return onAuthStateChanged(auth, setUser);
   }, []);
+
+  useEffect(() => {
+    const updateUnreadCount = () => {
+      setUnreadCount(user ? getUserActivity(user.uid).unreadCount : 0);
+    };
+
+    updateUnreadCount();
+    window.addEventListener("storage", updateUnreadCount);
+    window.addEventListener("joblify-activity-updated", updateUnreadCount);
+    window.addEventListener("joblify-notifications-read", updateUnreadCount);
+    return () => {
+      window.removeEventListener("storage", updateUnreadCount);
+      window.removeEventListener("joblify-activity-updated", updateUnreadCount);
+      window.removeEventListener("joblify-notifications-read", updateUnreadCount);
+    };
+  }, [user]);
 
   const isActive = (path: string) => pathname === path;
   return (
@@ -47,7 +69,11 @@ export default function DashboardLayout({
         <div className="flex items-center gap-6">
           <Link href="/dashboard/user-notification" className="relative">
             <Bell className="text-gray-700 hover:text-[#1F3064]" />
-            <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#F0802D] rounded-full"></span>
+            {unreadCount > 0 && (
+              <span className="absolute -right-3 -top-3 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#F0802D] px-1 text-[10px] font-bold text-white">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
           </Link>
 
           <div className="relative">
@@ -74,7 +100,12 @@ export default function DashboardLayout({
 
                 <Link href="/dashboard/user-settings">
                   <button
-                    onClick={() => setShowDropdown(false)}
+                    onClick={async () => {
+                      await signOut(auth);
+                      setShowDropdown(false);
+                      setAuthToast("Logged out successfully.");
+                      router.push("/login");
+                    }}
                     className="w-full flex items-center mt-3 gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
                   >
                     <Settings size={18} />

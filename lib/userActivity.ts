@@ -2,12 +2,14 @@ export type UserActivity = {
   appliedJobIds: string[];
   savedJobIds: string[];
   recentActivities: string[];
+  unreadCount: number;
 };
 
 const emptyActivity: UserActivity = {
   appliedJobIds: [],
   savedJobIds: [],
   recentActivities: [],
+  unreadCount: 0,
 };
 
 const getStorageKey = (userId: string) => `joblify-activity-${userId}`;
@@ -32,6 +34,7 @@ export function getUserActivity(userId: string): UserActivity {
       recentActivities: Array.isArray(activity.recentActivities)
         ? activity.recentActivities
         : [],
+      unreadCount: typeof activity.unreadCount === "number" ? activity.unreadCount : 0,
     };
   } catch {
     return emptyActivity;
@@ -40,6 +43,7 @@ export function getUserActivity(userId: string): UserActivity {
 
 function saveUserActivity(userId: string, activity: UserActivity) {
   window.localStorage.setItem(getStorageKey(userId), JSON.stringify(activity));
+  window.dispatchEvent(new Event("joblify-activity-updated"));
 }
 
 export function recordApplication(userId: string, jobId: string, jobTitle: string) {
@@ -53,6 +57,7 @@ export function recordApplication(userId: string, jobId: string, jobTitle: strin
     appliedJobIds: [...activity.appliedJobIds, jobId],
     savedJobIds: activity.savedJobIds,
     recentActivities: [`You applied for ${jobTitle}`, ...activity.recentActivities].slice(0, 50),
+    unreadCount: activity.unreadCount + 1,
   });
 }
 
@@ -63,6 +68,7 @@ export function recordUserActivity(userId: string, message: string) {
     appliedJobIds: activity.appliedJobIds,
     savedJobIds: activity.savedJobIds,
     recentActivities: [message, ...activity.recentActivities].slice(0, 50),
+    unreadCount: activity.unreadCount + 1,
   });
 }
 
@@ -84,7 +90,19 @@ export function toggleSavedJob(
       isSaved ? `You removed ${jobTitle} from saved jobs` : `You saved ${jobTitle}`,
       ...activity.recentActivities,
     ].slice(0, 50),
+    unreadCount: activity.unreadCount + 1,
   });
 
   return !isSaved;
+}
+
+export function markUserNotificationsRead(userId: string) {
+  const activity = getUserActivity(userId);
+
+  saveUserActivity(userId, {
+    ...activity,
+    unreadCount: 0,
+  });
+
+  window.dispatchEvent(new Event("joblify-notifications-read"));
 }

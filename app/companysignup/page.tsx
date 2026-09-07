@@ -12,6 +12,7 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
+import { setAuthToast } from "@/components/AuthToast";
 
 const industries = [
   "Information Technology",
@@ -119,6 +120,7 @@ export default function CompanySignup() {
         createdAt: serverTimestamp(),
       });
 
+      setAuthToast("Account created successfully.");
       router.push("/company-dashboard");
     } catch (error: any) {
       console.error(error);

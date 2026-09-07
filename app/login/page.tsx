@@ -12,6 +12,7 @@ import {
 
 import { auth } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
+import { setAuthToast } from "@/components/AuthToast";
 
 export default function Login() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function Login() {
         password
       );
 
-      // Login successful
+      setAuthToast("Logged in successfully.");
       router.push("/dashboard");
     } catch (error: any) {
       console.error(error);

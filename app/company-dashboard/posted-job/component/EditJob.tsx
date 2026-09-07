@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { X, Briefcase, MapPin, Wallet } from "lucide-react";
+import { doc, updateDoc } from "firebase/firestore";
 import type { Job } from "@/lib/jobs";
+import { auth, db } from "@/lib/firebase";
+import { recordCompanyActivity } from "@/lib/companyActivity";
+import Toast from "@/components/Toast";
 
 interface EditJobModalProps {
   isOpen: boolean;
@@ -25,6 +29,9 @@ export default function EditJobModal({
     responsibilities: "",
     requirements: "",
   });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
+  const [toast, setToast] = useState("");
 
   useEffect(() => {
     if (job) {
@@ -41,10 +48,47 @@ export default function EditJobModal({
     }
   }, [job]);
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!job) return;
+
+    setSaving(true);
+    setError("");
+
+    try {
+      const [minimumSalary, maximumSalary] = formData.salary
+        .split("-")
+        .map((value) => value.trim());
+
+      await updateDoc(doc(db, "jobs", job.id), {
+        title: formData.title.trim(),
+        location: formData.location.trim(),
+        type: formData.type,
+        status: formData.status,
+        minimumSalary: minimumSalary || formData.salary.trim(),
+        maximumSalary: maximumSalary || formData.salary.trim(),
+        description: formData.description.trim(),
+        responsibilities: formData.responsibilities.trim(),
+        requirements: formData.requirements.trim(),
+      });
+
+      if (auth.currentUser) {
+        recordCompanyActivity(auth.currentUser.uid, `You updated the job: ${formData.title.trim()}`);
+      }
+      setToast("Changes saved successfully.");
+    } catch (saveError) {
+      console.error("Unable to update job:", saveError);
+      setError("Unable to save these changes. Please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (!isOpen || !job) return null;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <Toast message={toast} onClose={() => setToast("")} />
       <div className="bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl md:max-h-[90vh] max-h-[80vh] overflow-y-auto md:mt-0 -mt-16">
         {/* Header */}
         <div className="bg-linear-to-r from-[#1F3064] to-[#2B4287] text-white p-6 flex justify-between items-center">
@@ -63,7 +107,12 @@ export default function EditJobModal({
         </div>
 
         {/* Form */}
-        <form className="p-6 space-y-5">
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {error && (
+            <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+              {error}
+            </p>
+          )}
           <div>
             <label className="text-sm font-medium text-gray-600 block mb-2">
               Job Title
@@ -234,9 +283,10 @@ export default function EditJobModal({
 
             <button
               type="submit"
+              disabled={saving}
               className="bg-[#1F3064] text-white px-6 py-3 rounded-xl"
             >
-              Save Changes
+              {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

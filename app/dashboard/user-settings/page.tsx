@@ -20,6 +20,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase";
 import { useUserSettingsStore } from "@/lib/userSettingsStore";
 import { recordUserActivity } from "@/lib/userActivity";
+import Toast from "@/components/Toast";
 
 type ProfileData = {
   phone?: string;
@@ -44,18 +45,17 @@ export default function UserSettings() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
   const [cvFile, setCvFile] = useState<File | null>(null);
+  const [toast, setToast] = useState("");
   const {
     profile,
     showPassword,
     loading,
     saving,
-    message,
     error,
     updateProfile,
     setShowPassword,
     setLoading,
     setSaving,
-    setMessage,
     setError,
     resetProfile,
     resetFeedback,
@@ -208,7 +208,7 @@ export default function UserSettings() {
       recordUserActivity(currentUser.uid, "You updated your profile settings");
       setProfileImageFile(null);
       setCvFile(null);
-      setMessage("Your changes have been saved.");
+      setToast("Changes saved successfully.");
     } catch {
       setError("We could not save your changes. Please try again.");
     } finally {
@@ -222,6 +222,7 @@ export default function UserSettings() {
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
+      <Toast message={toast} onClose={() => setToast("")} />
       <div className="mb-6">
         <h1 className="text-xl md:text-2xl font-bold text-[#1F3064]">User Settings</h1>
         <p className="text-sm text-gray-500 mt-2">
@@ -235,7 +236,6 @@ export default function UserSettings() {
         </div>
       )}
       {error && <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</div>}
-      {message && <div className="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">{message}</div>}
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="bg-white rounded-2xl shadow-sm p-6 h-fit">

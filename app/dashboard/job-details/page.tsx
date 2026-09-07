@@ -13,8 +13,9 @@ import { Suspense } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { db } from "@/lib/firebase";
-import { recordApplication } from "@/lib/userActivity";
+import { getUserActivity, recordApplication } from "@/lib/userActivity";
 import { recordJobApplication } from "@/lib/companyActivity";
+import Toast from "@/components/Toast";
 
 type JobDetails = {
   title: string;
@@ -40,6 +41,12 @@ function JobDetailsContent() {
   const [job, setJob] = useState<JobDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
+  const [toast, setToast] = useState("");
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    setSubmitted(Boolean(user && jobId && getUserActivity(user.uid).appliedJobIds.includes(jobId)));
+  }, [jobId]);
 
   useEffect(() => {
     const user = auth.currentUser;
@@ -102,6 +109,12 @@ function JobDetailsContent() {
     setSubmitting(true);
 
     try {
+      if (getUserActivity(user.uid).appliedJobIds.includes(jobId)) {
+        setSubmitted(true);
+        setSubmitError("You have already applied for this job.");
+        return;
+      }
+
       let cvData = "";
       let cvName = "";
       let cvType = "";
@@ -150,6 +163,7 @@ function JobDetailsContent() {
 
       recordApplication(user.uid, jobId, `${job.title} at ${job.company}`);
       setSubmitted(true);
+      setToast("Application submitted successfully.");
     } catch (error) {
       console.error("Unable to submit application:", error);
       setSubmitError("Unable to submit your application. Please try again.");
@@ -191,6 +205,7 @@ function JobDetailsContent() {
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
+      <Toast message={toast} onClose={() => setToast("")} />
       <div className="mx-auto">
         
         {/* Header */}

@@ -159,11 +159,6 @@ export default function Jobs() {
             ))}
           </div>
 
-          <div className="flex justify-center mt-10">
-            <button className="px-6 py-2 border cursor-pointer border-[#1F3064] text-[#1F3064] rounded-lg hover:bg-[#1F3064] hover:text-white transition">
-              View More Jobs
-            </button>
-          </div>
         </div>
       </div>
     </section>

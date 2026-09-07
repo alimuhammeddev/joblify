@@ -5,7 +5,10 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { getCompanyActivity } from "@/lib/companyActivity";
+import {
+  getCompanyActivity,
+  markCompanyNotificationsRead,
+} from "@/lib/companyActivity";
 
 type CompanyJob = { id: string; title: string };
 type Application = { jobId: string; applicantName: string };
@@ -38,6 +41,10 @@ export default function CompanyNotification() {
           (activity, index, all) => all.indexOf(activity) === index,
         ),
       );
+
+      if (companyId) {
+        markCompanyNotificationsRead(companyId);
+      }
     };
 
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {

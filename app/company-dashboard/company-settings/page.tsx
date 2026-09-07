@@ -23,6 +23,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "@/lib/firebase";
 import { useCompanySettingsStore } from "@/lib/companySettingsStore";
 import { recordCompanyActivity } from "@/lib/companyActivity";
+import Toast from "@/components/Toast";
 
 type CompanyProfile = {
   companyName?: string;
@@ -70,6 +71,7 @@ const industries = [
 export default function CompanySettings() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [toast, setToast] = useState("");
   const {
     profile,
     showPasswordForm,
@@ -208,6 +210,7 @@ export default function CompanySettings() {
       recordCompanyActivity(currentUser.uid, "You updated your company settings");
       setLogoFile(null);
       setMessage("Your company changes have been saved.");
+      setToast("Changes saved successfully.");
     } catch {
       setError("We could not save your changes. Please try again.");
     } finally {
@@ -224,6 +227,7 @@ export default function CompanySettings() {
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
+      <Toast message={toast} onClose={() => setToast("")} />
       <div className="mb-8">
         <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
           Company Settings

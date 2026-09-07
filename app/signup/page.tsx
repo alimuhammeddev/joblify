@@ -10,6 +10,7 @@ import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 import { auth, db } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
+import { setAuthToast } from "@/components/AuthToast";
 
 export default function Signup() {
   const router = useRouter();
@@ -67,7 +68,7 @@ export default function Signup() {
         createdAt: serverTimestamp(),
       });
 
-      // Redirect to dashboard
+      setAuthToast("Account created successfully.");
       router.push("/dashboard");
     } catch (error: any) {
       console.error(error);

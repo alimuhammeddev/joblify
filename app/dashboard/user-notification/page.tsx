@@ -4,14 +4,20 @@ import { Bell, CheckCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { getUserActivity } from "@/lib/userActivity";
+import { getUserActivity, markUserNotificationsRead } from "@/lib/userActivity";
 
 export default function UserNotification() {
   const [activities, setActivities] = useState<string[]>([]);
 
   useEffect(() => {
     return onAuthStateChanged(auth, (user) => {
-      setActivities(user ? getUserActivity(user.uid).recentActivities : []);
+      if (!user) {
+        setActivities([]);
+        return;
+      }
+
+      setActivities(getUserActivity(user.uid).recentActivities);
+      markUserNotificationsRead(user.uid);
     });
   }, []);
 
