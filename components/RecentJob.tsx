@@ -3,12 +3,24 @@
 import { MapPin, Wallet } from "lucide-react";
 import Link from "next/link";
 import { collection, onSnapshot } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { formatPostedAt, mapJob, type Job } from "@/lib/jobs";
 
 export default function RecentJob() {
+  const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(Boolean(user));
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
     setJobs(
@@ -22,6 +34,15 @@ export default function RecentJob() {
         .slice(0, 3),
     );
   }), []);
+
+  const handleApplyNow = (job: Job) => {
+    if (isLoggedIn) {
+      router.push(`/dashboard/job-details?jobId=${job.id}`);
+      return;
+    }
+
+    router.push("/login");
+  };
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6 mt-20 mb-16">
@@ -70,7 +91,11 @@ export default function RecentJob() {
               </div>
             </div>
 
-            <button className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white">
+            <button
+              type="button"
+              onClick={() => handleApplyNow(job)}
+              className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+            >
               Apply Now
             </button>
           </div>

@@ -8,13 +8,25 @@ import {
   Wallet,
 } from "lucide-react";
 import { collection, onSnapshot } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { formatPostedAt, isJobOpen, mapJob, type Job } from "@/lib/jobs";
 
 export default function LatestJob() {
+  const router = useRouter();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setIsLoggedIn(Boolean(user));
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(
     () =>
@@ -30,6 +42,15 @@ export default function LatestJob() {
       value.toLowerCase().includes(normalizedSearchTerm),
     ),
   );
+
+  const handleApplyNow = (job: Job) => {
+    if (isLoggedIn) {
+      router.push(`/dashboard/job-details?jobId=${job.id}`);
+      return;
+    }
+
+    router.push("/login");
+  };
 
   return (
     <section className="relative overflow-hidden bg-white px-4 pb-20 pt-28 sm:px-6 lg:px-8 lg:pt-36">
@@ -117,7 +138,11 @@ export default function LatestJob() {
                 </div>
               </div>
 
-              <button className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white">
+              <button
+                type="button"
+                onClick={() => handleApplyNow(job)}
+                className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+              >
                 Apply Now
               </button>
             </div>

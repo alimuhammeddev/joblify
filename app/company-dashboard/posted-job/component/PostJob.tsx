@@ -59,7 +59,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl md:max-h-[90vh] max-h-[80vh] overflow-y-auto md:mt-0 -mt-16">
-        <div className="bg-linear-to-r from-[#1F3064] to-[#2B4287] text-white p-6">
+        <div className="bg-[#1F3064] text-white p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="bg-white/15 p-3 rounded-2xl">

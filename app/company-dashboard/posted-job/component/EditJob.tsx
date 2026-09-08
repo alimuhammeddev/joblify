@@ -5,7 +5,6 @@ import { X, Briefcase, MapPin, Wallet, Save } from "lucide-react";
 import { doc, updateDoc } from "firebase/firestore";
 import type { Job } from "@/lib/jobs";
 import { auth, db } from "@/lib/firebase";
-import { recordCompanyActivity } from "@/lib/companyActivity";
 
 interface EditJobModalProps {
   isOpen: boolean;
@@ -78,9 +77,6 @@ export default function EditJobModal({
         requirements: formData.requirements.trim(),
       });
 
-      if (auth.currentUser) {
-        recordCompanyActivity(auth.currentUser.uid, `You updated the job: ${formData.title.trim()}`);
-      }
       onSaved();
       onClose();
     } catch (saveError) {
@@ -97,7 +93,7 @@ export default function EditJobModal({
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl md:max-h-[90vh] max-h-[80vh] overflow-y-auto md:mt-0 -mt-16">
         {/* Header */}
-        <div className="bg-linear-to-r from-[#1F3064] to-[#2B4287] text-white p-6 flex justify-between items-center">
+        <div className="bg-[#1F3064] text-white p-6 flex justify-between items-center">
           <div>
             <h2 className="text-xl font-bold">Edit Job</h2>
 
