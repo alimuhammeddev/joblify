@@ -37,7 +37,7 @@ export default function WeDo() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               What we do
             </p>
-            <h2 className="max-w-md text-3xl font-extrabold leading-tight text-[#1F3064] sm:text-4xl">
+            <h2 className="max-w-md text-3xl font-extrabold leading-tight text-[#1F3064] md:text-4xl">
               Everything you need to make your next move.
             </h2>
           </div>
