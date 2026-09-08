@@ -7,10 +7,6 @@ export default function CTA() {
         <div className="absolute right-8 top-8 hidden h-24 w-24 rounded-full border border-white/10 sm:block" />
         <div className="grid gap-10 p-7 sm:p-10 md:p-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
           <div className="max-w-xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#ffad70]/40 bg-[#F0802D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.18em] text-[#ffad70]">
-              <Sparkles size={14} />
-              Stay in the know
-            </div>
             <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
               Good opportunities don&apos;t wait around.
             </h2>
