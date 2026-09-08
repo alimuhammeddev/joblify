@@ -92,10 +92,7 @@ export default function CompanyNotification() {
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
-      <div className="mb-8 border-l-4 border-[#F0802D] pl-4">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
-          Your updates
-        </p>
+      <div className="mb-8">
         <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#1F3064] md:text-3xl">
           Notifications
         </h1>
@@ -157,7 +154,7 @@ export default function CompanyNotification() {
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="text-sm font-bold text-[#1F3064]">
-                    Company Activity
+                    New Activity
                   </h3>
                   <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-semibold text-gray-500">
                     Recent

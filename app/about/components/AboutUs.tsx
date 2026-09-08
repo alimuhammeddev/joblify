@@ -11,7 +11,7 @@ export default function AboutUS() {
             About Joblify
           </p>
 
-          <h1 className="text-3xl font-extrabold leading-[1.08] tracking-tight text-[#1F3064] md:text-5xl">
+          <h1 className="text-3xl font-extrabold leading-[1.08] tracking-tight text-[#1F3064] md:text-4xl">
             Where ambition meets its next <span className="text-[#F0802D]">opportunity.</span>
           </h1>
 

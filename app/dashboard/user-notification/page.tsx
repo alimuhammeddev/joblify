@@ -88,9 +88,9 @@ export default function UserNotification() {
               </div>
 
               <div className="min-w-0 flex-1">
-                <div className="flex items-start justify-between gap-3">
+                <div className="flex items-start justify-between gap-3">  
                   <h3 className="text-sm font-bold text-[#1F3064]">
-                    Platform Activity
+                    New Activity
                   </h3>
                   <span className="shrink-0 rounded-full bg-gray-100 px-2.5 py-1 text-[11px] font-semibold text-gray-500">
                     Recent

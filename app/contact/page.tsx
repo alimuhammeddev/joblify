@@ -10,7 +10,7 @@ export default function Contact() {
       </div>
 
       <div className="relative overflow-hidden bg-white px-4 pb-20 pt-28 sm:px-6 sm:pt-32 lg:pb-28 lg:pt-36">
-        <div className="relative mx-auto max-w-7xl">
+        <div className="relative mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="mb-12 max-w-2xl">
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Contact Joblify
