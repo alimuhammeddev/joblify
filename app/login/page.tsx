@@ -8,9 +8,11 @@ import { useRouter } from "next/navigation";
 import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
+  signOut,
 } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 
-import { auth } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import icon from "@/components/assets/icon.png";
 import { setAuthToast } from "@/components/AuthToast";
 
@@ -32,7 +34,15 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const credential = await signInWithEmailAndPassword(auth, email, password);
+      const userDoc = await getDoc(doc(db, "users", credential.user.uid));
+      const accountType = userDoc.exists() ? userDoc.data().accountType : "";
+
+      if (accountType !== "individual") {
+        await signOut(auth);
+        setError("This email belongs to a company account. Please use the company login page.");
+        return;
+      }
 
       setAuthToast("Logged in successfully.");
       router.push("/dashboard");

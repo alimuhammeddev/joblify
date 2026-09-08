@@ -91,7 +91,7 @@ export default function CompanyDashboard() {
 
         <Link
           href="/company-dashboard/posted-job"
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#16254d] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 sm:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-5 py-3 text-sm font-bold text-white shadow-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 sm:w-auto"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15">
             <Plus size={16} />
