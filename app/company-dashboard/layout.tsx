@@ -17,7 +17,7 @@ import Image from "next/image";
 import joblify from "./assets/joblify.png";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { onAuthStateChanged, type User as FirebaseUser } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { getCompanyActivity } from "@/lib/companyActivity";
@@ -34,6 +34,7 @@ export default function CompanyDashboardLayout({
   const [showDropdown, setShowDropdown] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [unreadCount, setUnreadCount] = useState(0);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     return onAuthStateChanged(auth, setUser);
@@ -46,14 +47,50 @@ export default function CompanyDashboardLayout({
 
     updateUnreadCount();
     window.addEventListener("storage", updateUnreadCount);
-    window.addEventListener("joblify-company-activity-updated", updateUnreadCount);
-    window.addEventListener("joblify-company-notifications-read", updateUnreadCount);
+    window.addEventListener(
+      "joblify-company-activity-updated",
+      updateUnreadCount,
+    );
+    window.addEventListener(
+      "joblify-company-notifications-read",
+      updateUnreadCount,
+    );
     return () => {
       window.removeEventListener("storage", updateUnreadCount);
-      window.removeEventListener("joblify-company-activity-updated", updateUnreadCount);
-      window.removeEventListener("joblify-company-notifications-read", updateUnreadCount);
+      window.removeEventListener(
+        "joblify-company-activity-updated",
+        updateUnreadCount,
+      );
+      window.removeEventListener(
+        "joblify-company-notifications-read",
+        updateUnreadCount,
+      );
     };
   }, [user]);
+
+  useEffect(() => {
+    if (!showDropdown) return;
+
+    const closeDropdown = (event: PointerEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setShowDropdown(false);
+      }
+    };
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setShowDropdown(false);
+    };
+
+    document.addEventListener("pointerdown", closeDropdown);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("pointerdown", closeDropdown);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [showDropdown]);
 
   const isActive = (path: string) => pathname === path;
   return (
@@ -67,7 +104,10 @@ export default function CompanyDashboardLayout({
 
         {/* Right */}
         <div className="flex items-center gap-6">
-          <Link href="/company-dashboard/company-notification" className="relative">
+          <Link
+            href="/company-dashboard/company-notification"
+            className="relative"
+          >
             <Bell className="text-gray-700 hover:text-[#1F3064]" />
             {unreadCount > 0 && (
               <span className="absolute -right-3 -top-3 flex h-5 min-w-5 items-center justify-center rounded-full bg-[#F0802D] px-1 text-[10px] font-bold text-white">
@@ -76,60 +116,72 @@ export default function CompanyDashboardLayout({
             )}
           </Link>
 
-          <div className="relative">
+          <div ref={dropdownRef} className="relative">
             <button
+              type="button"
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-2 cursor-pointer"
+              aria-expanded={showDropdown}
+              aria-haspopup="menu"
+              className="flex cursor-pointer items-center gap-2 rounded-xl p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D]"
             >
-              <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300 transition">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FDE6D5] text-[#1F3064] transition">
                 <User size={18} />
               </div>
-              <ChevronDown size={16} className="text-gray-600" />
             </button>
 
             {showDropdown && (
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-lg border border-gray-100 z-50 overflow-hidden">
-                <div className="pb-3 bg-[#FDE6D5] p-3">
-                  <h3 className="font-semibold text-[#1F3064]">
+              <div
+                className="absolute right-0 z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-[#1F3064]/10"
+                role="menu"
+              >
+                <div className="border-b border-[#F5D4B8] bg-[#FFF4EA] px-4 py-4">
+                  <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#F0802D]">
+                    Company account
+                  </p>
+                  <h3 className="mt-1 truncate font-bold text-[#1F3064]">
                     {user?.displayName || "Company"}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="mt-0.5 truncate text-xs text-gray-500">
                     {user?.email || "No email available"}
                   </p>
                 </div>
 
-                <Link href="/company-dashboard/company-settings">
-                  <button
+                <div className="space-y-1 p-2">
+                  <Link
+                    href="/company-dashboard/company-settings"
                     onClick={() => setShowDropdown(false)}
-                    className="w-full flex items-center mt-3 gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-700 transition hover:bg-gray-50 hover:text-[#1F3064]"
+                    role="menuitem"
                   >
-                    <Settings size={18} />
+                    <Settings size={17} />
                     <span className="text-sm font-medium">Settings</span>
-                  </button>
-                </Link>
+                  </Link>
 
-                <Link href="/company-dashboard/company-help-support">
-                  <button
+                  <Link
+                    href="/company-dashboard/company-help-support"
                     onClick={() => setShowDropdown(false)}
-                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-gray-100 transition text-gray-700 cursor-pointer"
+                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-gray-700 transition hover:bg-gray-50 hover:text-[#1F3064]"
+                    role="menuitem"
                   >
-                    <HelpCircle size={18} />
+                    <HelpCircle size={17} />
                     <span className="text-sm font-medium">Help & Support</span>
-                  </button>
-                </Link>
+                  </Link>
 
-                <div className="mt-3 space-y-2">
+                  <div className="my-1 border-t border-gray-100" />
+
                   <button
+                    type="button"
                     onClick={async () => {
                       await signOut(auth);
                       setShowDropdown(false);
                       setAuthToast("Logged out successfully.");
                       router.push("/companylogin");
                     }}
-                    className="w-full flex items-center gap-3 px-3 py-2 hover:bg-red-50 transition text-red-500 cursor-pointer"
+                    className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-red-500 transition hover:bg-red-50"
+                    role="menuitem"
                   >
-                    <LogOut size={18} />
-                    Logout
+                    <LogOut size={17} />
+                    <span className="text-sm font-medium">Logout</span>
                   </button>
                 </div>
               </div>
@@ -201,7 +253,9 @@ export default function CompanyDashboardLayout({
         <Link
           href="/company-dashboard/posted-job"
           className={`flex flex-col items-center ${
-            isActive("/company-dashboard/posted-job") ? "text-[#1F3064]" : "text-gray-600"
+            isActive("/company-dashboard/posted-job")
+              ? "text-[#1F3064]"
+              : "text-gray-600"
           }`}
         >
           <Briefcase size={20} />

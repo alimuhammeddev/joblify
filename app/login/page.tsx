@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { User, Building2 } from "lucide-react";
+import { ArrowRight, Building2, LockKeyhole, Mail, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -32,11 +32,7 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      await signInWithEmailAndPassword(auth, email, password);
 
       setAuthToast("Logged in successfully.");
       router.push("/dashboard");
@@ -85,7 +81,7 @@ export default function Login() {
       await sendPasswordResetEmail(auth, email);
 
       setResetMessage(
-        "Password reset instructions have been sent to your email."
+        "Password reset instructions have been sent to your email.",
       );
     } catch (error: any) {
       console.error(error);
@@ -106,164 +102,150 @@ export default function Login() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
-
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F6F7FA] px-4 py-8 sm:px-6">
+      <div className="relative w-full max-w-md rounded-3xl border border-white bg-white p-5  sm:p-8">
         {/* Logo */}
-        <Link href="/">
-          <Image
-            src={icon}
-            alt="icon"
-            className="w-10"
-          />
+        <Link
+          href="/"
+          className="inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+        >
+          <Image src={icon} alt="Joblify home" className="h-11 w-11" />
         </Link>
 
         {/* Heading */}
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-[#1F3064]">
-            Welcome to{" "}
-            <span className="text-[#1F3064]">
-              Job<span className="text-[#F0802D]">Lify</span>
-            </span>
+        <div className="mb-7 mt-7 text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
+            Individual account
+          </p>
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#1F3064]">
+            Welcome to Job<span className="text-[#F0802D]">Lify</span>
           </h1>
 
-          <p className="text-gray-500">
-            Sign in to access your Individual Joblify account
+          <p className="mt-3 text-sm leading-6 text-gray-500">
+            Sign in to continue your job search.
           </p>
         </div>
 
         {/* Account Type */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
-
+        <div className="mb-7 grid grid-cols-2 gap-3">
           {/* Individual */}
-          <div className="border border-[#1F3064] rounded-xl p-4 bg-[#f8fafc] shadow-sm">
-            <div className="flex flex-col items-start gap-3">
-
-              <div className="bg-[#1F3064] text-white p-3 rounded-lg">
-                <User size={16} />
-              </div>
-
-              <div>
-                <h1 className="text-[#1F3064] font-bold text-sm">
-                  Individual Account
-                </h1>
-              </div>
-
+          <div className="rounded-2xl border-2 border-[#1F3064] bg-[#F7F9FC] p-3.5">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#1F3064] text-white">
+                <User size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Individual
+                <span className="block font-medium text-gray-500">
+                  Selected
+                </span>
+              </span>
             </div>
           </div>
 
           {/* Company */}
-          <Link href="/companylogin">
-            <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#fff7f1] transition duration-300">
-
-              <div className="flex flex-col items-start gap-3">
-
-                <div className="bg-[#F0802D] text-white p-3 rounded-lg">
-                  <Building2 size={16} />
-                </div>
-
-                <div>
-                  <h1 className="text-[#1F3064] font-bold text-sm">
-                    Company Account
-                  </h1>
-                </div>
-
-              </div>
-
+          <Link
+            href="/companylogin"
+            className="rounded-2xl border border-gray-200 p-3.5 transition hover:border-[#F0802D] hover:bg-[#FFF9F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FDE6D5] text-[#F0802D]">
+                <Building2 size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Company
+                <span className="block font-medium text-gray-500">
+                  Switch account
+                </span>
+              </span>
             </div>
           </Link>
-
         </div>
 
         {/* Error */}
         {error && (
-          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-600">
             {error}
           </div>
         )}
 
         {/* Success */}
         {resetMessage && (
-          <div className="mb-4 rounded-md border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-600">
+          <div className="mb-5 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm leading-5 text-green-700">
             {resetMessage}
           </div>
         )}
 
         {/* Login Form */}
-        <form
-          onSubmit={handleLogin}
-          className="space-y-5"
-        >
-
+        <form onSubmit={handleLogin} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Email Address
             </label>
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <Mail size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Enter your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <LockKeyhole size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Remember + Forgot */}
-          <div className="flex items-center justify-between text-sm">
-
+          <div className="flex items-center justify-between gap-3 text-sm">
             <label className="flex items-center gap-2 text-[#1F3064]">
-              <input
-                type="checkbox"
-                className="rounded text-[#1F3064]"
-              />
-
+              <input type="checkbox" className="h-4 w-4 accent-[#1F3064]" />
               Remember me
             </label>
 
             <button
               type="button"
               onClick={handleForgotPassword}
-              className="text-[#F0802D] hover:underline"
+              className="font-semibold text-[#F0802D] transition hover:text-[#d7671b] hover:underline"
             >
               Forgot Password?
             </button>
-
           </div>
 
           {/* Login */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#16254d] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Signing In..." : "Login"}
+            {!loading && <ArrowRight size={17} />}
           </button>
-
         </form>
 
         {/* Signup */}
-        <p className="text-center text-sm text-[#1F3064] mt-6">
+        <p className="mt-7 text-center text-sm text-[#1F3064]">
           New to Joblify?{" "}
-
           <Link
             href="/signup"
             className="text-[#F0802D] font-medium hover:underline"
@@ -271,7 +253,6 @@ export default function Login() {
             Create Account
           </Link>
         </p>
-
       </div>
     </section>
   );

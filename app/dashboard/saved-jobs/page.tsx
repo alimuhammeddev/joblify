@@ -1,6 +1,6 @@
 "use client";
 
-import { MapPin, Wallet, Trash2 } from "lucide-react";
+import { ArrowRight, MapPin, Wallet, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -78,7 +78,7 @@ export default function SavedJobs() {
         {savedJobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition duration-300"
+            className="bg-white rounded-2xl p-6 shadow-xs"
           >
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
               {/* Left Section */}
@@ -109,11 +109,13 @@ export default function SavedJobs() {
               </div>
 
               {/* Right Section */}
-              <div className="flex flex-col sm:flex-row gap-3">
-                <Link href={`/dashboard/job-details?jobId=${job.id}`}>
-                <button className="bg-[#1F3064] text-white px-5 py-2 rounded-lg hover:bg-[#16254d] transition cursor-pointer">
+              <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+                <Link
+                  href={`/dashboard/job-details?jobId=${job.id}`}
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#16254d] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 sm:min-w-36"
+                >
                   Apply Now
-                </button>
+                  <ArrowRight size={17} />
                 </Link>
 
                 <button
@@ -122,14 +124,14 @@ export default function SavedJobs() {
                     const user = auth.currentUser;
                     if (!user) return;
 
-                    toggleSavedJob(user.uid, job.id, job.title);
+                    toggleSavedJob(user.uid, job.id);
                     setSavedJobs((currentJobs) =>
                       currentJobs.filter((currentJob) => currentJob.id !== job.id),
                     );
                   }}
-                  className="flex items-center justify-center gap-2 border border-red-200 text-red-500 px-5 py-2 rounded-lg hover:bg-red-50 transition cursor-pointer"
+                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-red-200 px-5 py-3 text-sm font-bold text-red-500 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 cursor-pointer sm:min-w-36"
                 >
-                  <Trash2 size={16} />
+                  <Trash2 size={17} />
                   Remove
                 </button>
               </div>

@@ -1,6 +1,14 @@
 "use client";
 
-import { User, Building2, ChevronDown } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  ChevronDown,
+  LockKeyhole,
+  Mail,
+  Phone,
+  User,
+} from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -161,63 +169,69 @@ export default function CompanySignup() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F6F7FA] px-4 py-8 sm:px-6">
+      <div className="relative w-full max-w-md rounded-3xl border border-white bg-white p-5 sm:p-8">
         {/* Logo */}
-        <Link href="/">
-          <Image src={icon} alt="icon" className="w-10" />
+        <Link
+          href="/"
+          className="inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+        >
+          <Image src={icon} alt="Joblify home" className="h-11 w-11" />
         </Link>
 
         {/* Heading */}
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-[#1F3064]">
-            Welcome to{" "}
-            <span className="text-[#1F3064]">
-              Job<span className="text-[#F0802D]">Lify</span>
-            </span>
+        <div className="mb-7 mt-7 text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
+            Create your company profile
+          </p>
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#1F3064]">
+            Grow with Job<span className="text-[#F0802D]">Lify</span>
           </h1>
 
-          <p className="text-gray-500">Create your Company Joblify account</p>
+          <p className="mt-3 text-sm leading-6 text-gray-500">
+            Build your hiring presence and connect with great candidates.
+          </p>
         </div>
 
         {/* Account Type */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 gap-4 mb-4">
+        <div className="mb-7 grid grid-cols-2 gap-3">
           {/* Individual */}
-          <Link href="/signup">
-            <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#f8fafc] transition duration-300">
-              <div className="flex flex-col items-start gap-3">
-                <div className="bg-[#1F3064] text-white p-3 rounded-lg">
-                  <User size={16} />
-                </div>
-
-                <div>
-                  <h1 className="text-[#1F3064] font-bold text-sm">
-                    Individual Account
-                  </h1>
-                </div>
-              </div>
+          <Link
+            href="/signup"
+            className="rounded-2xl border border-gray-200 p-3.5 transition hover:border-[#1F3064] hover:bg-[#F7F9FC] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#E7EBF5] text-[#1F3064]">
+                <User size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Individual
+                <span className="block font-medium text-gray-500">
+                  Switch account
+                </span>
+              </span>
             </div>
           </Link>
 
           {/* Company */}
-          <div className="border border-[#1F3064] rounded-xl p-4 bg-[#fff7f1] shadow-sm">
-            <div className="flex flex-col items-start gap-3">
-              <div className="bg-[#F0802D] text-white p-3 rounded-lg">
-                <Building2 size={16} />
-              </div>
-
-              <div>
-                <h1 className="text-[#1F3064] font-bold text-sm">
-                  Company Account
-                </h1>
-              </div>
+          <div className="rounded-2xl border-2 border-[#F0802D] bg-[#FFF9F5] p-3.5">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F0802D] text-white">
+                <Building2 size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Company
+                <span className="block font-medium text-[#F0802D]">
+                  Selected
+                </span>
+              </span>
             </div>
           </div>
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
+          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-600">
             {error}
           </div>
         )}
@@ -226,48 +240,54 @@ export default function CompanySignup() {
         <form onSubmit={handleSignup} className="space-y-5">
           {/* Company Name */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Company Name
             </label>
 
-            <input
-              type="text"
-              placeholder="Enter your company name"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <Building2 size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Enter your company name"
+                value={companyName}
+                onChange={(e) => setCompanyName(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Company Email */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Company Email
             </label>
 
-            <input
-              type="email"
-              placeholder="Enter company email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <Mail size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="email"
+                placeholder="you@company.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Industry */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Industry
             </label>
 
-            <div className="relative">
+            <div className="relative flex items-center rounded-xl border border-gray-200 bg-gray-50 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
               <select
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-700 appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
+                className="w-full appearance-none bg-transparent px-4 py-3 text-sm text-gray-700 outline-none"
               >
                 <option value="">Select Industry</option>
 
@@ -280,57 +300,66 @@ export default function CompanySignup() {
 
               <ChevronDown
                 size={18}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+                className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-gray-400"
               />
             </div>
           </div>
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Phone Number
             </label>
 
-            <input
-              type="tel"
-              placeholder="Enter company phone number"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <Phone size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="tel"
+                placeholder="Enter company phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <LockKeyhole size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Confirm Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <LockKeyhole size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+              />
+            </div>
           </div>
 
           {/* Terms */}
@@ -340,12 +369,15 @@ export default function CompanySignup() {
               checked={termsAccepted}
               onChange={(e) => setTermsAccepted(e.target.checked)}
               required
-              className="mt-1 rounded text-[#1F3064]"
+              className="mt-1 h-4 w-4 accent-[#1F3064]"
             />
 
             <p className="text-[#1F3064]">
               I agree to the{" "}
-              <a href="#" className="text-[#F0802D] hover:underline">
+              <a
+                href="#"
+                className="font-semibold text-[#F0802D] hover:underline"
+              >
                 Terms & Conditions
               </a>
             </p>
@@ -355,14 +387,15 @@ export default function CompanySignup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#16254d] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Creating Account..." : "Create Company Account"}
+            {!loading && <ArrowRight size={17} />}
           </button>
         </form>
 
         {/* Login */}
-        <p className="text-center text-sm text-[#1F3064] mt-6">
+        <p className="mt-7 text-center text-sm text-[#1F3064]">
           Already have a company account?{" "}
           <Link
             href="/companylogin"

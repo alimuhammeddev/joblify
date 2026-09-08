@@ -75,7 +75,6 @@ export function recordUserActivity(userId: string, message: string) {
 export function toggleSavedJob(
   userId: string,
   jobId: string,
-  jobTitle: string
 ) {
   const activity = getUserActivity(userId);
   const isSaved = activity.savedJobIds.includes(jobId);
@@ -86,11 +85,8 @@ export function toggleSavedJob(
   saveUserActivity(userId, {
     appliedJobIds: activity.appliedJobIds,
     savedJobIds,
-    recentActivities: [
-      isSaved ? `You removed ${jobTitle} from saved jobs` : `You saved ${jobTitle}`,
-      ...activity.recentActivities,
-    ].slice(0, 50),
-    unreadCount: activity.unreadCount + 1,
+    recentActivities: activity.recentActivities,
+    unreadCount: activity.unreadCount,
   });
 
   return !isSaved;

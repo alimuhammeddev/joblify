@@ -1,22 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X, Briefcase, MapPin, Wallet } from "lucide-react";
+import { X, Briefcase, MapPin, Wallet, Save } from "lucide-react";
 import { doc, updateDoc } from "firebase/firestore";
 import type { Job } from "@/lib/jobs";
 import { auth, db } from "@/lib/firebase";
 import { recordCompanyActivity } from "@/lib/companyActivity";
-import Toast from "@/components/Toast";
 
 interface EditJobModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSaved: () => void;
   job: Job | null;
 }
 
 export default function EditJobModal({
   isOpen,
   onClose,
+  onSaved,
   job,
 }: EditJobModalProps) {
   const [formData, setFormData] = useState({
@@ -31,7 +32,6 @@ export default function EditJobModal({
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
-  const [toast, setToast] = useState("");
 
   useEffect(() => {
     if (job) {
@@ -81,7 +81,8 @@ export default function EditJobModal({
       if (auth.currentUser) {
         recordCompanyActivity(auth.currentUser.uid, `You updated the job: ${formData.title.trim()}`);
       }
-      setToast("Changes saved successfully.");
+      onSaved();
+      onClose();
     } catch (saveError) {
       console.error("Unable to update job:", saveError);
       setError("Unable to save these changes. Please try again.");
@@ -94,7 +95,6 @@ export default function EditJobModal({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <Toast message={toast} onClose={() => setToast("")} />
       <div className="bg-white w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl md:max-h-[90vh] max-h-[80vh] overflow-y-auto md:mt-0 -mt-16">
         {/* Header */}
         <div className="bg-linear-to-r from-[#1F3064] to-[#2B4287] text-white p-6 flex justify-between items-center">
@@ -105,8 +105,10 @@ export default function EditJobModal({
           </div>
 
           <button
+            type="button"
             onClick={onClose}
-            className="bg-white/10 p-2 rounded-xl hover:bg-white/20"
+            aria-label="Close edit job dialog"
+            className="rounded-xl bg-white/10 p-2 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
           >
             <X size={20} />
           </button>
@@ -278,11 +280,11 @@ export default function EditJobModal({
             />
           </div>
 
-          <div className="flex justify-end md:flex-row flex-col gap-3 pt-4">
+          <div className="flex flex-col justify-end gap-3 border-t border-gray-100 pt-5 md:flex-row">
             <button
               type="button"
               onClick={onClose}
-              className="border border-gray-300 px-6 py-3 rounded-xl"
+              className="rounded-xl border border-gray-200 px-6 py-3 text-sm font-bold text-gray-600 transition hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
             >
               Cancel
             </button>
@@ -290,8 +292,9 @@ export default function EditJobModal({
             <button
               type="submit"
               disabled={saving}
-              className="bg-[#1F3064] text-white px-6 py-3 rounded-xl"
+              className="flex items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#16254d] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
             >
+              <Save size={17} />
               {saving ? "Saving..." : "Save Changes"}
             </button>
           </div>

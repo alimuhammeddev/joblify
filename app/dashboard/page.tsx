@@ -1,6 +1,12 @@
 "use client";
 
-import { Briefcase, Bookmark, MapPin, Wallet } from "lucide-react";
+import {
+  Briefcase,
+  Bookmark,
+  CheckCircle2,
+  MapPin,
+  Wallet,
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -53,11 +59,16 @@ export default function Dashboard() {
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
-      <div className="mb-8">
-        <p className="text-sm text-gray-500">Welcome back</p>
-        <h1 className="md:text-2xl text-xl font-bold text-[#1F3064]">
-          {displayName}
+      <div className="mb-8 border-l-4 border-[#F0802D] pl-4">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
+          Dashboard overview
+        </p>
+        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#1F3064] md:text-3xl">
+          Welcome back, <span className="text-[#F0802D]">{displayName}</span>
         </h1>
+        <p className="mt-2 text-sm text-gray-500">
+          Keep moving toward your next opportunity.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 mb-8">
@@ -145,19 +156,43 @@ export default function Dashboard() {
 
         <div className="space-y-6">
           <div className="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100">
-            <h2 className="text-lg font-semibold text-[#1F3064] mb-4">
-              Recent Activity
-            </h2>
+            <div className="mb-5 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-lg font-semibold text-[#1F3064]">
+                  Recent Activity
+                </h2>
+                <p className="mt-1 text-xs text-gray-400">
+                  Your latest account updates
+                </p>
+              </div>
+              {activities.length > 0 && (
+                <span className="rounded-full bg-[#FDE6D5] px-2.5 py-1 text-xs font-bold text-[#F0802D]">
+                  {activities.length}
+                </span>
+              )}
+            </div>
             {activities.length === 0 ? (
-              <p className="text-sm text-gray-500">No recent activity yet.</p>
+              <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center">
+                <p className="text-sm font-medium text-gray-600">
+                  No recent activity yet.
+                </p>
+                <p className="mt-1 text-xs text-gray-400">
+                  Your job updates will appear here.
+                </p>
+              </div>
             ) : (
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {activities.map((activity, index) => (
                   <div
                     key={index}
-                    className="text-sm text-gray-600 border-b pb-2 last:border-none"
+                    className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 px-3 py-3 transition hover:border-[#FDE6D5] hover:bg-[#FFF9F5]"
                   >
-                    {activity}
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#FDE6D5] text-[#F0802D]">
+                      <CheckCircle2 size={15} />
+                    </span>
+                    <p className="min-w-0 text-sm leading-6 text-gray-600">
+                      {activity}
+                    </p>
                   </div>
                 ))}
               </div>

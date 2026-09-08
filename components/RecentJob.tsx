@@ -5,7 +5,7 @@ import Link from "next/link";
 import { collection, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "@/lib/firebase";
-import { mapJob, type Job } from "@/lib/jobs";
+import { formatPostedAt, mapJob, type Job } from "@/lib/jobs";
 
 export default function RecentJob() {
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -38,33 +38,39 @@ export default function RecentJob() {
         {jobs.map((job) => (
           <div
             key={job.id}
-            className="bg-white rounded-2xl shadow-sm p-6 hover:shadow-md transition duration-300"
+            className="group flex min-h-71.25 flex-col rounded-2xl bg-white p-6 shadow-sm"
           >
-            <div className="flex justify-between items-start">
-              <div>
-                <h3 className="text-lg font-semibold text-[#1F3064]">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+                  {formatPostedAt(job)}
+                </p>
+                <h3 className="line-clamp-2 text-xl font-extrabold leading-tight text-[#1F3064]">
                   {job.title}
                 </h3>
-                <p className="text-sm text-gray-500">{job.company}</p>
+                <p className="mt-2 truncate text-sm font-semibold text-slate-500">
+                  {job.company}
+                </p>
               </div>
-              <span className="text-xs bg-[#F0802D]/10 text-[#F0802D] px-3 py-1 rounded-full">
+
+              <span className="shrink-0 rounded-full bg-[#1f3064] px-3 py-1.5 text-xs font-bold text-white">
                 {job.type}
               </span>
             </div>
 
-            <div className="mt-4 space-y-3 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <MapPin size={16} className="text-[#F0802D]" />
+            <div className="mt-6 space-y-3 text-sm text-slate-500">
+              <div className="flex items-center gap-3">
+                <MapPin size={17} className="shrink-0 text-[#F0802D]" />
                 <span>{job.location}</span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Wallet size={16} className="text-[#F0802D]" />
+              <div className="flex items-center gap-3">
+                <Wallet size={17} className="shrink-0 text-[#F0802D]" />
                 <span>{job.salary}</span>
               </div>
             </div>
 
-            <button className="mt-6 w-full cursor-pointer bg-[#1F3064] text-white py-2 rounded-lg hover:bg-[#16254d] transition">
+            <button className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white">
               Apply Now
             </button>
           </div>

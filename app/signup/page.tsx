@@ -1,7 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { User, Building2 } from "lucide-react";
+import {
+  ArrowRight,
+  Building2,
+  LockKeyhole,
+  Mail,
+  User,
+  UserRound,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -95,52 +102,57 @@ export default function Signup() {
   };
 
   return (
-    <section className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl md:p-8 p-4">
+    <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#F6F7FA] px-4 py-8 sm:px-6">
 
-        <Link href="/">
-          <Image src={icon} alt="icon" className="w-10" />
+      <div className="relative w-full max-w-md rounded-3xl border border-white bg-white p-5 sm:p-8">
+
+        <Link
+          href="/"
+          className="inline-flex rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+        >
+          <Image src={icon} alt="Joblify home" className="h-11 w-11" />
         </Link>
 
-        <div className="text-center mb-4">
-          <h1 className="text-2xl font-bold text-[#1F3064]">
-            Welcome to{" "}
-            <span className="text-[#1F3064]">
-              Job<span className="text-[#F0802D]">Lify</span>
-            </span>
+        <div className="mb-7 mt-7 text-center">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
+            Create your profile
+          </p>
+          <h1 className="text-2xl font-extrabold tracking-tight text-[#1F3064]">
+            Join Job<span className="text-[#F0802D]">Lify</span>
           </h1>
 
-          <p className="text-gray-500">
-            Create your Individual Joblify account
+          <p className="mt-3 text-sm leading-6 text-gray-500">
+            Create your individual account and find work that moves you forward.
           </p>
         </div>
 
         {/* Account type */}
-        <div className="grid grid-cols-2 gap-4 mb-4">
+        <div className="mb-7 grid grid-cols-2 gap-3">
 
-          <div className="border border-[#1F3064] rounded-xl p-4 bg-[#f8fafc] shadow-sm">
-            <div className="flex flex-col items-start gap-3">
-              <div className="bg-[#1F3064] text-white p-3 rounded-lg">
-                <User size={16} />
-              </div>
-
-              <h1 className="text-[#1F3064] font-bold text-sm">
-                Individual Account
-              </h1>
+          <div className="rounded-2xl border-2 border-[#1F3064] bg-[#F7F9FC] p-3.5 shadow-sm">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#1F3064] text-white">
+                <User size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Individual
+                <span className="block font-medium text-gray-500">Selected</span>
+              </span>
             </div>
           </div>
 
-          <Link href="/companysignup">
-            <div className="border border-[#1F3064] rounded-xl p-4 cursor-pointer hover:shadow-md hover:bg-[#fff7f1] transition duration-300">
-              <div className="flex flex-col items-start gap-3">
-                <div className="bg-[#F0802D] text-white p-3 rounded-lg">
-                  <Building2 size={16} />
-                </div>
-
-                <h1 className="text-[#1F3064] font-bold text-sm">
-                  Company Account
-                </h1>
-              </div>
+          <Link
+            href="/companysignup"
+            className="rounded-2xl border border-gray-200 p-3.5 transition hover:border-[#F0802D] hover:bg-[#FFF9F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2"
+          >
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FDE6D5] text-[#F0802D]">
+                <Building2 size={17} />
+              </span>
+              <span className="text-xs font-bold leading-4 text-[#1F3064]">
+                Company
+                <span className="block font-medium text-gray-500">Switch account</span>
+              </span>
             </div>
           </Link>
 
@@ -148,7 +160,7 @@ export default function Signup() {
 
         {/* Error */}
         {error && (
-          <div className="mb-4 rounded-md bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600">
+          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-600">
             {error}
           </div>
         )}
@@ -157,66 +169,78 @@ export default function Signup() {
 
           {/* Full Name */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Full Name
             </label>
 
-            <input
-              type="text"
-              placeholder="Enter your full name"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-              required
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <UserRound size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+                required
+              />
+            </div>
           </div>
 
           {/* Email */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Email Address
             </label>
 
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-              required
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <Mail size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+                required
+              />
+            </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-              required
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <LockKeyhole size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+                required
+              />
+            </div>
           </div>
 
           {/* Confirm Password */}
           <div>
-            <label className="block text-sm font-semibold text-[#1F3064] mb-2">
+            <label className="mb-2 block text-sm font-bold text-[#1F3064]">
               Confirm Password
             </label>
 
-            <input
-              type="password"
-              placeholder="Confirm your password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1F3064]"
-              required
-            />
+            <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 transition focus-within:border-[#1F3064] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#1F3064]/15">
+              <LockKeyhole size={18} className="shrink-0 text-gray-400" />
+              <input
+                type="password"
+                placeholder="Confirm your password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full bg-transparent text-sm text-[#1F3064] outline-none placeholder:text-gray-400"
+                required
+              />
+            </div>
           </div>
 
           {/* Terms */}
@@ -224,14 +248,14 @@ export default function Signup() {
             <input
               type="checkbox"
               required
-              className="mt-1 rounded text-[#1F3064]"
+              className="mt-1 h-4 w-4 accent-[#1F3064]"
             />
 
             <p className="text-[#1F3064]">
               I agree to the{" "}
               <a
                 href="#"
-                className="text-[#F0802D] hover:underline"
+                className="font-semibold text-[#F0802D] hover:underline"
               >
                 Terms & Conditions
               </a>
@@ -242,14 +266,15 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#1F3064] text-white py-2 rounded-md font-semibold hover:bg-[#16254d] transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#16254d] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Creating Account..." : "Create Account"}
+            {!loading && <ArrowRight size={17} />}
           </button>
 
         </form>
 
-        <p className="text-center text-sm text-[#1F3064] mt-6">
+        <p className="mt-7 text-center text-sm text-[#1F3064]">
           Already have an account?{" "}
 
           <Link

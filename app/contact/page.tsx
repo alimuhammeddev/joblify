@@ -15,7 +15,7 @@ export default function Contact() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Contact Joblify
             </p>
-            <h1 className="text-3xl font-extrabold leading-tight text-[#1F3064] sm:text-4xl">
+            <h1 className="text-3xl font-extrabold leading-tight text-[#1F3064] md:text-4xl">
               Let&apos;s build your next career move together.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -29,13 +29,13 @@ export default function Contact() {
             <div className="relative overflow-hidden bg-[#1F3064] p-7 text-white sm:p-10">
               <div className="absolute -bottom-20 -right-20 h-56 w-56 rounded-full border-32 border-white/5" />
               <div className="relative">
-                <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#F0802D]">
+                <p className="text-sm font-bold uppercase tracking-[0.16em] text-[#ffad70]">
                   Start a conversation
                 </p>
                 <h2 className="mt-4 text-xl font-extrabold leading-tight sm:text-2xl">
                   We&apos;re here to help you move forward.
                 </h2>
-                <p className="mt-4 text-sm leading-relaxed text-white/70">
+                <p className="mt-4 text-sm leading-relaxed text-[#c5cee3]">
                   Whether you are searching for your next role or building your
                   team, tell us what you need and we&apos;ll point you in the right
                   direction.
@@ -43,24 +43,24 @@ export default function Contact() {
 
                 <div className="mt-10 space-y-6 text-sm">
                   <div className="flex items-start gap-3">
-                    <Mail className="mt-0.5 text-[#F0802D]" size={19} />
+                    <Mail className="mt-0.5 text-[#ffad70]" size={19} />
                     <div>
                       <p className="font-bold">Email us</p>
-                      <p className="mt-1 text-white/65">hello@joblify.com</p>
+                      <p className="mt-1 text-[#c5cee3]">support@joblify.com</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <MapPin className="mt-0.5 text-[#F0802D]" size={19} />
+                    <MapPin className="mt-0.5 text-[#ffad70]" size={19} />
                     <div>
                       <p className="font-bold">Find us</p>
-                      <p className="mt-1 text-white/65">Available wherever opportunity calls</p>
+                      <p className="mt-1 text-[#c5cee3]">Available wherever opportunity calls</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Clock3 className="mt-0.5 text-[#F0802D]" size={19} />
+                    <Clock3 className="mt-0.5 text-[#ffad70]" size={19} />
                     <div>
                       <p className="font-bold">Response time</p>
-                      <p className="mt-1 text-white/65">Usually within one business day</p>
+                      <p className="mt-1 text-[#c5cee3]">Usually within one business day</p>
                     </div>
                   </div>
                 </div>
