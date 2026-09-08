@@ -61,7 +61,7 @@ export default function LatestJob() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Find your next job
             </p>
-            <h1 className="max-w-3xl text-3xl font-extrabold leading-[1.08] tracking-tight text-[#1F3064] md:text-4xl">
+            <h1 className="max-w-3xl text-2xl font-extrabold leading-[1.08] tracking-tight text-[#1F3064] md:text-3xl">
               Work that moves
               <span className="text-[#F0802D]"> you forward.</span>
             </h1>

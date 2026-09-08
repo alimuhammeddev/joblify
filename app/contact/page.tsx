@@ -15,7 +15,7 @@ export default function Contact() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Contact Joblify
             </p>
-            <h1 className="text-3xl font-extrabold leading-tight text-[#1F3064] md:text-4xl">
+            <h1 className="text-2xl font-extrabold leading-tight text-[#1F3064] md:text-3xl">
               Let&apos;s build your next career move together.
             </h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg">
