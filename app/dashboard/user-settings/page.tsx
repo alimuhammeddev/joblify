@@ -19,7 +19,6 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 import { auth, db, storage } from "@/lib/firebase";
 import { useUserSettingsStore } from "@/lib/userSettingsStore";
-import { recordUserActivity } from "@/lib/userActivity";
 import Toast from "@/components/Toast";
 
 type ProfileData = {
@@ -207,7 +206,6 @@ export default function UserSettings() {
         profileImageUrl: savedProfileImageUrl,
         cvData: savedCvData,
       });
-      recordUserActivity(currentUser.uid, "You updated your profile settings");
       setProfileImageFile(null);
       setCvFile(null);
       setToast("Changes saved successfully.");
@@ -430,7 +428,7 @@ export default function UserSettings() {
                     )}
                   </div>
                 </div>
-                <label className="w-full md:w-auto cursor-pointer bg-[#1F3064] text-white px-5 py-2 rounded-lg hover:bg-[#16254d] transition flex items-center justify-center md:justify-start gap-2">
+                <label className="w-full md:w-auto cursor-pointer bg-[#1F3064] text-white px-5 py-2 rounded-lg flex items-center justify-center md:justify-start gap-2">
                   <Upload size={16} /> Upload CV
                   <input
                     type="file"
@@ -503,7 +501,7 @@ export default function UserSettings() {
             <button
               type="submit"
               disabled={saving || !user}
-              className="bg-[#1F3064] text-white px-6 py-3 rounded-xl flex items-center gap-2 hover:opacity-90 disabled:opacity-50"
+              className="bg-[#1F3064] text-white px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer"
             >
               <Save size={18} /> {saving ? "Saving..." : "Save Changes"}
             </button>

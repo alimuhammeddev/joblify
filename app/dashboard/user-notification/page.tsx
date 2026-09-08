@@ -24,11 +24,8 @@ export default function UserNotification() {
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
       {/* Header */}
-      <div className="mb-8 border-l-4 border-[#F0802D] pl-4">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#F0802D]">
-          Your updates
-        </p>
-        <h1 className="mt-2 text-2xl font-extrabold tracking-tight text-[#1F3064] md:text-3xl">
+      <div className="mb-8">
+        <h1 className="mt-2 text-xl font-extrabold tracking-tight text-[#1F3064] md:text-2xl">
           Notifications
         </h1>
         <p className="mt-2 text-sm text-gray-500">

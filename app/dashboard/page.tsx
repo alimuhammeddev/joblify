@@ -144,7 +144,7 @@ export default function Dashboard() {
                   </div>
 
                   <Link href={`/dashboard/job-details?jobId=${job.id}`}>
-                    <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium">
+                    <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium cursor-pointer">
                       Apply Now
                     </button>
                   </Link>
