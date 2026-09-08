@@ -2,12 +2,12 @@ import { ArrowRight, Mail, Sparkles } from "lucide-react";
 
 export default function CTA() {
   return (
-    <section className="mx-auto mb-16 mt-16 max-w-7xl px-5 sm:px-8 lg:px-10">
-      <div className="relative isolate overflow-hidden rounded-4xl bg-[#101d40] shadow-2xl shadow-[#1F3064]/15">
+    <section className="mx-auto mb-16 mt-16 max-w-7xl px-4 sm:px-6 lg:px-6">
+      <div className="relative isolate overflow-hidden rounded-4xl bg-[#101d40]">
         <div className="absolute right-8 top-8 hidden h-24 w-24 rounded-full border border-white/10 sm:block" />
         <div className="grid gap-10 p-7 sm:p-10 md:p-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
           <div className="max-w-xl">
-            <h2 className="text-3xl font-extrabold leading-tight tracking-tight text-white md:text-4xl">
+            <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
               Good opportunities don&apos;t wait around.
             </h2>
             <p className="mt-5 max-w-lg text-sm leading-7 text-[#c5cee3] sm:text-base">

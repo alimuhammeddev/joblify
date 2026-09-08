@@ -18,6 +18,15 @@ export type Job = {
   postedAt?: { toDate: () => Date };
 };
 
+export function sortJobsByNewestFirst<T extends { postedAt?: { toDate: () => Date } }>(jobs: T[]) {
+  return [...jobs].sort((left, right) => {
+    const leftTime = left.postedAt?.toDate?.().getTime?.() ?? 0;
+    const rightTime = right.postedAt?.toDate?.().getTime?.() ?? 0;
+
+    return rightTime - leftTime;
+  });
+}
+
 export function mapJob(snapshot: QueryDocumentSnapshot<DocumentData>): Job {
   const data = snapshot.data();
   const minimumSalary = String(data.minimumSalary || "-");

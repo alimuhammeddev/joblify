@@ -7,7 +7,7 @@ import footer from "./assets/footer.png";
 export default function Footer() {
   return (
     <footer className="relative overflow-hidden bg-[#101d40] text-white">
-      <div className="relative mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10">
+      <div className="relative mx-auto max-w-7xl py-14 px-4 sm:px-6 lg:px-6">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_0.8fr_0.8fr_1fr] lg:gap-8">
           <div className="max-w-xs">
             <Link href="/" aria-label="Joblify home" className="inline-block">

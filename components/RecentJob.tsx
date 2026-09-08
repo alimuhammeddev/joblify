@@ -7,7 +7,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
-import { formatPostedAt, mapJob, type Job } from "@/lib/jobs";
+import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 
 export default function RecentJob() {
   const router = useRouter();
@@ -23,16 +23,11 @@ export default function RecentJob() {
   }, []);
 
   useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
-    setJobs(
-      snapshot.docs
-        .map(mapJob)
-        .sort((firstJob, secondJob) => {
-          const firstTime = firstJob.postedAt?.toDate().getTime() || 0;
-          const secondTime = secondJob.postedAt?.toDate().getTime() || 0;
-          return secondTime - firstTime;
-        })
-        .slice(0, 3),
-    );
+    const jobs = snapshot.docs
+      .map(mapJob)
+      .filter(isJobOpen);
+
+    setJobs(sortJobsByNewestFirst(jobs).slice(0, 3));
   }), []);
 
   const handleApplyNow = (job: Job) => {

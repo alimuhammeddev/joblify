@@ -10,8 +10,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 z-50 w-full bg-white/90 px-4 py-3 backdrop-blur-md sm:px-6">
-      <div className="mx-auto max-w-7xl rounded-2xl px-4 py-3 sm:px-5">
+    <nav className="fixed top-0 z-50 w-full bg-white/90 px-4 py-3 backdrop-blur-md">
+      <div className="mx-auto max-w-7xl rounded-2xl px-4 py-3 md:px-5">
         <div className="flex items-center justify-between">
           <Link href="/" aria-label="Joblify home">
             <Image src={joblify} alt="Joblify" className="w-28" priority />

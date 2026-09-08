@@ -14,7 +14,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { auth } from "@/lib/firebase";
 import { getUserActivity, type UserActivity } from "@/lib/userActivity";
 import { db } from "@/lib/firebase";
-import { isJobOpen, mapJob, type Job } from "@/lib/jobs";
+import { isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 
 export default function Dashboard() {
   const [displayName, setDisplayName] = useState("User");
@@ -30,7 +30,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     return onSnapshot(collection(db, "jobs"), (snapshot) => {
-      setPostedJobs(snapshot.docs.map(mapJob).filter(isJobOpen));
+      const jobs = snapshot.docs.map(mapJob).filter(isJobOpen);
+      setPostedJobs(sortJobsByNewestFirst(jobs));
     });
   }, []);
 

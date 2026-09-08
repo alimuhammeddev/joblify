@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
+import { isJobOpen, sortJobsByNewestFirst } from "@/lib/jobs";
 
 type CompanyJob = {
   id: string;
@@ -21,6 +22,7 @@ type CompanyJob = {
   applicants: number;
   location: string;
   type: string;
+  status: string;
   postedAt?: { toDate: () => Date };
 };
 
@@ -45,20 +47,21 @@ export default function CompanyDashboard() {
       return onSnapshot(
         jobsQuery,
         (snapshot) => {
-          setJobs(
-            snapshot.docs.map((job) => {
-              const data = job.data();
+          const companyJobs = snapshot.docs.map((job) => {
+            const data = job.data();
 
               return {
-                id: job.id,
-                title: data.title || "Untitled job",
-                applicants: data.applicantCount || 0,
-                location: data.location || "Location not specified",
-                type: data.type || "Not specified",
-                postedAt: data.postedAt,
-              };
-            }),
-          );
+              id: job.id,
+              title: data.title || "Untitled job",
+              applicants: data.applicantCount || 0,
+              location: data.location || "Location not specified",
+              type: data.type || "Not specified",
+              status: String(data.status || "Open"),
+              postedAt: data.postedAt,
+            };
+          });
+
+          setJobs(sortJobsByNewestFirst(companyJobs));
         },
         (error) => {
           console.error("Unable to load company jobs:", error);
@@ -154,6 +157,14 @@ export default function CompanyDashboard() {
                       </h3>
                     </div>
 
+                    <div className="flex items-center gap-2">
+                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${
+                        job.status.trim().toLowerCase() === "open"
+                          ? "bg-emerald-50 text-emerald-700"
+                          : "bg-red-50 text-red-600"
+                      }`}>{job.status}</span>
+                    </div>
+
                     <p className="text-sm text-gray-500">
                       {job.applicants} Applicants
                     </p>
@@ -243,4 +254,4 @@ export default function CompanyDashboard() {
       </div>
     </section>
   );
-}
+};

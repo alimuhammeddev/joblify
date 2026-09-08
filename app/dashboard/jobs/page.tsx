@@ -8,7 +8,7 @@ import { auth } from "@/lib/firebase";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
-import { formatPostedAt, isJobOpen, mapJob, type Job } from "@/lib/jobs";
+import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 import Toast from "@/components/Toast";
 
 export default function Jobs() {
@@ -27,7 +27,7 @@ export default function Jobs() {
       collection(db, "jobs"),
       (snapshot) => {
         const jobs: Job[] = snapshot.docs.map(mapJob).filter(isJobOpen);
-        setPostedJobs(jobs);
+        setPostedJobs(sortJobsByNewestFirst(jobs));
         setJobsError(false);
       },
       (error) => {

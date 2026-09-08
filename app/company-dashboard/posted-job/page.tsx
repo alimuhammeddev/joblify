@@ -16,7 +16,7 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { formatPostedAt, mapJob, type Job } from "@/lib/jobs";
+import { formatPostedAt, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 import PostJobModal from "./component/PostJob";
 import ViewApplicants from "./component/ViewApplicants";
 import EditJobModal from "./component/EditJob";
@@ -56,7 +56,8 @@ export default function PostedJob() {
       );
 
       unsubscribeJobs = onSnapshot(jobsQuery, (snapshot) => {
-        setPostedJobs(snapshot.docs.map(mapJob));
+        const jobs = snapshot.docs.map(mapJob);
+        setPostedJobs(sortJobsByNewestFirst(jobs));
       }, (error) => {
         console.error("Unable to load posted jobs:", error);
         setPostedJobs([]);
