@@ -120,7 +120,7 @@ export default function PostedJob() {
         <button
           type="button"
           onClick={() => setIsPostJobOpen(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#16254d] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 sm:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] px-5 py-3 text-sm font-bold text-white shadow-xs cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D] focus-visible:ring-offset-2 sm:w-auto"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15">
             <Plus size={16} />
@@ -133,7 +133,7 @@ export default function PostedJob() {
         {postedJobs.map((job) => (
           <div
             key={job.id}
-            className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xs transition"
           >
             <div className="h-1 bg-[#F0802D]" />
             <div className="flex flex-col gap-6 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
