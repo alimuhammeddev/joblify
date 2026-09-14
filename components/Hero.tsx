@@ -8,7 +8,7 @@ import { ArrowRight, CheckCircle2, Play, Search } from "lucide-react";
 export default function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-white pt-28 pb-16 sm:pt-32 lg:pt-36 lg:pb-24">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:px-8">
+      <div className="mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[0.88fr_1.12fr] lg:gap-16 lg:px-5">
         <div className="max-w-xl text-center lg:text-left">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[#F0802D] bg-white px-3 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-[#F0802D]">
             <span className="h-2 w-2 rounded-full bg-[#F0802D]" />

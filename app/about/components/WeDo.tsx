@@ -31,7 +31,7 @@ export default function WeDo() {
   return (
     <section className="relative overflow-hidden bg-[#f8f9fc] py-20 sm:py-24">
       <div className="absolute -right-40 top-10 h-96 w-96 rounded-full bg-[#1F3064]/5 blur-3xl" />
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-5">
         <div className="mb-12 grid gap-8 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
           <div>
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">

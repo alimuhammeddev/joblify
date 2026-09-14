@@ -5,7 +5,7 @@ import about from "./assets/about.jpg";
 export default function AboutUS() {
   return (
     <section className="relative overflow-hidden bg-white pb-20 pt-28 sm:pt-32 lg:pb-28 lg:pt-36">
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:px-8">
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 sm:px-6 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:px-5">
         <div className="max-w-2xl">
           <p className="mb-5 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
             About Joblify

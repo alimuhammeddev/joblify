@@ -54,9 +54,9 @@ export default function LatestJob() {
   };
 
   return (
-    <section className="relative overflow-hidden bg-white px-4 pb-20 pt-28 sm:px-6 lg:px-8 lg:pt-36">
+    <section className="relative overflow-hidden bg-white px-4 pb-20 pt-28 sm:px-6 lg:px-5 lg:pt-36">
       <div className="relative mx-auto max-w-7xl">
-        <div className="mb-12 grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
+        <div className="mb-12 grid gap-8 lg:grid-cols-[1fr_auto] ml-3">
           <div>
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Find your next job
