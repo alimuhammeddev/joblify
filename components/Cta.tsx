@@ -7,8 +7,8 @@ export default function CTA() {
         <div className="absolute right-8 top-8 hidden h-24 w-24 rounded-full border border-white/10 sm:block" />
         <div className="grid gap-10 p-7 sm:p-10 md:p-14 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-16">
           <div className="max-w-xl">
-            <h2 className="text-2xl font-extrabold leading-tight tracking-tight text-white md:text-3xl">
-              Good opportunities don&apos;t wait around.
+            <h2 className="text-xl font-bold leading-tight tracking-tight text-white md:text-3xl">
+              Good opportunities don't wait around.
             </h2>
             <p className="mt-5 max-w-lg text-sm leading-7 text-[#c5cee3] sm:text-base">
               Get fresh roles, practical career advice, and stories from
@@ -41,7 +41,7 @@ export default function CTA() {
               />
               <button
                 type="submit"
-                className="group inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-extrabold text-[#1F3064] transition"
+                className="group inline-flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-white px-5 py-3.5 text-sm font-bold text-[#1F3064] transition"
               >
                 Subscribe for updates
                 <ArrowRight

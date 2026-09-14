@@ -79,7 +79,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-[#9eabc8] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-[#9eabc8] sm:flex-row items-center sm:justify-between">
           <p>© {new Date().getFullYear()} Joblify. All rights reserved.</p>
           <div className="flex gap-5">
             <a href="#" className="transition hover:text-white">

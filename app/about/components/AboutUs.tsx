@@ -45,19 +45,19 @@ export default function AboutUS() {
 
           <div className="mt-10 flex flex-wrap gap-x-8 gap-y-5 border-t border-[#1F3064]/10 pt-6">
             <div>
-              <p className="text-2xl font-extrabold text-[#1F3064]">100+</p>
+              <p className="text-2xl font-bold text-[#1F3064]">100+</p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Active seekers
               </p>
             </div>
             <div>
-              <p className="text-2xl font-extrabold text-[#1F3064]">50+</p>
+              <p className="text-2xl font-bold text-[#1F3064]">50+</p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Trusted employers
               </p>
             </div>
             <div>
-              <p className="text-2xl font-extrabold text-[#1F3064]">24/7</p>
+              <p className="text-2xl font-bold text-[#1F3064]">24/7</p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-slate-500">
                 Opportunities
               </p>

@@ -15,7 +15,7 @@ export default function Hero() {
             Your next chapter starts here
           </div>
 
-          <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-[#1F3064] sm:text-5xl lg:text-7xl">
+          <h1 className="text-4xl font-extrabold leading-[1.06] tracking-tight text-[#1F3064] md:text-5xl lg:text-7xl">
             Find work that feels <span className="text-[#F0802D]">right.</span>
           </h1>
 
@@ -27,14 +27,14 @@ export default function Hero() {
           <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row lg:justify-start">
             <Link
               href="/jobs"
-              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#F0802D] px-6 py-3.5 font-bold text-white transition hover:bg-[#E67E22] sm:w-auto"
+              className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#F0802D] px-6 py-3.5 font-semibold text-white transition hover:bg-[#E67E22] sm:w-auto"
             >
               Explore open roles
               <ArrowRight size={18} className="transition group-hover:translate-x-1" />
             </Link>
             <Link
               href="/about"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#1F3064]/15 bg-white px-6 py-3.5 font-bold text-[#1F3064] transition duration-500 hover:border-[#1F3064]/30 hover:bg-[#1F3064] hover:text-white sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-[#1F3064]/15 bg-white px-6 py-3.5 font-semibold text-[#1F3064] transition duration-500 hover:border-[#1F3064]/30 hover:bg-[#1F3064] hover:text-white sm:w-auto"
             >
               <Play size={16} fill="currentColor" />
               How it works
@@ -67,7 +67,7 @@ export default function Hero() {
             />
           </div>
           <div className="absolute -bottom-5 -left-3 z-10 rounded-2xl bg-[#1F3064] px-4 py-3 text-white sm:-left-6">
-            <p className="text-xl font-extrabold">100+</p>
+            <p className="text-xl font-semibold">100+</p>
             <p className="text-xs text-white/70">career possibilities</p>
           </div>
         </div>
