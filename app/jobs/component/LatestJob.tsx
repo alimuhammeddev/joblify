@@ -61,7 +61,7 @@ export default function LatestJob() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Find your next job
             </p>
-            <h1 className="max-w-3xl text-2xl font-extrabold leading-[1.08] tracking-tight text-[#1F3064] md:text-3xl">
+            <h1 className="max-w-3xl text-2xl font-bold leading-[1.08] tracking-tight text-[#1F3064] md:text-3xl">
               Work that moves
               <span className="text-[#F0802D]"> you forward.</span>
             </h1>
@@ -114,7 +114,7 @@ export default function LatestJob() {
                   <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
                     {formatPostedAt(job)}
                   </p>
-                  <h3 className="line-clamp-2 text-xl font-extrabold leading-tight text-[#1F3064]">
+                  <h3 className="line-clamp-2 text-xl font-bold leading-tight text-[#1F3064]">
                     {job.title}
                   </h3>
                   <p className="mt-2 truncate text-sm font-semibold text-slate-500">

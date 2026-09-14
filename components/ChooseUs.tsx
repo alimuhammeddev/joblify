@@ -32,7 +32,7 @@ export default function Choose() {
             <p className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-[#F0802D]">
               Why Joblify
             </p>
-            <h2 className="max-w-md text-2xl font-bold leading-tight text-[#1F3064] md:text-4xl">
+            <h2 className="max-w-md text-2xl font-bold leading-tight text-[#1F3064] md:text-3xl">
               A better way to move your career forward.
             </h2>
           </div>
