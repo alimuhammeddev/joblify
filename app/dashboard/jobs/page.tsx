@@ -102,7 +102,7 @@ export default function Jobs() {
                     <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">
                       {formatPostedAt(job)}
                     </p>
-                    <h3 className="line-clamp-2 text-xl font-extrabold leading-tight text-[#1F3064]">
+                    <h3 className="line-clamp-2 text-xl font-bold leading-tight text-[#1F3064]">
                       {job.title}
                     </h3>
                     <p className="mt-2 truncate text-sm font-semibold text-slate-500">

@@ -145,7 +145,7 @@ export default function PostedJob() {
                     <Building2 size={18} />
                   </span>
 
-                  <h2 className="min-w-0 text-lg font-extrabold text-[#1F3064] sm:text-xl">
+                  <h2 className="min-w-0 text-lg font-bold text-[#1F3064] sm:text-xl">
                     {job.title}
                   </h2>
 
@@ -189,7 +189,7 @@ export default function PostedJob() {
               </div>
 
               {/* Actions */}
-              <div className="grid w-full shrink-0 grid-cols-1 gap-2 sm:grid-cols-3 lg:w-auto lg:grid-cols-1 xl:grid-cols-3">
+              <div className="grid w-full shrink-0 grid-cols-1 gap-2 sm:grid-cols-3 lg:w-auto lg:grid-cols-1 xl:grid-cols-2">
                 <button
                   type="button"
                   onClick={() => {
@@ -212,14 +212,6 @@ export default function PostedJob() {
                 >
                   <Pencil size={17} />
                   Edit Job
-                </button>
-
-                <button
-                  type="button"
-                  className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-red-200 px-4 py-2 text-sm font-bold text-red-500 transition hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2"
-                >
-                  <Trash2 size={17} />
-                  Delete
                 </button>
               </div>
             </div>

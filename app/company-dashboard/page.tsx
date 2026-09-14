@@ -50,7 +50,7 @@ export default function CompanyDashboard() {
           const companyJobs = snapshot.docs.map((job) => {
             const data = job.data();
 
-              return {
+            return {
               id: job.id,
               title: data.title || "Untitled job",
               applicants: data.applicantCount || 0,
@@ -158,11 +158,15 @@ export default function CompanyDashboard() {
                     </div>
 
                     <div className="flex items-center gap-2">
-                      <span className={`rounded-full px-3 py-1 text-xs font-bold ${
-                        job.status.trim().toLowerCase() === "open"
-                          ? "bg-emerald-50 text-emerald-700"
-                          : "bg-red-50 text-red-600"
-                      }`}>{job.status}</span>
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-bold ${
+                          job.status.trim().toLowerCase() === "open"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : "bg-red-50 text-red-600"
+                        }`}
+                      >
+                        {job.status}
+                      </span>
                     </div>
 
                     <p className="text-sm text-gray-500">
@@ -187,16 +191,6 @@ export default function CompanyDashboard() {
                           : "Recently"}
                       </span>
                     </div>
-                  </div>
-
-                  <div className="flex gap-3">
-                    <button className="border border-[#1F3064] text-[#1F3064] px-4 py-2 rounded-xl text-sm font-medium hover:bg-[#1F3064] hover:text-white transition">
-                      View Applicants
-                    </button>
-
-                    <button className="bg-[#1F3064] text-white px-5 py-2 rounded-xl text-sm font-medium hover:opacity-90 transition">
-                      Edit Job
-                    </button>
                   </div>
                 </div>
               </div>
@@ -254,4 +248,4 @@ export default function CompanyDashboard() {
       </div>
     </section>
   );
-};
+}
