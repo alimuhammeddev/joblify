@@ -162,7 +162,7 @@ export default function ViewApplicants({
                       <div className="overflow-hidden">
                         <div className="px-5 pb-5">
                           <div className="grid gap-5 sm:grid-cols-[1fr_1.3fr] rounded-2xl bg-slate-50 border border-slate-200 p-5">
-                            <div>
+                            <div className="min-w-0">
                               <div className="text-xs font-semibold uppercase tracking-wide text-slate-400">
                                 Resume
                               </div>
@@ -172,7 +172,7 @@ export default function ViewApplicants({
                                 download={
                                   applicant.resumeName || "applicant-cv"
                                 }
-                                className="mt-3 flex items-center gap-3 rounded-xl bg-white border border-slate-200 px-3.5 py-3 transition-colors hover:border-[#1F3064]/30"
+                                className="mt-3 flex min-w-0 items-center gap-3 rounded-xl bg-white border border-slate-200 px-3.5 py-3 transition-colors hover:border-[#1F3064]/30"
                               >
                                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#F0802D]/10 text-[#F0802D]">
                                   <FileText size={16} />
