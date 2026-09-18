@@ -49,13 +49,12 @@ export default function ViewApplicants({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:p-4">
       <div
         className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
         onClick={onClose}
       />
-
-      <div className="relative w-full max-w-3xl max-h-[calc(100vh-2rem)] rounded-2xl bg-white overflow-hidden flex flex-col">
+      <div className="relative w-full max-w-3xl h-[80dvh] max-h-[calc(100dvh-4rem)] -translate-y-7 sm:h-[85dvh] sm:max-h-[calc(100dvh-2rem)] sm:-translate-y-2 rounded-2xl bg-white overflow-hidden flex flex-col">
         {/* Header */}
         <div className="relative shrink-0 overflow-hidden bg-[#1F3064] px-8 py-7">
           <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full opacity-40 blur-2xl" />
@@ -84,7 +83,6 @@ export default function ViewApplicants({
           </div>
         </div>
 
-        {/* List */}
         <div className="flex-1 min-h-0 overflow-y-auto bg-slate-50/70 px-4 py-4 sm:px-5">
           {applicants.length > 0 ? (
             <div className="space-y-3">
@@ -98,7 +96,7 @@ export default function ViewApplicants({
                     key={applicant.id}
                     className={`overflow-hidden rounded-2xl bg-white border transition-shadow duration-200 ${
                       isApplicantOpen
-                        ? "border-[#1F3064]/20 shadow-[0_8px_24px_-12px_rgba(31,48,100,0.25)]"
+                        ? "border-[#1F3064]/20"
                         : "border-slate-200 hover:border-slate-300"
                     }`}
                   >
@@ -231,4 +229,4 @@ export default function ViewApplicants({
       </div>
     </div>
   );
-}
+};
