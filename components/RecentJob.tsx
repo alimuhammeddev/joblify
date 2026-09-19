@@ -7,7 +7,16 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
-import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+import {
+  formatPostedAt,
+  isJobOpen,
+  mapJob,
+  sortJobsByNewestFirst,
+  type Job,
+} from "@/lib/jobs";
+
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
 
 export default function RecentJob() {
   const router = useRouter();
@@ -22,13 +31,15 @@ export default function RecentJob() {
     return unsubscribe;
   }, []);
 
-  useEffect(() => onSnapshot(collection(db, "jobs"), (snapshot) => {
-    const jobs = snapshot.docs
-      .map(mapJob)
-      .filter(isJobOpen);
+  useEffect(
+    () =>
+      onSnapshot(collection(db, "jobs"), (snapshot) => {
+        const jobs = snapshot.docs.map(mapJob).filter(isJobOpen);
 
-    setJobs(sortJobsByNewestFirst(jobs).slice(0, 3));
-  }), []);
+        setJobs(sortJobsByNewestFirst(jobs).slice(0, 3));
+      }),
+    [],
+  );
 
   const handleApplyNow = (job: Job) => {
     if (isLoggedIn) {
@@ -82,7 +93,7 @@ export default function RecentJob() {
 
               <div className="flex items-center gap-3">
                 <Wallet size={17} className="shrink-0 text-[#F0802D]" />
-                <span>{job.salary}</span>
+                <span>{formatSalary(job.salary)}</span>
               </div>
             </div>
 

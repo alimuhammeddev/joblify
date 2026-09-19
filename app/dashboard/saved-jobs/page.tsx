@@ -18,6 +18,9 @@ type SavedJob = {
   salary: string;
 };
 
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
+
 export default function SavedJobs() {
   const [savedJobs, setSavedJobs] = useState<SavedJob[]>([]);
 
@@ -88,7 +91,7 @@ export default function SavedJobs() {
                     {job.title}
                   </h2>
 
-                  <span className="text-xs bg-[#F0802D]/10 text-[#F0802D] px-3 py-1 rounded-full">
+                  <span className="text-xs bg-[#1f3064] text-white px-3 py-1 rounded-full">
                     {job.type}
                   </span>
                 </div>
@@ -103,7 +106,7 @@ export default function SavedJobs() {
 
                   <div className="flex items-center gap-2">
                     <Wallet size={16} className="text-[#F0802D]" />
-                    <span>{job.salary}</span>
+                    <span>{formatSalary(job.salary)}</span>
                   </div>
                 </div>
               </div>

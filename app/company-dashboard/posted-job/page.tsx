@@ -16,11 +16,19 @@ import {
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-import { formatPostedAt, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+import {
+  formatPostedAt,
+  mapJob,
+  sortJobsByNewestFirst,
+  type Job,
+} from "@/lib/jobs";
 import PostJobModal from "./component/PostJob";
 import ViewApplicants from "./component/ViewApplicants";
 import EditJobModal from "./component/EditJob";
 import Toast from "@/components/Toast";
+
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
 
 export default function PostedJob() {
   const [isPostJobOpen, setIsPostJobOpen] = useState(false);
@@ -55,13 +63,17 @@ export default function PostedJob() {
         where("companyId", "==", user.uid),
       );
 
-      unsubscribeJobs = onSnapshot(jobsQuery, (snapshot) => {
-        const jobs = snapshot.docs.map(mapJob);
-        setPostedJobs(sortJobsByNewestFirst(jobs));
-      }, (error) => {
-        console.error("Unable to load posted jobs:", error);
-        setPostedJobs([]);
-      });
+      unsubscribeJobs = onSnapshot(
+        jobsQuery,
+        (snapshot) => {
+          const jobs = snapshot.docs.map(mapJob);
+          setPostedJobs(sortJobsByNewestFirst(jobs));
+        },
+        (error) => {
+          console.error("Unable to load posted jobs:", error);
+          setPostedJobs([]);
+        },
+      );
     });
 
     return () => {
@@ -94,7 +106,9 @@ export default function PostedJob() {
               email: String(data.applicantEmail || ""),
               resume: String(data.cvData || ""),
               resumeName: String(data.cvName || "CV"),
-              coverLetter: String(data.coverLetter || "No cover letter provided."),
+              coverLetter: String(
+                data.coverLetter || "No cover letter provided.",
+              ),
             };
           }),
         );
@@ -178,7 +192,7 @@ export default function PostedJob() {
 
                   <span className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">
                     <Wallet size={15} className="text-[#F0802D]" />
-                    {job.salary}
+                    {formatSalary(job.salary)}
                   </span>
 
                   <span className="flex items-center gap-2 rounded-lg bg-gray-50 px-3 py-2">

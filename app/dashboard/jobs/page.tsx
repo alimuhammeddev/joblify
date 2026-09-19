@@ -11,6 +11,9 @@ import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
 import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 import Toast from "@/components/Toast";
 
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
+
 export default function Jobs() {
   const [postedJobs, setPostedJobs] = useState<Job[]>([]);
   const [jobsError, setJobsError] = useState(false);
@@ -159,7 +162,7 @@ export default function Jobs() {
 
                   <div className="flex items-center gap-3">
                     <Wallet size={17} className="shrink-0 text-[#F0802D]" />
-                    <span>{job.salary}</span>
+                    <span>{formatSalary(job.salary)}</span>
                   </div>
                 </div>
 

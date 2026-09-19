@@ -11,8 +11,16 @@ interface PostJobModalProps {
   onClose: () => void;
 }
 
+// Formats a string of digits with thousands separators, e.g. "1000000" -> "1,000,000"
+const formatNumber = (value: string) => {
+  const digits = value.replace(/\D/g, "");
+  return digits ? Number(digits).toLocaleString("en-US") : "";
+};
+
 export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
   const [error, setError] = useState("");
+  const [minimumSalary, setMinimumSalary] = useState("");
+  const [maximumSalary, setMaximumSalary] = useState("");
 
   if (!isOpen) return null;
 
@@ -21,6 +29,38 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
     const formData = new FormData(event.currentTarget);
 
     setError("");
+
+    const title = String(formData.get("title") || "").trim();
+    const location = String(formData.get("location") || "").trim();
+    const type = String(formData.get("type") || "").trim();
+    const description = String(formData.get("description") || "").trim();
+    const responsibilities = String(
+      formData.get("responsibilities") || "",
+    ).trim();
+    const requirements = String(formData.get("requirements") || "").trim();
+
+    if (
+      !title ||
+      !location ||
+      !type ||
+      !minimumSalary ||
+      !maximumSalary ||
+      !description ||
+      !responsibilities ||
+      !requirements
+    ) {
+      setError("Please fill in all fields before posting this job.");
+      return;
+    }
+
+    if (
+      Number(minimumSalary.replace(/,/g, "")) >
+      Number(maximumSalary.replace(/,/g, ""))
+    ) {
+      setError("Minimum salary cannot be greater than maximum salary.");
+      return;
+    }
+
     await auth.authStateReady();
     const user = auth.currentUser;
     if (!user) {
@@ -32,27 +72,29 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
       await addDoc(collection(db, "jobs"), {
         companyId: user.uid,
         companyName: user.displayName || "Company",
-        title: String(formData.get("title") || "").trim(),
-        location: String(formData.get("location") || "").trim(),
-        type: String(formData.get("type") || "").trim(),
-        minimumSalary: String(formData.get("minimumSalary") || "").trim(),
-        maximumSalary: String(formData.get("maximumSalary") || "").trim(),
-        description: String(formData.get("description") || "").trim(),
-        responsibilities: String(formData.get("responsibilities") || "").trim(),
-        requirements: String(formData.get("requirements") || "").trim(),
+        title,
+        location,
+        type,
+        // Strip commas so the stored value stays a plain number string
+        minimumSalary: minimumSalary.replace(/,/g, ""),
+        maximumSalary: maximumSalary.replace(/,/g, ""),
+        description,
+        responsibilities,
+        requirements,
         applicantCount: 0,
         postedAt: serverTimestamp(),
       });
 
-      recordCompanyActivity(
-        user.uid,
-        `You posted a new job: ${String(formData.get("title") || "Untitled job").trim()}`,
-      );
+      recordCompanyActivity(user.uid, `You posted a new job: ${title}`);
 
+      setMinimumSalary("");
+      setMaximumSalary("");
       onClose();
     } catch (submissionError) {
       console.error("Unable to post job:", submissionError);
-      setError("Unable to post this job. Please check your account and try again.");
+      setError(
+        "Unable to post this job. Please check your account and try again.",
+      );
     }
   };
 
@@ -109,6 +151,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                   <input
                     name="title"
+                    required
                     type="text"
                     placeholder="Frontend Developer"
                     className="w-full outline-none"
@@ -147,6 +190,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                   <input
                     name="location"
+                    required
                     type="text"
                     placeholder="Abuja, Nigeria"
                     className="w-full outline-none"
@@ -160,7 +204,11 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
                   Employment Type
                 </label>
 
-                <select name="type" className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-[#F0802D]">
+                <select
+                  name="type"
+                  required
+                  className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-[#F0802D]"
+                >
                   <option>Full-time</option>
                   <option>Part-time</option>
                   <option>Contract</option>
@@ -185,8 +233,14 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                 <input
                   name="minimumSalary"
-                  type="number"
-                  placeholder="500000"
+                  required
+                  type="text"
+                  inputMode="numeric"
+                  value={minimumSalary}
+                  onChange={(e) =>
+                    setMinimumSalary(formatNumber(e.target.value))
+                  }
+                  placeholder="500,000"
                   className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-[#F0802D]"
                 />
               </div>
@@ -198,8 +252,14 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                 <input
                   name="maximumSalary"
-                  type="number"
-                  placeholder="1000000"
+                  required
+                  type="text"
+                  inputMode="numeric"
+                  value={maximumSalary}
+                  onChange={(e) =>
+                    setMaximumSalary(formatNumber(e.target.value))
+                  }
+                  placeholder="1,000,000"
                   className="w-full border border-gray-200 rounded-2xl px-4 py-3 outline-none focus:border-[#F0802D]"
                 />
               </div>
@@ -218,6 +278,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                 <textarea
                   name="description"
+                  required
                   rows={2}
                   placeholder="Describe responsibilities, requirements, qualifications, and expectations..."
                   className="w-full outline-none resize-none"
@@ -238,6 +299,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                 <textarea
                   name="responsibilities"
+                  required
                   rows={3}
                   placeholder="e.g Build and maintain frontend applications, collaborate with backend team..."
                   className="w-full outline-none resize-none"
@@ -258,6 +320,7 @@ export default function PostJobModal({ isOpen, onClose }: PostJobModalProps) {
 
                 <textarea
                   name="requirements"
+                  required
                   rows={3}
                   placeholder="e.g 3+ years experience, React, TypeScript, strong communication skills..."
                   className="w-full outline-none resize-none"

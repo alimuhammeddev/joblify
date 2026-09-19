@@ -4,7 +4,6 @@ import {
   BriefcaseBusiness,
   MapPin,
   Search,
-  Sparkles,
   Wallet,
 } from "lucide-react";
 import { collection, onSnapshot } from "firebase/firestore";
@@ -13,6 +12,9 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
 
 export default function LatestJob() {
   const router = useRouter();
@@ -135,7 +137,7 @@ export default function LatestJob() {
 
                 <div className="flex items-center gap-3">
                   <Wallet size={17} className="shrink-0 text-[#F0802D]" />
-                  <span>{job.salary}</span>
+                  <span>{formatSalary(job.salary)}</span>
                 </div>
               </div>
 

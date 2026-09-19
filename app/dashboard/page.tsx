@@ -16,6 +16,9 @@ import { getUserActivity, type UserActivity } from "@/lib/userActivity";
 import { db } from "@/lib/firebase";
 import { isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
 
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
+
 export default function Dashboard() {
   const [displayName, setDisplayName] = useState("User");
   const [userActivity, setUserActivity] = useState<UserActivity | null>(null);
@@ -139,7 +142,7 @@ export default function Dashboard() {
                       </span>
                       <span className="flex items-center gap-1">
                         <Wallet className="w-4 h-4 text-[#F0802D]" />{" "}
-                        {job.salary}
+                        {formatSalary(job.salary)}
                       </span>
                     </div>
                   </div>
@@ -205,55 +208,32 @@ export default function Dashboard() {
               <h2 className="text-lg font-semibold text-[#1F3064]">
                 Application Analytics
               </h2>
-              <span className="text-xs font-medium text-gray-400">
-                This month
+            </div>
+
+            <div className="flex items-center gap-4 rounded-xl bg-[#F4F6FB] px-5 py-5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#1F3064] text-white">
+                <Briefcase className="h-5 w-5" />
               </span>
-            </div>
 
-            <div className="flex items-center gap-5">
-              <div
-                className="relative flex h-32 w-32 shrink-0 items-center justify-center rounded-full"
-                style={{
-                  background: hasApplications
-                    ? "conic-gradient(#1F3064 0 100%, #F0802D 100% 100%, #4F8A70 100% 100%, #D9DEE8 100% 100%)"
-                    : "#D9DEE8",
-                }}
-                role="img"
-                aria-label={
-                  hasApplications
-                    ? "Application analytics: 100 percent applied"
-                    : "Application analytics: no applications yet"
-                }
-              >
-                <div className="flex h-20 w-20 flex-col items-center justify-center rounded-full bg-white">
-                  <span className="text-2xl font-bold text-[#1F3064]">
-                    {dashboardStats.appliedJobs}
-                  </span>
-                  <span className="text-[11px] text-gray-500">
-                    applications
-                  </span>
-                </div>
-              </div>
-
-              <div className="min-w-0 flex-1 space-y-3">
-                {analyticsData.map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex items-center justify-between gap-3 text-sm"
-                  >
-                    <span className="flex min-w-0 items-center gap-2 text-gray-600">
-                      <span
-                        className={`h-2.5 w-2.5 shrink-0 rounded-full ${item.color}`}
-                      />
-                      <span className="truncate">{item.label}</span>
-                    </span>
-                    <span className="font-semibold text-[#1F3064]">
-                      {item.value}
-                    </span>
-                  </div>
-                ))}
+              <div className="min-w-0">
+                <p className="text-2xl font-extrabold leading-none text-[#1F3064]">
+                  {dashboardStats.appliedJobs}
+                </p>
+                <p className="mt-1.5 text-sm text-gray-500">
+                  {hasApplications
+                    ? Number(dashboardStats.appliedJobs) === 1
+                      ? "Job applied to"
+                      : "Jobs applied to"
+                    : "No applications yet"}
+                </p>
               </div>
             </div>
+
+            {!hasApplications && (
+              <p className="mt-3 text-xs text-gray-400">
+                Apply to a job and your count will show up here.
+              </p>
+            )}
           </div>
         </div>
       </div>

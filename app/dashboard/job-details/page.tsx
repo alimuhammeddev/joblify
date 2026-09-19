@@ -29,6 +29,9 @@ type JobDetails = {
   requirements: string;
 };
 
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
+
 function JobDetailsContent() {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
@@ -244,7 +247,7 @@ function JobDetailsContent() {
             </span>
             <div>
               <p className="text-xs text-gray-500">Salary</p>
-              <p className="font-medium text-sm">{job.salary}</p>
+              <p className="font-medium text-sm">{formatSalary(job.salary)}</p>
             </div>
           </div>
 

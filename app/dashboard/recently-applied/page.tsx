@@ -26,6 +26,9 @@ type ApplicationRecord = {
   createdAt?: { toDate?: () => Date };
 };
 
+const formatSalary = (salary: string) =>
+  salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
+
 export default function RecentlyApplied() {
   const [appliedJobs, setAppliedJobs] = useState<AppliedJob[]>([]);
 
@@ -136,12 +139,7 @@ export default function RecentlyApplied() {
 
                   <div className="flex items-center gap-2">
                     <Wallet size={16} className="text-[#F0802D]" />
-                    <span>{job.salary}</span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <Clock size={16} className="text-[#F0802D]" />
-                    <span>Application sent</span>
+                    <span>{formatSalary(job.salary)}</span>
                   </div>
                 </div>
               </div>
