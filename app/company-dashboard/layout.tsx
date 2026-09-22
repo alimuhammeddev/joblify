@@ -124,7 +124,7 @@ export default function CompanyDashboardLayout({
               aria-haspopup="menu"
               className="flex cursor-pointer items-center gap-2 rounded-xl p-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0802D]"
             >
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FDE6D5] text-[#1F3064] transition">
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#1F3064] text-[#ffffff] transition">
                 <User size={18} />
               </div>
             </button>
@@ -134,14 +134,14 @@ export default function CompanyDashboardLayout({
                 className="absolute right-0 z-50 mt-3 w-64 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-[#1F3064]/10"
                 role="menu"
               >
-                <div className="border-b border-[#F5D4B8] bg-[#FFF4EA] px-4 py-4">
+                <div className="border-b border-[#F5D4B8] bg-[#1F3064] px-4 py-4">
                   <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[#F0802D]">
                     Company account
                   </p>
-                  <h3 className="mt-1 truncate font-bold text-[#1F3064]">
+                  <h3 className="mt-1 truncate font-bold text-[#ffffff]">
                     {user?.displayName || "Company"}
                   </h3>
-                  <p className="mt-0.5 truncate text-xs text-gray-500">
+                  <p className="mt-0.5 truncate text-xs text-[#ffffff]">
                     {user?.email || "No email available"}
                   </p>
                 </div>
