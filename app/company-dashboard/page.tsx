@@ -150,23 +150,25 @@ export default function CompanyDashboard() {
               >
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <Building2 className="w-5 h-5 text-[#F0802D]" />
-                      <h3 className="font-semibold text-lg text-gray-800">
-                        {job.title}
-                      </h3>
-                    </div>
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-2 mb-1">
+                        <Building2 className="w-5 h-5 text-[#F0802D]" />
+                        <h3 className="font-semibold text-lg text-gray-800">
+                          {job.title}
+                        </h3>
+                      </div>
 
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-bold ${
-                          job.status.trim().toLowerCase() === "open"
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-red-50 text-red-600"
-                        }`}
-                      >
-                        {job.status}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`rounded-full px-3 py-1 text-xs font-bold ${
+                            job.status.trim().toLowerCase() === "open"
+                              ? "bg-emerald-50 text-emerald-700"
+                              : "bg-red-50 text-red-600"
+                          }`}
+                        >
+                          {job.status}
+                        </span>
+                      </div>
                     </div>
 
                     <p className="text-sm text-gray-500">

@@ -259,8 +259,8 @@ export default function CompanySettings() {
                   <Building2 size={36} />
                 </div>
               )}
-              <label className="absolute -bottom-2 -right-2 bg-[#F0802D] text-white p-2 rounded-full cursor-pointer">
-                <Camera size={15} />
+              <label className="absolute -bottom-2 -right-2 bg-[#1F3064] text-white p-2 rounded-full cursor-pointer">
+                <Camera size={20} />
                 <input
                   type="file"
                   accept="image/*"

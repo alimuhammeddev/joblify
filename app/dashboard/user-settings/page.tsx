@@ -263,7 +263,7 @@ export default function UserSettings() {
                 </div>
               )}
               <label className="absolute bottom-1 right-1 bg-[#1F3064] text-white p-2 rounded-full hover:opacity-90 transition cursor-pointer">
-                <Camera size={16} />
+                <Camera size={20} />
                 <input
                   type="file"
                   accept="image/*"
