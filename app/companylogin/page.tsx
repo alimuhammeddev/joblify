@@ -40,7 +40,7 @@ export default function CompanyLogin() {
 
       if (accountType !== "company") {
         await signOut(auth);
-        setError("This email belongs to an individual account. Please use the individual login page.");
+        setError("Invalid Login credentials");
         return;
       }
 
