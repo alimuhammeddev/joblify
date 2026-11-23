@@ -12,14 +12,21 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+import { useExternalJobs } from "@/lib/useExternalJobs";
 
 const formatSalary = (salary: string) =>
   salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
 
 export default function LatestJob() {
   const router = useRouter();
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [postedJobs, setPostedJobs] = useState<Job[]>([]);
+  const {
+    jobs: externalJobs,
+    error: externalJobsError,
+    warnings: externalJobsWarnings,
+  } = useExternalJobs();
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -34,17 +41,21 @@ export default function LatestJob() {
     () =>
       onSnapshot(collection(db, "jobs"), (snapshot) => {
         const jobs = snapshot.docs.map(mapJob).filter(isJobOpen);
-        setJobs(sortJobsByNewestFirst(jobs));
+        setPostedJobs(sortJobsByNewestFirst(jobs));
       }),
     [],
   );
 
+  const jobs = sortJobsByNewestFirst([...postedJobs, ...externalJobs]);
   const normalizedSearchTerm = searchTerm.trim().toLowerCase();
   const filteredJobs = jobs.filter((job) =>
-    [job.title, job.company, job.location, job.type].some((value) =>
+    [job.title, job.company, job.location, job.type, job.description].some((value) =>
       value.toLowerCase().includes(normalizedSearchTerm),
     ),
   );
+  const pageSize = 30;
+  const pageCount = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
+  const visibleJobs = filteredJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleApplyNow = (job: Job) => {
     if (isLoggedIn) {
@@ -68,8 +79,8 @@ export default function LatestJob() {
               <span className="text-[#F0802D]"> you forward.</span>
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-500 sm:text-lg">
-              Browse fresh opportunities from ambitious teams and find a role
-              that fits the way you want to grow.
+              Browse roles posted on Joblify alongside opportunities in the
+              United States, United Kingdom, Canada, Germany, and the Netherlands.
             </p>
           </div>
         </div>
@@ -81,7 +92,10 @@ export default function LatestJob() {
               type="text"
               placeholder="Search by title, company, location, or type..."
               value={searchTerm}
-              onChange={(event) => setSearchTerm(event.target.value)}
+              onChange={(event) => {
+                setSearchTerm(event.target.value);
+                setCurrentPage(1);
+              }}
               aria-label="Search jobs"
               className="w-full rounded-xl border border-slate-200 bg-white py-4 pl-11 pr-4 text-sm text-[#1F3064] outline-none transition placeholder:text-slate-400 focus:ring-2 focus:ring-[#F0802D]"
             />
@@ -97,7 +111,10 @@ export default function LatestJob() {
           {searchTerm && (
             <button
               type="button"
-              onClick={() => setSearchTerm("")}
+              onClick={() => {
+                setSearchTerm("");
+                setCurrentPage(1);
+              }}
               className="text-sm font-bold text-[#1F3064] underline decoration-[#F0802D] underline-offset-4 cursor-pointer"
             >
               Clear search
@@ -105,8 +122,19 @@ export default function LatestJob() {
           )}
         </div>
 
+        {externalJobsError && (
+          <p className="mb-5 text-sm text-slate-500">
+            External jobs are temporarily unavailable. Showing Joblify jobs.
+          </p>
+        )}
+        {externalJobsWarnings.length > 0 && (
+          <p className="mb-5 text-sm text-slate-500">
+            Some external job sources could not be loaded: {externalJobsWarnings.join(", ")}.
+          </p>
+        )}
+
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {filteredJobs.map((job) => (
+          {visibleJobs.map((job) => (
             <div
               key={job.id}
               className="group flex min-h-71.25 flex-col rounded-2xl bg-white p-6 shadow-sm"
@@ -122,6 +150,16 @@ export default function LatestJob() {
                   <p className="mt-2 truncate text-sm font-semibold text-slate-500">
                     {job.company}
                   </p>
+                  {job.source && job.applicationUrl && (
+                    <a
+                      href={job.sourceUrl || job.applicationUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 inline-block text-xs text-slate-400 underline underline-offset-2"
+                    >
+                      {job.source === "YubHub" ? "Data by YubHub" : `Source: ${job.source}`}
+                    </a>
+                  )}
                 </div>
 
                 <span className="shrink-0 rounded-full bg-[#1f3064] px-3 py-1.5 text-xs font-bold text-white">
@@ -129,7 +167,7 @@ export default function LatestJob() {
                 </span>
               </div>
 
-              <div className="mt-6 space-y-3 text-sm text-slate-500">
+              <div className="mt-6 mb-4 space-y-3 text-sm text-slate-500">
                 <div className="flex items-center gap-3">
                   <MapPin size={17} className="shrink-0 text-[#F0802D]" />
                   <span>{job.location}</span>
@@ -141,16 +179,51 @@ export default function LatestJob() {
                 </div>
               </div>
 
-              <button
-                type="button"
-                onClick={() => handleApplyNow(job)}
-                className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
-              >
-                Apply Now
-              </button>
+              {job.applicationUrl ? (
+                <a
+                  href={job.applicationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+                >
+                  Apply now
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleApplyNow(job)}
+                  className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+                >
+                  Apply Now
+                </button>
+              )}
             </div>
           ))}
         </div>
+
+        {pageCount > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-[#1F3064] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-slate-500">
+              Page {currentPage} of {pageCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
+              disabled={currentPage === pageCount}
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-[#1F3064] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
         {filteredJobs.length === 0 && (
           <div className="rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">

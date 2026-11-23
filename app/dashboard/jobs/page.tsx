@@ -9,6 +9,7 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { getUserActivity, toggleSavedJob } from "@/lib/userActivity";
 import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+import { useExternalJobs } from "@/lib/useExternalJobs";
 import Toast from "@/components/Toast";
 
 const formatSalary = (salary: string) =>
@@ -17,8 +18,14 @@ const formatSalary = (salary: string) =>
 export default function Jobs() {
   const [postedJobs, setPostedJobs] = useState<Job[]>([]);
   const [jobsError, setJobsError] = useState(false);
+  const {
+    jobs: externalJobs,
+    error: externalJobsError,
+    warnings: externalJobsWarnings,
+  } = useExternalJobs();
   const [searchTerm, setSearchTerm] = useState("");
   const [activeSearchTerm, setActiveSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [toast, setToast] = useState("");
   const [savedJobIds, setSavedJobIds] = useState<string[]>(() => {
     const user = auth.currentUser;
@@ -40,7 +47,7 @@ export default function Jobs() {
     );
   }, []);
 
-  const availableJobs = postedJobs.filter((job) =>
+  const availableJobs = sortJobsByNewestFirst([...postedJobs, ...externalJobs]).filter((job) =>
     [
       job.title,
       job.company,
@@ -52,6 +59,9 @@ export default function Jobs() {
       job.requirements,
     ].some((value) => value.toLowerCase().includes(activeSearchTerm)),
   );
+  const pageSize = 30;
+  const pageCount = Math.max(1, Math.ceil(availableJobs.length / pageSize));
+  const visibleJobs = availableJobs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
     <section className="bg-gray-50 min-h-screen mb-20">
@@ -63,6 +73,16 @@ export default function Jobs() {
               Jobs could not be loaded. Please try again later.
             </p>
           )}
+          {externalJobsError && (
+            <p className="mt-2 text-sm text-slate-500">
+              External jobs are temporarily unavailable. Showing Joblify jobs.
+            </p>
+          )}
+          {externalJobsWarnings.length > 0 && (
+            <p className="mt-2 text-sm text-slate-500">
+              Some external job sources could not be loaded: {externalJobsWarnings.join(", ")}.
+            </p>
+          )}
         </div>
 
         <form
@@ -70,6 +90,7 @@ export default function Jobs() {
           onSubmit={(event) => {
             event.preventDefault();
             setActiveSearchTerm(searchTerm.trim().toLowerCase());
+            setCurrentPage(1);
           }}
         >
           <div className="flex flex-col md:flex-row gap-4">
@@ -95,7 +116,7 @@ export default function Jobs() {
 
         <div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {availableJobs.map((job) => (
+            {visibleJobs.map((job) => (
               <div
                 key={job.id}
                 className="group flex min-h-71.25 flex-col rounded-2xl bg-white p-6 shadow-sm"
@@ -111,6 +132,16 @@ export default function Jobs() {
                     <p className="mt-2 truncate text-sm font-semibold text-slate-500">
                       {job.company}
                     </p>
+                    {job.source && job.applicationUrl && (
+                      <a
+                        href={job.sourceUrl || job.applicationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-1 inline-block text-xs text-slate-400 underline underline-offset-2"
+                      >
+                        {job.source === "YubHub" ? "Data by YubHub" : `Source: ${job.source}`}
+                      </a>
+                    )}
                   </div>
 
                   <div className="flex shrink-0 items-center gap-3">
@@ -120,10 +151,7 @@ export default function Jobs() {
                         const user = auth.currentUser;
                         if (!user) return;
 
-                        const isSaved = toggleSavedJob(
-                          user.uid,
-                          String(job.id),
-                        );
+                        const isSaved = toggleSavedJob(user.uid, String(job.id));
                         setToast(isSaved ? "Job saved." : "Job removed from saved jobs.");
                         setSavedJobIds((currentIds) =>
                           isSaved
@@ -154,7 +182,7 @@ export default function Jobs() {
                   </div>
                 </div>
 
-                <div className="mt-6 space-y-3 text-sm text-slate-500">
+                <div className="mt-6 mb-4 space-y-3 text-sm text-slate-500">
                   <div className="flex items-center gap-3">
                     <MapPin size={17} className="shrink-0 text-[#F0802D]" />
                     <span>{job.location}</span>
@@ -166,14 +194,23 @@ export default function Jobs() {
                   </div>
                 </div>
 
-                <Link
-                  href={`/dashboard/job-details?jobId=${job.id}`}
-                  className="mt-auto pt-6"
-                >
-                  <button className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white">
+                {job.applicationUrl ? (
+                  <a
+                    href={job.applicationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+                  >
+                    Apply now
+                  </a>
+                ) : (
+                  <Link
+                    href={`/dashboard/job-details?jobId=${job.id}`}
+                    className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-bold text-white"
+                  >
                     Apply Now
-                  </button>
-                </Link>
+                  </Link>
+                )}
               </div>
             ))}
           </div>
@@ -183,6 +220,29 @@ export default function Jobs() {
             </p>
           )}
         </div>
+        {pageCount > 1 && (
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}
+              disabled={currentPage === 1}
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-[#1F3064] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-slate-500">
+              Page {currentPage} of {pageCount}
+            </span>
+            <button
+              type="button"
+              onClick={() => setCurrentPage((page) => Math.min(pageCount, page + 1))}
+              disabled={currentPage === pageCount}
+              className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-semibold text-[#1F3064] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
       <Toast message={toast} onClose={() => setToast("")} />
     </section>

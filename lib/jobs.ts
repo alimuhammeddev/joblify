@@ -3,6 +3,9 @@ import type { DocumentData, QueryDocumentSnapshot } from "firebase/firestore";
 export type Job = {
   id: string;
   companyId?: string;
+  source?: string;
+  sourceUrl?: string;
+  applicationUrl?: string;
   company: string;
   title: string;
   location: string;
@@ -15,13 +18,18 @@ export type Job = {
   requirements: string;
   status: string;
   applicants: number;
-  postedAt?: { toDate: () => Date };
+  postedAt?: string | { toDate: () => Date };
 };
 
-export function sortJobsByNewestFirst<T extends { postedAt?: { toDate: () => Date } }>(jobs: T[]) {
+function getPostedAtDate(postedAt: Job["postedAt"]) {
+  const date = typeof postedAt === "string" ? new Date(postedAt) : postedAt?.toDate();
+  return date instanceof Date && Number.isFinite(date.getTime()) ? date : null;
+}
+
+export function sortJobsByNewestFirst<T extends { postedAt?: Job["postedAt"] }>(jobs: T[]) {
   return [...jobs].sort((left, right) => {
-    const leftTime = left.postedAt?.toDate?.().getTime?.() ?? 0;
-    const rightTime = right.postedAt?.toDate?.().getTime?.() ?? 0;
+    const leftTime = getPostedAtDate(left.postedAt)?.getTime() ?? 0;
+    const rightTime = getPostedAtDate(right.postedAt)?.getTime() ?? 0;
 
     return rightTime - leftTime;
   });
@@ -52,7 +60,7 @@ export function mapJob(snapshot: QueryDocumentSnapshot<DocumentData>): Job {
 }
 
 export function formatPostedAt(job: Job) {
-  return job.postedAt ? job.postedAt.toDate().toLocaleDateString() : "Recently";
+  return getPostedAtDate(job.postedAt)?.toLocaleDateString() ?? "Recently";
 }
 
 export function isJobOpen(job: Pick<Job, "status">) {

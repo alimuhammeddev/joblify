@@ -14,13 +14,19 @@ import {
   sortJobsByNewestFirst,
   type Job,
 } from "@/lib/jobs";
+import { useExternalJobs } from "@/lib/useExternalJobs";
 
 const formatSalary = (salary: string) =>
   salary.replace(/\d{4,}/g, (num) => Number(num).toLocaleString("en-US"));
 
 export default function RecentJob() {
   const router = useRouter();
-  const [jobs, setJobs] = useState<Job[]>([]);
+  const [postedJobs, setPostedJobs] = useState<Job[]>([]);
+  const {
+    jobs: externalJobs,
+    error: externalJobsError,
+    warnings: externalJobsWarnings,
+  } = useExternalJobs();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -36,10 +42,12 @@ export default function RecentJob() {
       onSnapshot(collection(db, "jobs"), (snapshot) => {
         const jobs = snapshot.docs.map(mapJob).filter(isJobOpen);
 
-        setJobs(sortJobsByNewestFirst(jobs).slice(0, 3));
+        setPostedJobs(sortJobsByNewestFirst(jobs));
       }),
     [],
   );
+
+  const jobs = sortJobsByNewestFirst([...postedJobs, ...externalJobs]).slice(0, 3);
 
   const handleApplyNow = (job: Job) => {
     if (isLoggedIn) {
@@ -78,6 +86,16 @@ export default function RecentJob() {
                 <p className="mt-2 truncate text-sm font-semibold text-slate-500">
                   {job.company}
                 </p>
+                {job.source && job.applicationUrl && (
+                  <a
+                    href={job.sourceUrl || job.applicationUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-1 inline-block text-xs text-slate-400 underline underline-offset-2"
+                  >
+                    {job.source === "YubHub" ? "Data by YubHub" : `Source: ${job.source}`}
+                  </a>
+                )}
               </div>
 
               <span className="shrink-0 rounded-full bg-[#1f3064] px-3 py-1.5 text-xs font-bold text-white">
@@ -85,7 +103,7 @@ export default function RecentJob() {
               </span>
             </div>
 
-            <div className="mt-6 space-y-3 text-sm text-slate-500">
+            <div className="mt-6 mb-4 space-y-3 text-sm text-slate-500">
               <div className="flex items-center gap-3">
                 <MapPin size={17} className="shrink-0 text-[#F0802D]" />
                 <span>{job.location}</span>
@@ -97,16 +115,38 @@ export default function RecentJob() {
               </div>
             </div>
 
-            <button
-              type="button"
-              onClick={() => handleApplyNow(job)}
-              className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-medium text-white"
-            >
-              Apply Now
-            </button>
+            {job.applicationUrl ? (
+              <a
+                href={job.applicationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-auto flex w-full items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-medium text-white"
+              >
+                Apply now
+              </a>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleApplyNow(job)}
+                className="mt-auto flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#1F3064] py-3 text-sm font-medium text-white"
+              >
+                Apply Now
+              </button>
+            )}
           </div>
         ))}
       </div>
+
+      {externalJobsError && (
+        <p className="mt-4 text-center text-sm text-slate-500">
+          External jobs are temporarily unavailable.
+        </p>
+      )}
+      {externalJobsWarnings.length > 0 && (
+        <p className="mt-4 text-center text-sm text-slate-500">
+          Some external job sources could not be loaded: {externalJobsWarnings.join(", ")}.
+        </p>
+      )}
 
       <div className="flex justify-center mt-10">
         <Link href="/jobs">
