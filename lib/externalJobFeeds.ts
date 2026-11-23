@@ -22,10 +22,9 @@ const yubhubCountries = [
   { slug: "united-states", name: "United States" },
   { slug: "united-kingdom", name: "United Kingdom" },
   { slug: "canada", name: "Canada" },
-  { slug: "germany", name: "Germany" },
 ];
 
-const jobicyCountries = ["usa", "uk", "canada", "germany", "netherlands"];
+const jobicyCountries = ["usa", "uk", "canada", "netherlands"];
 const jobsEveryHourCategories = 50;
 const targetCountryAliases = [
   "united states",
@@ -48,9 +47,6 @@ const targetCountryAliases = [
   "ca",
   "canada",
   "canadian",
-  "germany",
-  "deutschland",
-  "de",
   "netherlands",
   "the netherlands",
   "holland",

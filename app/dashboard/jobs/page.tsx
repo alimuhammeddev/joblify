@@ -75,7 +75,7 @@ export default function Jobs() {
           )}
           {externalJobsError && (
             <p className="mt-2 text-sm text-slate-500">
-              External jobs are temporarily unavailable. Showing Joblify jobs.
+              External jobs could not be refreshed. Showing Joblify jobs and any previously loaded listings.
             </p>
           )}
           {externalJobsWarnings.length > 0 && (

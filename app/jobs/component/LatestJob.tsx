@@ -11,7 +11,13 @@ import { onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
-import { formatPostedAt, isJobOpen, mapJob, sortJobsByNewestFirst, type Job } from "@/lib/jobs";
+import {
+  formatPostedAt,
+  isJobOpen,
+  mapJob,
+  sortJobsByNewestFirst,
+  type Job,
+} from "@/lib/jobs";
 import { useExternalJobs } from "@/lib/useExternalJobs";
 
 const formatSalary = (salary: string) =>
@@ -80,7 +86,7 @@ export default function LatestJob() {
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-7 text-slate-500 sm:text-lg">
               Browse roles posted on Joblify alongside opportunities in the
-              United States, United Kingdom, Canada, Germany, and the Netherlands.
+              United States, United Kingdom, Canada, and the Netherlands.
             </p>
           </div>
         </div>
@@ -124,7 +130,7 @@ export default function LatestJob() {
 
         {externalJobsError && (
           <p className="mb-5 text-sm text-slate-500">
-            External jobs are temporarily unavailable. Showing Joblify jobs.
+            External jobs could not be refreshed. Showing Joblify jobs and any previously loaded listings.
           </p>
         )}
         {externalJobsWarnings.length > 0 && (
