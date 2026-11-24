@@ -110,7 +110,6 @@ function createJob(fields: JobFields, source: string): Job | null {
     source,
     sourceUrl: getHttpsUrl(fields.sourceUrl) || applicationUrl,
     applicationUrl,
-    candidateLocation: fields.candidateLocation || fields.location || "Location not specified",
     company: fields.company || "Company",
     title: fields.title,
     location: fields.location || "Location not specified",
